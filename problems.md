@@ -1,0 +1,32 @@
+### 问题与解决
+
+- ##### LocalDateTime格式转换
+
+  - 解决：在字段属性上加上
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+08:00")
+
+- ##### BeanUtils.copyProperties在拷贝属性时忽略空值
+  - 解决：
+
+    第三个参数传要忽略的字段，通过
+
+    ```java
+    public static String[] getNullPropertyNames (Object source) {
+            final BeanWrapper src = new BeanWrapperImpl(source);
+            java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+    
+            Set<String> emptyNames = new HashSet<String>();
+            for(java.beans.PropertyDescriptor pd : pds) {
+                Object srcValue = src.getPropertyValue(pd.getName());
+                if (srcValue == null) emptyNames.add(pd.getName());
+            }
+            String[] result = new String[emptyNames.size()];
+            return emptyNames.toArray(result);
+        }
+    ```
+
+    传入model，获取model中为空的字段，返回值作为第三个参数传入。
+
+- ##### @DynamicInsert@DynamicUpdate使用后，save返回值是没有那些空字段的
+
+  - 解决：实际上在数据库中插入时那些字段已经是默认值插入了，所过实在要返回，可以查询一次再返回。
