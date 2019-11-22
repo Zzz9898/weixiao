@@ -12,6 +12,7 @@ import com.zjw.graduation.model.adm.AdmAdminUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.adm.AdmAdminService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public class AdmAdminController {
     private String tokenHead;
 
     @ApiOperation(value = "添加管理员")
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping("/add")
     @PreAuthorize("hasAuthority('adm:admin:create')")
     public JsonResult<AdmAdminDto> adminAdd(@RequestBody AdmAdminCreateModel model, BindingResult result) {
         AdmAdmin admAdmin = admAdminService.adminAdd(model);
@@ -64,7 +65,7 @@ public class AdmAdminController {
     }
 
     @ApiOperation(value = "登录以后返回token")
-    @PostMapping(value = "/login")
+    @PostMapping("/login")
     public JsonResult login(@RequestBody AdmAdminLoginModel model, BindingResult result) {
         LOGGER.info("model.getUsername() = {}, " , model.getUsername());
         String token = admAdminService.login(model.getUsername(), model.getPassword());
@@ -77,7 +78,14 @@ public class AdmAdminController {
         return JsonResult.success(tokenMap);
     }
 
+    @ApiModelProperty("退出登录")
+    @PostMapping("/logout")
+    public JsonResult logout(){
+        return JsonResult.success("");
+    }
+
     @ApiOperation("获取用户所有权限（包括+-权限）")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @GetMapping("/permission/{adminId}")
     public JsonResult<List<AdmPermission>> getPermissionList(@PathVariable Long adminId) {
         List<AdmPermission> permissionList = admAdminService.getPermissionList(adminId);
@@ -90,6 +98,7 @@ public class AdmAdminController {
      * @return
      */
     @GetMapping("/admAdmins")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户表列表")
     public JsonResult<PagingResult<AdmAdminDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
@@ -111,6 +120,7 @@ public class AdmAdminController {
      * @return
      */
     @GetMapping("/admAdmin/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户表详情")
     public JsonResult<AdmAdminDto> detail(@PathVariable("id") Long id) {
 
@@ -129,6 +139,7 @@ public class AdmAdminController {
      * @return
      */
     @PutMapping("/admAdmin")
+    @PreAuthorize("hasAuthority('adm:admin:update')")
     @ApiOperation("后台用户表修改")
     public JsonResult<AdmAdmin> update(@Validated @RequestBody AdmAdminUpdateModel admAdminUpdateModel) {
 
@@ -150,6 +161,7 @@ public class AdmAdminController {
      * @return
      */
     @DeleteMapping("/admAdmin/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:delete')")
     @ApiOperation("后台用户表删除")
     public JsonResult delete(@PathVariable("id") Long id) {
 

@@ -1,20 +1,22 @@
 package com.zjw.graduation.controller.adm;
 
 
-import com.zjw.graduation.service.adm.AdmRoleService;
+import com.zjw.graduation.data.NullPropertyUtils;
+import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.adm.AdmRoleDto;
+import com.zjw.graduation.entity.adm.AdmRole;
 import com.zjw.graduation.model.adm.AdmRoleCreateModel;
 import com.zjw.graduation.model.adm.AdmRoleUpdateModel;
-import com.zjw.graduation.entity.adm.AdmRole;
-import com.zjw.graduation.dto.adm.AdmRoleDto;
-import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
-import com.zjw.graduation.data.PagingResult;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import com.zjw.graduation.service.adm.AdmRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 
 
@@ -39,6 +41,7 @@ public class AdmRoleController {
      * @return
      */
     @GetMapping("/admRoles")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户角色表列表")
     public JsonResult<PagingResult<AdmRoleDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
@@ -60,6 +63,7 @@ public class AdmRoleController {
      * @return
      */
     @GetMapping("/admRole/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户角色表详情")
     public JsonResult<AdmRoleDto> detail(@PathVariable("id") Long id) {
 
@@ -78,6 +82,7 @@ public class AdmRoleController {
      * @return
      */
     @PostMapping("/admRole")
+    @PreAuthorize("hasAuthority('adm:admin:create')")
     @ApiOperation("后台用户角色表新增")
     public JsonResult<AdmRoleDto> create(@Validated @RequestBody AdmRoleCreateModel admRoleCreateModel) {
 
@@ -99,6 +104,7 @@ public class AdmRoleController {
      * @return
      */
     @PutMapping("/admRole")
+    @PreAuthorize("hasAuthority('adm:admin:update')")
     @ApiOperation("后台用户角色表修改")
     public JsonResult<AdmRole> update(@Validated @RequestBody AdmRoleUpdateModel admRoleUpdateModel) {
 
@@ -120,6 +126,7 @@ public class AdmRoleController {
      * @return
      */
     @DeleteMapping("/admRole/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:delete')")
     @ApiOperation("后台用户角色表删除")
     public JsonResult delete(@PathVariable("id") Long id) {
 

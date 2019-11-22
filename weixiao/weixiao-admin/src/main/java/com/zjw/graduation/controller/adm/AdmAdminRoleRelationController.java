@@ -1,20 +1,22 @@
 package com.zjw.graduation.controller.adm;
 
 
-import com.zjw.graduation.service.adm.AdmAdminRoleRelationService;
+import com.zjw.graduation.data.NullPropertyUtils;
+import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.adm.AdmAdminRoleRelationDto;
+import com.zjw.graduation.entity.adm.AdmAdminRoleRelation;
 import com.zjw.graduation.model.adm.AdmAdminRoleRelationCreateModel;
 import com.zjw.graduation.model.adm.AdmAdminRoleRelationUpdateModel;
-import com.zjw.graduation.entity.adm.AdmAdminRoleRelation;
-import com.zjw.graduation.dto.adm.AdmAdminRoleRelationDto;
-import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
-import com.zjw.graduation.data.PagingResult;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import com.zjw.graduation.service.adm.AdmAdminRoleRelationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 
 
@@ -39,6 +41,7 @@ public class AdmAdminRoleRelationController {
      * @return
      */
     @GetMapping("/admAdminRoleRelations")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户和角色关系表列表")
     public JsonResult<PagingResult<AdmAdminRoleRelationDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
@@ -60,6 +63,7 @@ public class AdmAdminRoleRelationController {
      * @return
      */
     @GetMapping("/admAdminRoleRelation/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户和角色关系表详情")
     public JsonResult<AdmAdminRoleRelationDto> detail(@PathVariable("id") Long id) {
 
@@ -78,6 +82,7 @@ public class AdmAdminRoleRelationController {
      * @return
      */
     @PostMapping("/admAdminRoleRelation")
+    @PreAuthorize("hasAuthority('adm:admin:create')")
     @ApiOperation("后台用户和角色关系表新增")
     public JsonResult<AdmAdminRoleRelationDto> create(@Validated @RequestBody AdmAdminRoleRelationCreateModel admAdminRoleRelationCreateModel) {
 
@@ -99,6 +104,7 @@ public class AdmAdminRoleRelationController {
      * @return
      */
     @PutMapping("/admAdminRoleRelation")
+    @PreAuthorize("hasAuthority('adm:admin:update')")
     @ApiOperation("后台用户和角色关系表修改")
     public JsonResult<AdmAdminRoleRelation> update(@Validated @RequestBody AdmAdminRoleRelationUpdateModel admAdminRoleRelationUpdateModel) {
 
@@ -120,6 +126,7 @@ public class AdmAdminRoleRelationController {
      * @return
      */
     @DeleteMapping("/admAdminRoleRelation/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:delete')")
     @ApiOperation("后台用户和角色关系表删除")
     public JsonResult delete(@PathVariable("id") Long id) {
 

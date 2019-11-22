@@ -1,20 +1,22 @@
 package com.zjw.graduation.controller.adm;
 
 
-import com.zjw.graduation.service.adm.AdmPermissionService;
+import com.zjw.graduation.data.NullPropertyUtils;
+import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.adm.AdmPermissionDto;
+import com.zjw.graduation.entity.adm.AdmPermission;
 import com.zjw.graduation.model.adm.AdmPermissionCreateModel;
 import com.zjw.graduation.model.adm.AdmPermissionUpdateModel;
-import com.zjw.graduation.entity.adm.AdmPermission;
-import com.zjw.graduation.dto.adm.AdmPermissionDto;
-import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
-import com.zjw.graduation.data.PagingResult;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import com.zjw.graduation.service.adm.AdmPermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 
 
@@ -39,6 +41,7 @@ public class AdmPermissionController {
      * @return
      */
     @GetMapping("/admPermissions")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户权限表列表")
     public JsonResult<PagingResult<AdmPermissionDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
@@ -60,6 +63,7 @@ public class AdmPermissionController {
      * @return
      */
     @GetMapping("/admPermission/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户权限表详情")
     public JsonResult<AdmPermissionDto> detail(@PathVariable("id") Long id) {
 
@@ -78,6 +82,7 @@ public class AdmPermissionController {
      * @return
      */
     @PostMapping("/admPermission")
+    @PreAuthorize("hasAuthority('adm:admin:create')")
     @ApiOperation("后台用户权限表新增")
     public JsonResult<AdmPermissionDto> create(@Validated @RequestBody AdmPermissionCreateModel admPermissionCreateModel) {
 
@@ -99,6 +104,7 @@ public class AdmPermissionController {
      * @return
      */
     @PutMapping("/admPermission")
+    @PreAuthorize("hasAuthority('adm:admin:update')")
     @ApiOperation("后台用户权限表修改")
     public JsonResult<AdmPermission> update(@Validated @RequestBody AdmPermissionUpdateModel admPermissionUpdateModel) {
 
@@ -120,6 +126,7 @@ public class AdmPermissionController {
      * @return
      */
     @DeleteMapping("/admPermission/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:delete')")
     @ApiOperation("后台用户权限表删除")
     public JsonResult delete(@PathVariable("id") Long id) {
 

@@ -1,20 +1,22 @@
 package com.zjw.graduation.controller.adm;
 
 
-import com.zjw.graduation.service.adm.AdmRolePermissionRelationService;
+import com.zjw.graduation.data.NullPropertyUtils;
+import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.adm.AdmRolePermissionRelationDto;
+import com.zjw.graduation.entity.adm.AdmRolePermissionRelation;
 import com.zjw.graduation.model.adm.AdmRolePermissionRelationCreateModel;
 import com.zjw.graduation.model.adm.AdmRolePermissionRelationUpdateModel;
-import com.zjw.graduation.entity.adm.AdmRolePermissionRelation;
-import com.zjw.graduation.dto.adm.AdmRolePermissionRelationDto;
-import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
-import com.zjw.graduation.data.PagingResult;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import com.zjw.graduation.service.adm.AdmRolePermissionRelationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 
 
@@ -39,6 +41,7 @@ public class AdmRolePermissionRelationController {
      * @return
      */
     @GetMapping("/admRolePermissionRelations")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户角色和权限关系表列表")
     public JsonResult<PagingResult<AdmRolePermissionRelationDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
@@ -60,6 +63,7 @@ public class AdmRolePermissionRelationController {
      * @return
      */
     @GetMapping("/admRolePermissionRelation/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户角色和权限关系表详情")
     public JsonResult<AdmRolePermissionRelationDto> detail(@PathVariable("id") Long id) {
 
@@ -78,6 +82,7 @@ public class AdmRolePermissionRelationController {
      * @return
      */
     @PostMapping("/admRolePermissionRelation")
+    @PreAuthorize("hasAuthority('adm:admin:create')")
     @ApiOperation("后台用户角色和权限关系表新增")
     public JsonResult<AdmRolePermissionRelationDto> create(@Validated @RequestBody AdmRolePermissionRelationCreateModel admRolePermissionRelationCreateModel) {
 
@@ -99,6 +104,7 @@ public class AdmRolePermissionRelationController {
      * @return
      */
     @PutMapping("/admRolePermissionRelation")
+    @PreAuthorize("hasAuthority('adm:admin:update')")
     @ApiOperation("后台用户角色和权限关系表修改")
     public JsonResult<AdmRolePermissionRelation> update(@Validated @RequestBody AdmRolePermissionRelationUpdateModel admRolePermissionRelationUpdateModel) {
 
@@ -120,6 +126,7 @@ public class AdmRolePermissionRelationController {
      * @return
      */
     @DeleteMapping("/admRolePermissionRelation/{id}")
+    @PreAuthorize("hasAuthority('adm:admin:delete')")
     @ApiOperation("后台用户角色和权限关系表删除")
     public JsonResult delete(@PathVariable("id") Long id) {
 

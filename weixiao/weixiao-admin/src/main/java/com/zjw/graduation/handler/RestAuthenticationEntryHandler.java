@@ -22,7 +22,7 @@ public class RestAuthenticationEntryHandler implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        response.getWriter().println(JSONUtil.parse(JsonResult.error(EnumStatusType.LOSE.getValue(),"token 失效，请重新登录！！！")));
+        response.getWriter().println(JSONUtil.parse(JsonResult.error(EnumStatusType.LOSE.getValue(),"token 无效，请重新登录！！！")));
         response.getWriter().flush();
     }
 }
