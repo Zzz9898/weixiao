@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * 后台用户权限表
  *
@@ -33,5 +35,7 @@ public interface AdmPermissionDao extends JpaRepository<AdmPermission, Long>, Jp
                     "WHERE " +
                     "`logic_flag` = 1 ")
     Page<AdmPermission> findAll(Pageable pageable);
+
+    List<AdmPermission> findAllByIdInAndLogicFlagIs(List<Long> permissionList, Integer value);
 }
 

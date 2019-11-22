@@ -2,6 +2,10 @@ package com.zjw.graduation.service.adm;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.adm.AdmAdmin;
+import com.zjw.graduation.entity.adm.AdmPermission;
+import com.zjw.graduation.model.adm.AdmAdminCreateModel;
+
+import java.util.List;
 
 /**
  * 后台用户表
@@ -18,5 +22,13 @@ public interface AdmAdminService {
     AdmAdmin save(AdmAdmin Admin);
 
     void delete(Long id);
+
+    AdmAdmin getAdminByUsername(String username);
+
+    List<AdmPermission> getPermissionList(Long id);
+
+    String login(String username, String password);
+
+    AdmAdmin adminAdd(AdmAdminCreateModel model);
 }
 

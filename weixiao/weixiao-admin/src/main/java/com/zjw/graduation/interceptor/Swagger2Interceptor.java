@@ -1,4 +1,4 @@
-package com.zjw.graduation.config;
+package com.zjw.graduation.interceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

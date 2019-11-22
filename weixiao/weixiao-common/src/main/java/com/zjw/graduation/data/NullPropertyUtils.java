@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 后台用户和角色关系表
+ * 获取实体空值字段
  *
  * @author zjw
  * @email zhangjw9898@qq.com

@@ -6,12 +6,20 @@ spring:
    username: root
    password: mysql5.7
    driver-class-name: com.mysql.jdbc.Driver
-#  jackson:
-#   date-format: yyyy-MM-dd HH:mm:ss
-#   time-zone: GMT+8
-#   locale: zh_CN
   jpa:
    show-sql: true
+  #redis
+#  redis:
+#    database: 1
+#    host: 134.175.171.235
+#    port: 6379
+#    password: myRedis
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-idle: 8
+#        min-idle: 0
+#    expiration: 86400 #redis的超期限时间(60*60*2)
 
 # Swagger
 swagger:
@@ -22,3 +30,10 @@ swagger:
   redirect-uri: / # 禁用swagger时的重定向地址
 project:
   version: 1.0.0
+
+# JWT
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: mySecret #JWT加解密使用的密钥
+  expiration: 86400 #JWT的超期限时间(60*60*2)
+  tokenHead: Bearer #JWT负载中拿到开头

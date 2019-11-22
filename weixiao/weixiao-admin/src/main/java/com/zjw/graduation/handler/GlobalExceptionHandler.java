@@ -1,4 +1,4 @@
-package com.zjw.graduation.config;
+package com.zjw.graduation.handler;
 
 import com.zjw.graduation.mvc.JsonResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;

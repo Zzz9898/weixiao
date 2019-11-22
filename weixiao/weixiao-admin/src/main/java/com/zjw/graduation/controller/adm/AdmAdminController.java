@@ -1,21 +1,32 @@
 package com.zjw.graduation.controller.adm;
 
 
-import com.zjw.graduation.service.adm.AdmAdminService;
-import com.zjw.graduation.model.adm.AdmAdminCreateModel;
-import com.zjw.graduation.model.adm.AdmAdminUpdateModel;
-import com.zjw.graduation.entity.adm.AdmAdmin;
-import com.zjw.graduation.dto.adm.AdmAdminDto;
 import com.zjw.graduation.data.NullPropertyUtils;
-import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.data.PagingResult;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import com.zjw.graduation.dto.adm.AdmAdminDto;
+import com.zjw.graduation.entity.adm.AdmAdmin;
+import com.zjw.graduation.entity.adm.AdmPermission;
+import com.zjw.graduation.model.adm.AdmAdminCreateModel;
+import com.zjw.graduation.model.adm.AdmAdminLoginModel;
+import com.zjw.graduation.model.adm.AdmAdminUpdateModel;
+import com.zjw.graduation.mvc.JsonResult;
+import com.zjw.graduation.service.adm.AdmAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -30,8 +41,48 @@ import java.time.LocalDateTime;
 @Api(value = "adm.AdmAdminController", tags = {"后台用户表"})
 public class AdmAdminController {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(AdmAdminController.class);
+
     @Autowired
     private AdmAdminService admAdminService;
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+
+    @ApiOperation(value = "添加管理员")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('adm:admin:create')")
+    public JsonResult<AdmAdminDto> adminAdd(@RequestBody AdmAdminCreateModel model, BindingResult result) {
+        AdmAdmin admAdmin = admAdminService.adminAdd(model);
+        if (admAdmin == null) {
+            return JsonResult.error("register fail");
+        }
+        AdmAdminDto admAdminDto = new AdmAdminDto();
+        BeanUtils.copyProperties(admAdmin, admAdminDto);
+        return JsonResult.success(admAdminDto);
+    }
+
+    @ApiOperation(value = "登录以后返回token")
+    @PostMapping(value = "/login")
+    public JsonResult login(@RequestBody AdmAdminLoginModel model, BindingResult result) {
+        LOGGER.info("model.getUsername() = {}, " , model.getUsername());
+        String token = admAdminService.login(model.getUsername(), model.getPassword());
+        if (token == null) {
+            return JsonResult.error("用户名或密码错误");
+        }
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        tokenMap.put("tokenHead", tokenHead);
+        return JsonResult.success(tokenMap);
+    }
+
+    @ApiOperation("获取用户所有权限（包括+-权限）")
+    @GetMapping("/permission/{adminId}")
+    public JsonResult<List<AdmPermission>> getPermissionList(@PathVariable Long adminId) {
+        List<AdmPermission> permissionList = admAdminService.getPermissionList(adminId);
+        return JsonResult.success(permissionList);
+    }
 
     /**
      * 列表
@@ -69,27 +120,6 @@ public class AdmAdminController {
         BeanUtils.copyProperties(admAdmin, admAdminDto);
 
         return JsonResult.success(admAdminDto);
-    }
-
-    /**
-     * 新增
-     *
-     * @param admAdminCreateModel
-     * @return
-     */
-    @PostMapping("/admAdmin")
-    @ApiOperation("后台用户表新增")
-    public JsonResult<AdmAdminDto> create(@Validated @RequestBody AdmAdminCreateModel admAdminCreateModel) {
-
-        AdmAdmin admAdmin = new AdmAdmin();
-        BeanUtils.copyProperties(admAdminCreateModel, admAdmin);
-        admAdminService.save(admAdmin);
-
-        AdmAdminDto admAdminDto = new AdmAdminDto();
-        BeanUtils.copyProperties(admAdmin, admAdminDto);
-
-        return JsonResult.success(admAdminDto);
-
     }
 
     /**

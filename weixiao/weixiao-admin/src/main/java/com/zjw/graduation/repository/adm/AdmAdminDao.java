@@ -33,5 +33,7 @@ public interface AdmAdminDao extends JpaRepository<AdmAdmin, Long>, JpaSpecifica
                     "WHERE " +
                     "`logic_flag` = 1 ")
     Page<AdmAdmin> findAll(Pageable pageable);
+
+    AdmAdmin findByUsername(String username);
 }
 
