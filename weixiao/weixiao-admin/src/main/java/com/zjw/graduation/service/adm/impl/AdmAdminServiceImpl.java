@@ -1,17 +1,21 @@
 package com.zjw.graduation.service.adm.impl;
 
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.student.StudentMemberDto;
 import com.zjw.graduation.entity.adm.AdmAdmin;
 import com.zjw.graduation.entity.adm.AdmAdminRoleRelation;
 import com.zjw.graduation.entity.adm.AdmPermission;
 import com.zjw.graduation.entity.adm.AdmRolePermissionRelation;
 import com.zjw.graduation.enums.EnumLogicType;
 import com.zjw.graduation.model.adm.AdmAdminCreateModel;
+import com.zjw.graduation.model.student.StudentMemberCreateModel;
+import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.repository.adm.AdmAdminDao;
 import com.zjw.graduation.repository.adm.AdmAdminRoleRelationDao;
 import com.zjw.graduation.repository.adm.AdmPermissionDao;
 import com.zjw.graduation.repository.adm.AdmRolePermissionRelationDao;
 import com.zjw.graduation.service.adm.AdmAdminService;
+import com.zjw.graduation.service.feign.student.StudentMemberFeign;
 import com.zjw.graduation.util.JwtTokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +33,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +48,9 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private StudentMemberFeign studentMemberFeign;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -66,6 +75,9 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
 
     @Autowired
     private AdmPermissionDao admPermissionDao;
+
+    @Autowired
+    private HttpServletRequest request;
 
 //    @Autowired
 //    private RedisTemplate redisTemplate;
@@ -140,10 +152,23 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
     }
 
     @Override
+    @Transactional
     public AdmAdmin adminAdd(AdmAdminCreateModel model) {
         AdmAdmin admAdmin = new AdmAdmin();
         BeanUtils.copyProperties(model, admAdmin);
-        admAdmin.setPassword(passwordEncoder.encode(admAdmin.getPassword()));
+        String password = passwordEncoder.encode(admAdmin.getPassword());
+        admAdmin.setPassword(password);
+        StudentMemberCreateModel studentMemberCreateModel = new StudentMemberCreateModel();
+        studentMemberCreateModel.setAcademyId(13L);
+        studentMemberCreateModel.setUsername(admAdmin.getUsername());
+        studentMemberCreateModel.setPassword(password);
+        studentMemberCreateModel.setNickname("这个是管理员同步");
+        studentMemberCreateModel.setNumber("1600000000");
+        studentMemberCreateModel.setPhone("10000000000");
+        JsonResult<StudentMemberDto> authorization = studentMemberFeign.create(request.getHeader("Authorization"), studentMemberCreateModel);
+        if (authorization == null || authorization.getData() == null){
+            return null;
+        }
         return admAdminDao.save(admAdmin);
     }
 

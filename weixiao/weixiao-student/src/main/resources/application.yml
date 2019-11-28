@@ -8,6 +8,8 @@ spring:
    driver-class-name: com.mysql.jdbc.Driver
   jpa:
    show-sql: true
+  application:
+    name: weixiao-student
   #redis
 #  redis:
 #    database: 1
@@ -37,3 +39,14 @@ jwt:
   secret: mySecret #JWT加解密使用的密钥
   expiration: 86400 #JWT的超期限时间(60*60*2)
   tokenHead: Bearer #JWT负载中拿到开头
+
+eureka:
+  client:
+    registerWithEureka: true # 服务注册开关
+    fetchRegistry: true # 服务发现开关
+    serviceUrl: # 注册到哪一个Eureka Server服务注册中心，多个中间用逗号分隔
+      #defaultZone: http://localhost:6001/eureka
+      defaultZone: http://134.175.171.235:6001/eureka
+  instance:
+    instanceId: ${spring.application.name}:${server.port} # 等价于microservice-product:8001
+    prefer-ip-address: true #访问路径就会显示成IP地址

@@ -31,3 +31,11 @@
 
   - 解决：实际上在数据库中插入时那些字段已经是默认值插入了，所过实在要返回，可以查询一次再返回。
   - 更新：使用 EntityManager entityManager的.refresh(entity)方法，可以更新缓存中的数据，但是需要在方法上加入@Transactional注解。
+  
+- ##### admin与student是两个模块，service不共用，但是在admin里却要对student经行管理
+
+  - 解决：使用springcloud的eureka与feign组件，将admin与student注册到eureka中，admin通过feign调用student接口。
+
+- ##### 在student中也需要jwt验证，但是在feign调用时确没有token传过去。
+
+  - 在调用feign的方法中使用@RequestHeader，将token信息自动注入到参数中，但是需要在student表中也要有admin管理员的账号信息，否则验证不通过。

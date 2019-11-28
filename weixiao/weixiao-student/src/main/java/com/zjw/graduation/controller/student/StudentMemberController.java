@@ -56,6 +56,9 @@ public class StudentMemberController {
         if (token == null) {
             return JsonResult.error("用户名或密码错误");
         }
+        if (token.equals("fail")){
+            return JsonResult.error("账号被禁用");
+        }
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
         tokenMap.put("tokenHead", tokenHead);
@@ -169,4 +172,10 @@ public class StudentMemberController {
         return JsonResult.success("删除成功");
     }
 
+    @PutMapping("/studentMember/disable/{id}")
+    @ApiOperation("学生表禁用")
+    public JsonResult disable(@PathVariable("id") Long id){
+        studentMemberService.disable(id);
+        return JsonResult.success("禁用成功");
+    }
 }

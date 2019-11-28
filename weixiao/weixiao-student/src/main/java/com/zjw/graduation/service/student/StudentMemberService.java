@@ -29,5 +29,7 @@ public interface StudentMemberService {
     String login(String username, String password);
 
     StudentMember update(StudentMember studentMember);
+
+    void disable(Long id);
 }
 

@@ -97,6 +97,11 @@ public class StudentMember implements Serializable {
     @Column(name = "hide")
     private Integer hide;
     /**
+     * 状态 0-禁用 1-启用
+     */
+    @Column(name = "state")
+    private Integer state;
+    /**
      * 创建时间
      */
     @Column(name = "created")
@@ -111,6 +116,14 @@ public class StudentMember implements Serializable {
      */
     @Column(name = "logic_flag")
     private Integer logicFlag;
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
 
     public String getNickname() {
         return nickname;

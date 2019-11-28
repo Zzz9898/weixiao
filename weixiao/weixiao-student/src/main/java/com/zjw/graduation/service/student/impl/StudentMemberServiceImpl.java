@@ -5,6 +5,7 @@ import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.entity.student.StudentMemberPermissionRelation;
 import com.zjw.graduation.entity.student.StudentPermission;
 import com.zjw.graduation.enums.EnumLogicType;
+import com.zjw.graduation.enums.EnumStateType;
 import com.zjw.graduation.repository.student.StudentMemberDao;
 import com.zjw.graduation.repository.student.StudentMemberPermissionRelationDao;
 import com.zjw.graduation.repository.student.StudentPermissionDao;
@@ -84,7 +85,7 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
     @Transactional
     public StudentMember save(StudentMember studentMember) {
         studentMember.setPassword(passwordEncoder.encode(studentMember.getPassword()));
-        StudentMember byUsername = studentMemberDao.findByUsername(studentMember.getUsername());
+        StudentMember byUsername = studentMemberDao.findByUsernameAndLogicFlagIs(studentMember.getUsername(), EnumLogicType.NORMAL.getValue());
         if (byUsername != null){
             return null;
         }
@@ -104,7 +105,7 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
 
     @Override
     public StudentMember getStudentByUsername(String username) {
-        return studentMemberDao.findByUsername(username);
+        return studentMemberDao.findByUsernameAndLogicFlagIs(username, EnumLogicType.NORMAL.getValue());
     }
 
     @Override
@@ -123,6 +124,9 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
             if (!passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("密码不正确");
             }
+            if (!userDetails.isEnabled()){
+                return "fail";
+            }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 //            StudentMember entity = studentMemberDao.findByUsername(username);
@@ -139,6 +143,15 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
     @Override
     public StudentMember update(StudentMember studentMember) {
         return studentMemberDao.save(studentMember);
+    }
+
+    @Override
+    public void disable(Long id) {
+        StudentMember studentMember = studentMemberDao.findById(id).orElse(null);
+        if (studentMember != null){
+            studentMember.setState(EnumStateType.DISABLE.getValue());
+            studentMemberDao.save(studentMember);
+        }
     }
 
 }

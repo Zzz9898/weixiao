@@ -34,6 +34,6 @@ public interface StudentMemberDao extends JpaRepository<StudentMember, Long>, Jp
                     "`logic_flag` = 1 ")
     Page<StudentMember> findAll(Pageable pageable);
 
-    StudentMember findByUsername(String username);
+    StudentMember findByUsernameAndLogicFlagIs(String username, Integer value);
 }
 

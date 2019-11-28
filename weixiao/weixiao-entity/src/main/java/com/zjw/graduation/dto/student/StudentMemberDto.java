@@ -85,6 +85,12 @@ public class StudentMemberDto {
     private Long academyId;
 
     /**
+     * 状态 0-启用 1-禁用
+     */
+    @ApiModelProperty(value = "状态 0-启用 1-禁用", name = "state")
+    private Integer state;
+
+    /**
      * 个人签名
      */
     @ApiModelProperty(value = "个人签名", name = "autograph")
@@ -115,6 +121,14 @@ public class StudentMemberDto {
      */
     @ApiModelProperty(value = "逻辑删除 0-是 1-否", name = "logicFlag")
     private Integer logicFlag;
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
 
     public String getNickname() {
         return nickname;

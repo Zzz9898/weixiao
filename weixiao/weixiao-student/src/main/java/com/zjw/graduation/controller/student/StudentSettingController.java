@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import java.time.LocalDateTime;
 
 
@@ -40,8 +41,8 @@ public class StudentSettingController {
      */
     @GetMapping("/studentSettings")
     @ApiOperation("学生设置表列表")
-    public JsonResult<PagingResult<StudentSettingDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
-                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
+    public JsonResult<PagingResult<StudentSettingDto>> list(@RequestParam(value = "pageindex", defaultValue = "0") int pageIndex,
+                                                            @RequestParam(value = "pagesize", defaultValue = "10") int pageSize) {
 
         PagingResult<StudentSetting> page = studentSettingService.page(pageIndex, pageSize);
         PagingResult<StudentSettingDto> convert = page.convert(item -> {
@@ -103,7 +104,7 @@ public class StudentSettingController {
     public JsonResult<StudentSetting> update(@Validated @RequestBody StudentSettingUpdateModel studentSettingUpdateModel) {
 
         StudentSetting studentSetting = studentSettingService.get(studentSettingUpdateModel.getId());
-        if (studentSetting.getId() == null){
+        if (studentSetting.getId() == null) {
             return JsonResult.error("Not find entity");
         }
         BeanUtils.copyProperties(studentSettingUpdateModel, studentSetting, NullPropertyUtils.getNullPropertyNames(studentSettingUpdateModel));

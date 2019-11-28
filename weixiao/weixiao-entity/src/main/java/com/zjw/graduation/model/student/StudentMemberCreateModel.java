@@ -95,7 +95,7 @@ public class StudentMemberCreateModel {
      * 专业id
      */
     @NotNull(message = "专业id 不能为空")
-    @Min(value = 14, message = "专业id 错误")
+    @Min(value = 13, message = "专业id 错误")
     @Max(value = 73, message = "专业id 错误")
     @ApiModelProperty(value = "专业id", required = true)
     private Long academyId;

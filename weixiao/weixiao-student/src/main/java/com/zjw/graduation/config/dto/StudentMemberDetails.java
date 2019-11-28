@@ -59,7 +59,7 @@ public class StudentMemberDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return studentMember.getState() == 1;
     }
 
 }
