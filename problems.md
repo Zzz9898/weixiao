@@ -30,3 +30,4 @@
 - ##### @DynamicInsert@DynamicUpdate使用后，save返回值是没有那些空字段的
 
   - 解决：实际上在数据库中插入时那些字段已经是默认值插入了，所过实在要返回，可以查询一次再返回。
+  - 更新：使用 EntityManager entityManager的.refresh(entity)方法，可以更新缓存中的数据，但是需要在方法上加入@Transactional注解。
