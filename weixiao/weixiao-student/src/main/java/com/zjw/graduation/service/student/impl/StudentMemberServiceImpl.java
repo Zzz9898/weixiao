@@ -154,4 +154,9 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
         }
     }
 
+    @Override
+    public StudentMember check(String username) {
+        return studentMemberDao.findByUsernameAndLogicFlagIs(username, EnumLogicType.NORMAL.getValue());
+    }
+
 }

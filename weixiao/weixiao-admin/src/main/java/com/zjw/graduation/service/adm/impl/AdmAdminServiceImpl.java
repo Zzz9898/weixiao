@@ -2,18 +2,14 @@ package com.zjw.graduation.service.adm.impl;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.student.StudentMemberDto;
-import com.zjw.graduation.entity.adm.AdmAdmin;
-import com.zjw.graduation.entity.adm.AdmAdminRoleRelation;
-import com.zjw.graduation.entity.adm.AdmPermission;
-import com.zjw.graduation.entity.adm.AdmRolePermissionRelation;
+import com.zjw.graduation.entity.adm.*;
 import com.zjw.graduation.enums.EnumLogicType;
+import com.zjw.graduation.enums.EnumStateType;
+import com.zjw.graduation.enums.EnumStatusType;
 import com.zjw.graduation.model.adm.AdmAdminCreateModel;
 import com.zjw.graduation.model.student.StudentMemberCreateModel;
 import com.zjw.graduation.mvc.JsonResult;
-import com.zjw.graduation.repository.adm.AdmAdminDao;
-import com.zjw.graduation.repository.adm.AdmAdminRoleRelationDao;
-import com.zjw.graduation.repository.adm.AdmPermissionDao;
-import com.zjw.graduation.repository.adm.AdmRolePermissionRelationDao;
+import com.zjw.graduation.repository.adm.*;
 import com.zjw.graduation.service.adm.AdmAdminService;
 import com.zjw.graduation.service.feign.student.StudentMemberFeign;
 import com.zjw.graduation.util.JwtTokenUtil;
@@ -37,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +75,9 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
     private AdmPermissionDao admPermissionDao;
 
     @Autowired
+    private AdmRoleDao admRoleDao;
+
+    @Autowired
     private HttpServletRequest request;
 
 //    @Autowired
@@ -107,6 +108,7 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         AdmAdmin admAdmin = admAdminDao.findById(id).orElse(null);
         if (admAdmin != null){
@@ -165,11 +167,39 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
         studentMemberCreateModel.setNickname("这个是管理员同步");
         studentMemberCreateModel.setNumber("1600000000");
         studentMemberCreateModel.setPhone("10000000000");
-        JsonResult<StudentMemberDto> authorization = studentMemberFeign.create(request.getHeader("Authorization"), studentMemberCreateModel);
-        if (authorization == null || authorization.getData() == null){
-            return null;
+        boolean check = studentMemberFeign.check(request.getHeader("Authorization"), admAdmin.getUsername());
+        if (check) {
+            JsonResult<StudentMemberDto> authorization = studentMemberFeign.create(request.getHeader("Authorization"), studentMemberCreateModel);
+            if (authorization == null || authorization.getData() == null) {
+                return null;
+            }
         }
         return admAdminDao.save(admAdmin);
+    }
+
+    @Override
+    public List<AdmRole> getRolesByAdmId(Long id) {
+        List<AdmAdminRoleRelation> admAdminRoles =
+                admAdminRoleRelationDao.findAllByAdminIdAndLogicFlagIs(id, EnumLogicType.NORMAL.getValue());
+        List<Long> ids =
+                admAdminRoles.stream().map(AdmAdminRoleRelation::getRoleId).collect(Collectors.toList());
+        List<AdmRole> admRoles = admRoleDao.findAllByIdInAndLogicFlagIs(ids, EnumLogicType.NORMAL.getValue());
+        return admRoles;
+    }
+
+    @Override
+    public void enableOrDisable(Long id) {
+        AdmAdmin admAdmin = admAdminDao.getOne(id);
+        admAdmin.setStatus(admAdmin.getStatus() == 1 ? EnumStateType.DISABLE.getValue() :  EnumStateType.NORMAL.getValue());
+        admAdminDao.save(admAdmin);
+    }
+
+    @Override
+    public void batchDelete(String ids) {
+        List<Integer> collect =
+                Arrays.stream(ids.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        LocalDateTime now = LocalDateTime.now();
+        admAdminDao.batchDelete(collect, now);
     }
 
 }

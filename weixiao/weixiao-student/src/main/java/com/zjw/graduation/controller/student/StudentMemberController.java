@@ -178,4 +178,11 @@ public class StudentMemberController {
         studentMemberService.disable(id);
         return JsonResult.success("禁用成功");
     }
+
+    @GetMapping("/studentMember/check")
+    @ApiOperation("学生表用户查询")
+    public boolean check(@RequestParam("username") String username){
+        StudentMember studentMember = studentMemberService.check(username);
+        return studentMember == null;
+    }
 }

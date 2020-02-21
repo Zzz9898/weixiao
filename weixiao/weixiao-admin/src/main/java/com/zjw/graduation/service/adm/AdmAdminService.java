@@ -3,6 +3,7 @@ package com.zjw.graduation.service.adm;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.adm.AdmAdmin;
 import com.zjw.graduation.entity.adm.AdmPermission;
+import com.zjw.graduation.entity.adm.AdmRole;
 import com.zjw.graduation.model.adm.AdmAdminCreateModel;
 
 import java.util.List;
@@ -30,5 +31,11 @@ public interface AdmAdminService {
     String login(String username, String password);
 
     AdmAdmin adminAdd(AdmAdminCreateModel model);
+
+    List<AdmRole> getRolesByAdmId(Long id);
+
+    void enableOrDisable(Long id);
+
+    void batchDelete(String ids);
 }
 

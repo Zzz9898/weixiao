@@ -42,4 +42,10 @@ public class StudentMemberFeignFallback implements StudentMemberFeign {
         logger.info("服务没有启动成功...");
         return JsonResult.error("服务没有启动成功...");
     }
+
+    @Override
+    public boolean check(String token, String username) {
+        logger.info("服务没有启动成功...");
+        return false;
+    }
 }

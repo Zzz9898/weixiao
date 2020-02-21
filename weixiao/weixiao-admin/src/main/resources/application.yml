@@ -53,3 +53,9 @@ eureka:
 feign:
   hystrix:
     enabled: true
+
+#文件上传
+file:
+  path: D:\\File\imgs\
+  server: http://localhost:8089/
+  pattern: files

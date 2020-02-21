@@ -4,13 +4,17 @@ package com.zjw.graduation.controller.adm;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.adm.AdmAdminDto;
+import com.zjw.graduation.dto.adm.AdmInfoDto;
 import com.zjw.graduation.entity.adm.AdmAdmin;
 import com.zjw.graduation.entity.adm.AdmPermission;
+import com.zjw.graduation.entity.adm.AdmRole;
+import com.zjw.graduation.enums.EnumStateType;
 import com.zjw.graduation.model.adm.AdmAdminCreateModel;
 import com.zjw.graduation.model.adm.AdmAdminLoginModel;
 import com.zjw.graduation.model.adm.AdmAdminUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.adm.AdmAdminService;
+import com.zjw.graduation.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -20,14 +24,17 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,6 +53,10 @@ public class AdmAdminController {
 
     @Autowired
     private AdmAdminService admAdminService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
@@ -53,7 +64,7 @@ public class AdmAdminController {
 
     @ApiOperation(value = "添加管理员")
     @PostMapping("/add")
-    @PreAuthorize("hasAuthority('adm:admin:create')")
+//    @PreAuthorize("hasAuthority('adm:admin:create')")
     public JsonResult<AdmAdminDto> adminAdd(@RequestBody AdmAdminCreateModel model, BindingResult result) {
         AdmAdmin admAdmin = admAdminService.adminAdd(model);
         if (admAdmin == null) {
@@ -92,6 +103,21 @@ public class AdmAdminController {
         return JsonResult.success(permissionList);
     }
 
+    @ApiOperation("根据token获取管理员信息")
+    @GetMapping("/info")
+    public AdmInfoDto getPermissionList(@RequestParam(value = "token") String token) {
+        String username = jwtTokenUtil.getUserNameFromToken(token);
+        AdmInfoDto admInfoDto = new AdmInfoDto();
+        AdmAdmin admAdmin = admAdminService.getAdminByUsername(username);
+        List<AdmRole> admRoles = admAdminService.getRolesByAdmId(admAdmin.getId());
+        List<String> roles = admRoles.stream().map(AdmRole::getDescription).collect(Collectors.toList());
+        admInfoDto.setName(admAdmin.getUsername());
+        admInfoDto.setAvatar(admAdmin.getIcon());
+        admInfoDto.setRoles(roles);
+        admInfoDto.setToken(tokenHead + token);
+        return admInfoDto;
+    }
+
     /**
      * 列表
      *
@@ -106,7 +132,7 @@ public class AdmAdminController {
         PagingResult<AdmAdmin> page = admAdminService.page(pageIndex, pageSize);
         PagingResult<AdmAdminDto> convert = page.convert(item -> {
             AdmAdminDto admAdminDto = new AdmAdminDto();
-            BeanUtils.copyProperties(item, admAdminDto);
+            BeanUtils.copyProperties(item, admAdminDto, "password");
             return admAdminDto;
         });
         return JsonResult.success(convert);
@@ -139,7 +165,6 @@ public class AdmAdminController {
      * @return
      */
     @PutMapping("/admAdmin")
-    @PreAuthorize("hasAuthority('adm:admin:update')")
     @ApiOperation("后台用户表修改")
     public JsonResult<AdmAdmin> update(@Validated @RequestBody AdmAdminUpdateModel admAdminUpdateModel) {
 
@@ -149,6 +174,7 @@ public class AdmAdminController {
         }
         BeanUtils.copyProperties(admAdminUpdateModel, admAdmin, NullPropertyUtils.getNullPropertyNames(admAdminUpdateModel));
         admAdmin.setUpdated(LocalDateTime.now());
+        admAdmin.setPassword(passwordEncoder.encode(admAdmin.getPassword()));
         AdmAdmin entity = admAdminService.save(admAdmin);
 
         return JsonResult.success(entity);
@@ -161,7 +187,6 @@ public class AdmAdminController {
      * @return
      */
     @DeleteMapping("/admAdmin/{id}")
-    @PreAuthorize("hasAuthority('adm:admin:delete')")
     @ApiOperation("后台用户表删除")
     public JsonResult delete(@PathVariable("id") Long id) {
 
@@ -170,4 +195,17 @@ public class AdmAdminController {
         return JsonResult.success("删除成功");
     }
 
+    @PutMapping("/admAdmin/enableorbatch")
+    @ApiOperation("后台用户表启用/禁用")
+    public JsonResult enableOrDisable(@RequestParam("id") Long id) {
+        admAdminService.enableOrDisable(id);
+        return JsonResult.success("操作成功");
+    }
+
+    @PutMapping("/admAdmin/batchdelete")
+    @ApiOperation("后台用户表删除")
+    public JsonResult batchDelete(@RequestParam("ids") String ids) {
+        admAdminService.batchDelete(ids);
+        return JsonResult.success("操作成功");
+    }
 }

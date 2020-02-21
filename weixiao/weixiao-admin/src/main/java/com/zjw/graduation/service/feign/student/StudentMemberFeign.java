@@ -2,6 +2,7 @@ package com.zjw.graduation.service.feign.student;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.student.StudentMemberDto;
+import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.model.student.StudentMemberCreateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import io.swagger.annotations.ApiOperation;
@@ -33,4 +34,9 @@ public interface StudentMemberFeign {
     @ApiOperation("学生注册")
     public JsonResult<StudentMemberDto> create(@RequestHeader("Authorization")String token,
                                                @Validated @RequestBody StudentMemberCreateModel studentMemberCreateModel);
+
+    @GetMapping("/studentMember/check")
+    @ApiOperation("学生表用户查询")
+    public boolean check(@RequestHeader("Authorization")String token,
+                           @RequestParam("username") String username);
 }

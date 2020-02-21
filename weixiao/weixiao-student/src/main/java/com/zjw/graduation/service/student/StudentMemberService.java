@@ -31,5 +31,7 @@ public interface StudentMemberService {
     StudentMember update(StudentMember studentMember);
 
     void disable(Long id);
+
+    StudentMember check(String username);
 }
 

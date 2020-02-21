@@ -1,0 +1,56 @@
+package com.zjw.graduation.controller.com;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import com.zjw.graduation.mvc.JsonResult;
+import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/file")
+@Api(value = "adm.FileUpload", tags = {"文件上传"})
+public class FileUpload {
+
+    @Value("${file.path}")
+    private String path;
+    @Value("${file.server}")
+    private String server;
+    @Value("${file.pattern}")
+    private String pattern;
+
+    @RequestMapping("/upload")
+    public JsonResult reciveCameraCapture(@RequestParam("file") MultipartFile file) {
+        if (file == null) {
+            return JsonResult.success("null");
+        }
+
+        // 保存图片
+        String filename = file.getOriginalFilename();
+        if (filename == null){
+            return JsonResult.success("null");
+        }
+
+        File fileUrl = new File(path);
+
+        if (!fileUrl.exists()) {
+            fileUrl.mkdirs();
+        }
+        filename = UUID.randomUUID().toString() + filename;
+        String destFilename = filename;
+        File destImage = new File(fileUrl, destFilename);
+        try {
+            file.transferTo(destImage);
+            return JsonResult.success("success", server + pattern + "/" + filename);
+        } catch (IOException e) {
+            return JsonResult.error("图片保存失败");
+        }
+    }
+}
