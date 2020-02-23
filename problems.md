@@ -39,3 +39,7 @@
 - ##### 在student中也需要jwt验证，但是在feign调用时确没有token传过去。
 
   - 在调用feign的方法中使用@RequestHeader，将token信息自动注入到参数中，但是需要在student表中也要有admin管理员的账号信息，否则验证不通过。
+  
+- ##### jpa做数据查询时，当查询的数据列表主键有相同的时候，那么之后出第一条外，其他相同的主键值会全部为第一次出现时的值。
+
+  - 解决：mysql查询语句里，增加自定义主键列，保证主键唯一，在实体里增加一列，标为主键(例：SELECT @rownum:=@rownum+1 AS rownum, table_name.* FROM (SELECT @rownum:=0) r, table_name ;)，但是在jpa中，由于不识别 : 字符，需要在 : 前用 \\\\ 转义。

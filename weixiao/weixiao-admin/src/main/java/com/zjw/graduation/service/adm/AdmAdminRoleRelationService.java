@@ -2,6 +2,9 @@ package com.zjw.graduation.service.adm;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.adm.AdmAdminRoleRelation;
+import com.zjw.graduation.model.adm.AdmAdminRoleRelationBatchDeleteModel;
+
+import java.util.List;
 
 /**
  * 后台用户和角色关系表
@@ -18,5 +21,9 @@ public interface AdmAdminRoleRelationService {
     AdmAdminRoleRelation save(AdmAdminRoleRelation Admin);
 
     void delete(Long id);
+
+    void deleteRelation(Long adminId, Long roleId);
+
+    void batchDelete(List<AdmAdminRoleRelationBatchDeleteModel> models);
 }
 

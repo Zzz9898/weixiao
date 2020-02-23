@@ -5,6 +5,7 @@ import com.zjw.graduation.entity.adm.AdmAdmin;
 import com.zjw.graduation.entity.adm.AdmPermission;
 import com.zjw.graduation.entity.adm.AdmRole;
 import com.zjw.graduation.model.adm.AdmAdminCreateModel;
+import com.zjw.graduation.view.AdmAdminRolesView;
 
 import java.util.List;
 
@@ -37,5 +38,7 @@ public interface AdmAdminService {
     void enableOrDisable(Long id);
 
     void batchDelete(String ids);
+
+    PagingResult<AdmAdminRolesView> getAdminRolesList(String username, Long roleId, int pageIndex, int pageSize);
 }
 

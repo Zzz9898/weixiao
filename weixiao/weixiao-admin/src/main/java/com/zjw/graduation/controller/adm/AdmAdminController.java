@@ -4,6 +4,7 @@ package com.zjw.graduation.controller.adm;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.adm.AdmAdminDto;
+import com.zjw.graduation.dto.adm.AdmAdminRolesViewDto;
 import com.zjw.graduation.dto.adm.AdmInfoDto;
 import com.zjw.graduation.entity.adm.AdmAdmin;
 import com.zjw.graduation.entity.adm.AdmPermission;
@@ -15,6 +16,7 @@ import com.zjw.graduation.model.adm.AdmAdminUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.adm.AdmAdminService;
 import com.zjw.graduation.util.JwtTokenUtil;
+import com.zjw.graduation.view.AdmAdminRolesView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -124,7 +126,6 @@ public class AdmAdminController {
      * @return
      */
     @GetMapping("/admAdmins")
-    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户表列表")
     public JsonResult<PagingResult<AdmAdminDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
@@ -207,5 +208,21 @@ public class AdmAdminController {
     public JsonResult batchDelete(@RequestParam("ids") String ids) {
         admAdminService.batchDelete(ids);
         return JsonResult.success("操作成功");
+    }
+
+    @GetMapping("/admAdmin/roles")
+    @ApiOperation("获取管理员角色列表")
+    public JsonResult<PagingResult<AdmAdminRolesViewDto>> adminRoles(@RequestParam(value = "username",defaultValue = "") String username,
+                                 @RequestParam(value = "roleid",defaultValue = "0") Long roleId,
+                                 @RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+                                 @RequestParam(value = "pagesize",defaultValue = "10")int pageSize){
+        PagingResult<AdmAdminRolesView> pagingResult =
+                admAdminService.getAdminRolesList(username, roleId, pageIndex, pageSize);
+        PagingResult<AdmAdminRolesViewDto> convert = pagingResult.convert(item -> {
+            AdmAdminRolesViewDto admAdminRolesViewDto = new AdmAdminRolesViewDto();
+            BeanUtils.copyProperties(item, admAdminRolesViewDto);
+            return admAdminRolesViewDto;
+        });
+        return JsonResult.success(convert);
     }
 }

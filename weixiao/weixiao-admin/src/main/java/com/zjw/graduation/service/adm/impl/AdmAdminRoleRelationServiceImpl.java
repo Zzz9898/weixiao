@@ -1,5 +1,7 @@
 package com.zjw.graduation.service.adm.impl;
 
+import com.zjw.graduation.model.adm.AdmAdminRoleRelationBatchDeleteModel;
+import com.zjw.graduation.mvc.JsonResult;
 import org.springframework.data.domain.Page;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.enums.EnumLogicType;
@@ -10,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service("admAdminRoleRelationService")
@@ -39,6 +45,11 @@ public class AdmAdminRoleRelationServiceImpl implements AdmAdminRoleRelationServ
 
     @Override
     public AdmAdminRoleRelation save(AdmAdminRoleRelation admAdminRoleRelation) {
+        AdmAdminRoleRelation entity =
+                admAdminRoleRelationDao.findByAdminIdAndRoleIdAndLogicFlagIs(admAdminRoleRelation.getAdminId(),admAdminRoleRelation.getRoleId() , EnumLogicType.NORMAL.getValue());
+        if (entity != null) {
+            return null;
+        }
         return admAdminRoleRelationDao.save(admAdminRoleRelation);
     }
 
@@ -48,6 +59,25 @@ public class AdmAdminRoleRelationServiceImpl implements AdmAdminRoleRelationServ
         if (admAdminRoleRelation != null){
             admAdminRoleRelation.setLogicFlag(EnumLogicType.DELETE.getValue());
             admAdminRoleRelationDao.save(admAdminRoleRelation);
+        }
+    }
+
+    @Override
+    public void deleteRelation(Long adminId, Long roleId) {
+        AdmAdminRoleRelation admAdminRoleRelation =
+                admAdminRoleRelationDao.findByAdminIdAndRoleIdAndLogicFlagIs(adminId, roleId, EnumLogicType.NORMAL.getValue());
+        if (admAdminRoleRelation != null){
+            admAdminRoleRelation.setUpdated(LocalDateTime.now());
+            admAdminRoleRelation.setLogicFlag(EnumLogicType.DELETE.getValue());
+            admAdminRoleRelationDao.save(admAdminRoleRelation);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void batchDelete(List<AdmAdminRoleRelationBatchDeleteModel> models) {
+        for (AdmAdminRoleRelationBatchDeleteModel model :models){
+            deleteRelation(model.getAdminId(), model.getRoleId());
         }
     }
 

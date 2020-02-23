@@ -41,7 +41,6 @@ public class AdmRoleController {
      * @return
      */
     @GetMapping("/admRoles")
-    @PreAuthorize("hasAuthority('adm:admin:read')")
     @ApiOperation("后台用户角色表列表")
     public JsonResult<PagingResult<AdmRoleDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {

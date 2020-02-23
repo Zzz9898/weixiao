@@ -13,6 +13,7 @@ import com.zjw.graduation.repository.adm.*;
 import com.zjw.graduation.service.adm.AdmAdminService;
 import com.zjw.graduation.service.feign.student.StudentMemberFeign;
 import com.zjw.graduation.util.JwtTokenUtil;
+import com.zjw.graduation.view.AdmAdminRolesView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -55,6 +56,9 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AdmAdminRolesViewDao admAdminRolesViewDao;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -161,7 +165,7 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
         String password = passwordEncoder.encode(admAdmin.getPassword());
         admAdmin.setPassword(password);
         StudentMemberCreateModel studentMemberCreateModel = new StudentMemberCreateModel();
-        studentMemberCreateModel.setAcademyId(13L);
+        studentMemberCreateModel.setAcademyId(999L);
         studentMemberCreateModel.setUsername(admAdmin.getUsername());
         studentMemberCreateModel.setPassword(password);
         studentMemberCreateModel.setNickname("这个是管理员同步");
@@ -200,6 +204,21 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
                 Arrays.stream(ids.split(",")).map(Integer::parseInt).collect(Collectors.toList());
         LocalDateTime now = LocalDateTime.now();
         admAdminDao.batchDelete(collect, now);
+    }
+
+    @Override
+    public PagingResult<AdmAdminRolesView> getAdminRolesList(String username, Long roleId, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        Page<AdmAdminRolesView> page = admAdminRolesViewDao.getAdminRolesList(username, roleId, pageable);
+
+        PagingResult<AdmAdminRolesView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
     }
 
 }

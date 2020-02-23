@@ -37,5 +37,7 @@ public interface AdmAdminRoleRelationDao extends JpaRepository<AdmAdminRoleRelat
     Page<AdmAdminRoleRelation> findAll(Pageable pageable);
 
     List<AdmAdminRoleRelation> findAllByAdminIdAndLogicFlagIs(Long id, Integer value);
+
+    AdmAdminRoleRelation findByAdminIdAndRoleIdAndLogicFlagIs(Long adminId, Long roleId, Integer value);
 }
 

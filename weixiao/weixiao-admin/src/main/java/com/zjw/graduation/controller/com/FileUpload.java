@@ -4,10 +4,7 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.zjw.graduation.mvc.JsonResult;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -26,7 +23,7 @@ public class FileUpload {
     @Value("${file.pattern}")
     private String pattern;
 
-    @RequestMapping("/upload")
+    @PostMapping("/upload")
     public JsonResult reciveCameraCapture(@RequestParam("file") MultipartFile file) {
         if (file == null) {
             return JsonResult.success("null");
