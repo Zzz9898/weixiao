@@ -31,6 +31,12 @@ public class StudentMemberDto {
     private String username;
 
     /**
+     * 姓名
+     */
+    @ApiModelProperty(value = "姓名", name = "truename")
+    private String truename;
+
+    /**
      * 昵称
      */
     @ApiModelProperty(value = "昵称", name = "nickname")
@@ -258,4 +264,11 @@ public class StudentMemberDto {
         this.logicFlag = logicFlag;
     }
 
+    public String getTruename() {
+        return truename;
+    }
+
+    public void setTruename(String truename) {
+        this.truename = truename;
+    }
 }

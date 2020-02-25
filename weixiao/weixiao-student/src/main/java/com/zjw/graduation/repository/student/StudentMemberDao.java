@@ -5,8 +5,14 @@ import org.springframework.data.domain.Pageable;
 import com.zjw.graduation.entity.student.StudentMember;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 学生表
@@ -35,5 +41,18 @@ public interface StudentMemberDao extends JpaRepository<StudentMember, Long>, Jp
     Page<StudentMember> findAll(Pageable pageable);
 
     StudentMember findByUsernameAndLogicFlagIs(String username, Integer value);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true,
+            value = "UPDATE " +
+                    "   z_student_member " +
+                    "SET " +
+                    "   `logic_flag` = 0 AND " +
+                    "   `updated` = :now " +
+                    "WHERE " +
+                    "   id IN :collect")
+    void batchDelete(@Param("collect") List<Long> collect,
+                     @Param("now") LocalDateTime now);
 }
 

@@ -4,12 +4,14 @@ package com.zjw.graduation.controller.student;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.student.StudentMemberDto;
+import com.zjw.graduation.dto.student.StudentMemberViewDto;
 import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.model.student.StudentMemberCreateModel;
 import com.zjw.graduation.model.student.StudentMemberLoginModel;
 import com.zjw.graduation.model.student.StudentMemberUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.student.StudentMemberService;
+import com.zjw.graduation.view.stu.StudentMemberView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -22,8 +24,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -64,24 +69,24 @@ public class StudentMemberController {
         tokenMap.put("tokenHead", tokenHead);
         return JsonResult.success(tokenMap);
     }
-    /**
-     * 列表
-     *
-     * @return
-     */
-    @GetMapping("/studentMembers")
-    @ApiOperation("学生表列表")
-    public JsonResult<PagingResult<StudentMemberDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
-                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
-
-        PagingResult<StudentMember> page = studentMemberService.page(pageIndex, pageSize);
-        PagingResult<StudentMemberDto> convert = page.convert(item -> {
-            StudentMemberDto studentMemberDto = new StudentMemberDto();
-            BeanUtils.copyProperties(item, studentMemberDto);
-            return studentMemberDto;
-        });
-        return JsonResult.success(convert);
-    }
+//    /**
+//     * 列表
+//     *
+//     * @return
+//     */
+//    @GetMapping("/studentMembers")
+//    @ApiOperation("学生表列表")
+//    public JsonResult<PagingResult<StudentMemberDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+//                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
+//
+//        PagingResult<StudentMember> page = studentMemberService.page(pageIndex, pageSize);
+//        PagingResult<StudentMemberDto> convert = page.convert(item -> {
+//            StudentMemberDto studentMemberDto = new StudentMemberDto();
+//            BeanUtils.copyProperties(item, studentMemberDto);
+//            return studentMemberDto;
+//        });
+//        return JsonResult.success(convert);
+//    }
 
 
     /**
@@ -172,11 +177,11 @@ public class StudentMemberController {
         return JsonResult.success("删除成功");
     }
 
-    @PutMapping("/studentMember/disable/{id}")
-    @ApiOperation("学生表禁用")
-    public JsonResult disable(@PathVariable("id") Long id){
-        studentMemberService.disable(id);
-        return JsonResult.success("禁用成功");
+    @PutMapping("/studentMember/disableorenable/{id}")
+    @ApiOperation("学生表禁用/启用")
+    public JsonResult disableOrEnable(@PathVariable("id") Long id){
+        studentMemberService.disableOrEnable(id);
+        return JsonResult.success("操作成功");
     }
 
     @GetMapping("/studentMember/check")
@@ -184,5 +189,33 @@ public class StudentMemberController {
     public boolean check(@RequestParam("username") String username){
         StudentMember studentMember = studentMemberService.check(username);
         return studentMember == null;
+    }
+
+    @GetMapping("/studentMembers")
+    @ApiOperation("学生表视图列表")
+    public JsonResult<PagingResult<StudentMemberViewDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+                                                               @RequestParam(value = "pagesize",defaultValue = "10")int pageSize,
+                                                               @RequestParam(value = "username",defaultValue = "")String username,
+                                                               @RequestParam(value = "sex",defaultValue = "0")int sex,
+                                                               @RequestParam(value = "academyid",defaultValue = "0") Long academyId,
+                                                               @RequestParam(value = "areaid",defaultValue = "0") Long areaId,
+                                                               @RequestParam(value = "state",defaultValue = "2") Long state) {
+        PagingResult<StudentMemberView> page =
+                studentMemberService.getStudentViewList(username, sex, academyId, areaId, state, pageIndex, pageSize);
+        PagingResult<StudentMemberViewDto> convert = page.convert(item -> {
+            StudentMemberViewDto studentMemberViewDto = new StudentMemberViewDto();
+            BeanUtils.copyProperties(item, studentMemberViewDto);
+            return studentMemberViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
+    @PutMapping("/studentMember/batchdelete")
+    @ApiOperation("学生表批量删除")
+    public JsonResult batchDelete(@RequestParam("ids") String ids){
+        List<Long> collect =
+                Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        studentMemberService.batchDelete(collect);
+        return JsonResult.success("批量禁用成功");
     }
 }

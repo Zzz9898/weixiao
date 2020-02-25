@@ -5,7 +5,7 @@ import com.zjw.graduation.entity.adm.AdmAdmin;
 import com.zjw.graduation.entity.adm.AdmPermission;
 import com.zjw.graduation.entity.adm.AdmRole;
 import com.zjw.graduation.model.adm.AdmAdminCreateModel;
-import com.zjw.graduation.view.AdmAdminRolesView;
+import com.zjw.graduation.view.adm.AdmAdminRolesView;
 
 import java.util.List;
 

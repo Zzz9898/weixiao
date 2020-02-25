@@ -1,8 +1,4 @@
-package com.zjw.graduation.entity.student;
-
-import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+package com.zjw.graduation.view.stu;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,17 +6,15 @@ import java.time.LocalDateTime;
 
 
 /**
- * 学生表
+ * 学生表视图
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2019-11-25 10:30:03
+ * @date 2020-02-25 11:26:42
  */
 @Entity
 @Table(name = "z_student_member")
-@DynamicInsert
-@DynamicUpdate
-public class StudentMember implements Serializable {
+public class StudentMemberView implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,11 +30,6 @@ public class StudentMember implements Serializable {
      */
     @Column(name = "username", nullable = false)
     private String username;
-    /**
-     * 密码
-     */
-    @Column(name = "password", nullable = false)
-    private String password;
 
     /**
      * 姓名
@@ -82,26 +71,18 @@ public class StudentMember implements Serializable {
      */
     @Column(name = "face_img")
     private String faceImg;
+
     /**
-     * 聊天头像
+     * 专业名称
      */
-    @Column(name = "face_img_min")
-    private String faceImgMin;
-    /**
-     * 专业id
-     */
-    @Column(name = "academy_id")
-    private Long academyId;
+    @Column(name = "academy_name")
+    private String academyName;
     /**
      * 个人签名
      */
     @Column(name = "autograph")
     private String autograph;
-    /**
-     * 是否隐藏个人信息 1-不隐藏 2-隐藏
-     */
-    @Column(name = "hide")
-    private Integer hide;
+
     /**
      * 状态 0-禁用 1-启用
      */
@@ -117,35 +98,6 @@ public class StudentMember implements Serializable {
      */
     @Column(name = "updated")
     private LocalDateTime updated;
-    /**
-     * 逻辑删除 0-是 1-否
-     */
-    @Column(name = "logic_flag")
-    private Integer logicFlag;
-
-    public String getTruename() {
-        return truename;
-    }
-
-    public void setTruename(String truename) {
-        this.truename = truename;
-    }
-
-    public Integer getState() {
-        return state;
-    }
-
-    public void setState(Integer state) {
-        this.state = state;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
 
     public Long getId() {
         return id;
@@ -163,12 +115,20 @@ public class StudentMember implements Serializable {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getTruename() {
+        return truename;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setTruename(String truename) {
+        this.truename = truename;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public Integer getSex() {
@@ -219,20 +179,12 @@ public class StudentMember implements Serializable {
         this.faceImg = faceImg;
     }
 
-    public String getFaceImgMin() {
-        return faceImgMin;
+    public String getAcademyName() {
+        return academyName;
     }
 
-    public void setFaceImgMin(String faceImgMin) {
-        this.faceImgMin = faceImgMin;
-    }
-
-    public Long getAcademyId() {
-        return academyId;
-    }
-
-    public void setAcademyId(Long academyId) {
-        this.academyId = academyId;
+    public void setAcademyName(String academyName) {
+        this.academyName = academyName;
     }
 
     public String getAutograph() {
@@ -243,12 +195,12 @@ public class StudentMember implements Serializable {
         this.autograph = autograph;
     }
 
-    public Integer getHide() {
-        return hide;
+    public Integer getState() {
+        return state;
     }
 
-    public void setHide(Integer hide) {
-        this.hide = hide;
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     public LocalDateTime getCreated() {
@@ -266,21 +218,4 @@ public class StudentMember implements Serializable {
     public void setUpdated(LocalDateTime updated) {
         this.updated = updated;
     }
-
-    public Integer getLogicFlag() {
-        return logicFlag;
-    }
-
-    public void setLogicFlag(Integer logicFlag) {
-        this.logicFlag = logicFlag;
-    }
-
-    public Object copy() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
-
 }

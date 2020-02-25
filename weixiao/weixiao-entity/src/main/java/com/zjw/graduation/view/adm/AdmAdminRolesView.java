@@ -1,4 +1,4 @@
-package com.zjw.graduation.view;
+package com.zjw.graduation.view.adm;
 
 import io.swagger.annotations.ApiModel;
 

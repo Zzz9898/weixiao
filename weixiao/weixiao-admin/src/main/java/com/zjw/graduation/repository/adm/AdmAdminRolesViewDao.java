@@ -1,6 +1,6 @@
 package com.zjw.graduation.repository.adm;
 
-import com.zjw.graduation.view.AdmAdminRolesView;
+import com.zjw.graduation.view.adm.AdmAdminRolesView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

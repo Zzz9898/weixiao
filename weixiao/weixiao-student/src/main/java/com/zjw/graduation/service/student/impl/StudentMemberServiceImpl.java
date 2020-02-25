@@ -8,9 +8,11 @@ import com.zjw.graduation.enums.EnumLogicType;
 import com.zjw.graduation.enums.EnumStateType;
 import com.zjw.graduation.repository.student.StudentMemberDao;
 import com.zjw.graduation.repository.student.StudentMemberPermissionRelationDao;
+import com.zjw.graduation.repository.student.StudentMemberViewDao;
 import com.zjw.graduation.repository.student.StudentPermissionDao;
 import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.util.JwtTokenUtil;
+import com.zjw.graduation.view.stu.StudentMemberView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +61,9 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private StudentMemberViewDao studentMemberViewDao;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -146,10 +152,10 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
     }
 
     @Override
-    public void disable(Long id) {
+    public void disableOrEnable(Long id) {
         StudentMember studentMember = studentMemberDao.findById(id).orElse(null);
         if (studentMember != null){
-            studentMember.setState(EnumStateType.DISABLE.getValue());
+            studentMember.setState(studentMember.getState().equals(EnumStateType.DISABLE.getValue()) ? EnumStateType.NORMAL.getValue() : EnumStateType.DISABLE.getValue());
             studentMemberDao.save(studentMember);
         }
     }
@@ -157,6 +163,27 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
     @Override
     public StudentMember check(String username) {
         return studentMemberDao.findByUsernameAndLogicFlagIs(username, EnumLogicType.NORMAL.getValue());
+    }
+
+    @Override
+    public PagingResult<StudentMemberView> getStudentViewList(String username, int sex, Long academyId, Long areaId, Long state, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        Page<StudentMemberView> page = studentMemberViewDao.getStudentViewList(username, sex, academyId, areaId, state, pageable);
+
+        PagingResult<StudentMemberView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
+    }
+
+    @Override
+    public void batchDelete(List<Long> collect) {
+        LocalDateTime now = LocalDateTime.now();
+        studentMemberDao.batchDelete(collect, now);
     }
 
 }
