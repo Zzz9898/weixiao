@@ -8,7 +8,7 @@ import com.zjw.graduation.entity.post.PostHot;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:02:40
+ * @date 2020-02-26 16:27:41
  */
 public interface PostHotService {
     PagingResult<PostHot> page(int pageIndex, int pageSize);

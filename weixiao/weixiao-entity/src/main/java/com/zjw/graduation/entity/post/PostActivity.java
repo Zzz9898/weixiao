@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:15:39
+ * @date 2020-02-26 16:27:41
  */
 @Entity
 @Table(name = "z_post_activity")
@@ -54,6 +54,16 @@ public class PostActivity implements Serializable {
 	 */
 	    @Column(name = "content")
 	private String content;
+		/**
+	 * 图片
+	 */
+	    @Column(name = "images")
+	private String images;
+		/**
+	 * 活动类型
+	 */
+	    @Column(name = "category")
+	private Long category;
 		/**
 	 * 开始时间
 	 */
@@ -152,6 +162,20 @@ public class PostActivity implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+		    public String getImages() {
+        return images;
+    }
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+		    public Long getCategory() {
+        return category;
+    }
+
+	public void setCategory(Long category) {
+		this.category = category;
 	}
 		    public LocalDateTime getStartTime() {
         return startTime;

@@ -1,4 +1,4 @@
-package com.zjw.graduation.entity.post;
+package com.zjw.graduation.entity.student;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -8,17 +8,17 @@ import java.time.LocalDateTime;
 
 
 /**
- * 热点内容表
+ * 举报表
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:27:41
+ * @date 2020-02-26 16:30:19
  */
 @Entity
-@Table(name = "z_post_hot")
+@Table(name = "z_student_report")
 @DynamicInsert
 @DynamicUpdate
-public class PostHot implements Serializable {
+public class StudentReport implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,35 +30,40 @@ public class PostHot implements Serializable {
 	@Column(name = "id", nullable = false, insertable = false, updatable = false)
 	private Long id;
 		/**
-	 * 发布内容
+	 * 举报人主键
+	 */
+		@Column(name = "student_id", nullable = false)
+	private Long studentId;
+    	/**
+	 * 被举报人主键
+	 */
+		@Column(name = "report_student_id", nullable = false)
+	private Long reportStudentId;
+    	/**
+	 * 内容类型
+	 */
+	    @Column(name = "category_id")
+	private Long categoryId;
+		/**
+	 * 发布内容主键
+	 */
+	    @Column(name = "post_id")
+	private Long postId;
+		/**
+	 * 举报说明
 	 */
 	    @Column(name = "content")
 	private String content;
 		/**
-	 * 图片
-	 */
-	    @Column(name = "images")
-	private String images;
-		/**
-	 * 发布时间
-	 */
-	    @Column(name = "release_time")
-	private LocalDateTime releaseTime;
-		/**
-	 * 浏览次数
-	 */
-	    @Column(name = "look_num")
-	private Integer lookNum;
-		/**
-	 * 点赞次数
-	 */
-	    @Column(name = "like_num")
-	private Integer likeNum;
-		/**
-	 * 状态 0-禁止 1-正常
+	 * 举报状态 0-全部 1-正在处理 2-已处理
 	 */
 	    @Column(name = "state")
 	private Integer state;
+		/**
+	 * 反馈
+	 */
+	    @Column(name = "reply")
+	private String reply;
 		/**
 	 * 创建时间
 	 */
@@ -83,6 +88,34 @@ public class PostHot implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+		    public Long getStudentId() {
+        return studentId;
+    }
+
+	public void setStudentId(Long studentId) {
+		this.studentId = studentId;
+	}
+		    public Long getReportStudentId() {
+        return reportStudentId;
+    }
+
+	public void setReportStudentId(Long reportStudentId) {
+		this.reportStudentId = reportStudentId;
+	}
+		    public Long getCategoryId() {
+        return categoryId;
+    }
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+		    public Long getPostId() {
+        return postId;
+    }
+
+	public void setPostId(Long postId) {
+		this.postId = postId;
+	}
 		    public String getContent() {
         return content;
     }
@@ -90,40 +123,19 @@ public class PostHot implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-		    public String getImages() {
-        return images;
-    }
-
-	public void setImages(String images) {
-		this.images = images;
-	}
-		    public LocalDateTime getReleaseTime() {
-        return releaseTime;
-    }
-
-	public void setReleaseTime(LocalDateTime releaseTime) {
-		this.releaseTime = releaseTime;
-	}
-		    public Integer getLookNum() {
-        return lookNum;
-    }
-
-	public void setLookNum(Integer lookNum) {
-		this.lookNum = lookNum;
-	}
-		    public Integer getLikeNum() {
-        return likeNum;
-    }
-
-	public void setLikeNum(Integer likeNum) {
-		this.likeNum = likeNum;
-	}
 		    public Integer getState() {
         return state;
     }
 
 	public void setState(Integer state) {
 		this.state = state;
+	}
+		    public String getReply() {
+        return reply;
+    }
+
+	public void setReply(String reply) {
+		this.reply = reply;
 	}
 		    public LocalDateTime getCreated() {
         return created;

@@ -8,7 +8,7 @@ import com.zjw.graduation.entity.post.PostActivity;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:15:39
+ * @date 2020-02-26 16:27:41
  */
 public interface PostActivityService {
     PagingResult<PostActivity> page(int pageIndex, int pageSize);

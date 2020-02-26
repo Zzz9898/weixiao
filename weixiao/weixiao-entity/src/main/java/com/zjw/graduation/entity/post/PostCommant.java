@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:09:07
+ * @date 2020-02-26 16:27:41
  */
 @Entity
 @Table(name = "z_post_comment")
@@ -44,6 +44,11 @@ public class PostCommant implements Serializable {
 	 */
 	    @Column(name = "content")
 	private String content;
+		/**
+	 * 内容类型 0-所有 1-活动 2-动态 3-热点
+	 */
+	    @Column(name = "category")
+	private Long category;
 		/**
 	 * 评论时间
 	 */
@@ -93,6 +98,13 @@ public class PostCommant implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+		    public Long getCategory() {
+        return category;
+    }
+
+	public void setCategory(Long category) {
+		this.category = category;
 	}
 		    public LocalDateTime getCommentTime() {
         return commentTime;

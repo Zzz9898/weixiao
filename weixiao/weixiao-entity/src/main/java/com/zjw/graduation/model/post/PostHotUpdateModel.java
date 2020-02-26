@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:02:40
+ * @date 2020-02-26 16:27:41
  */
 @ApiModel(value = "post.PostHotUpdateModel", description = "热点内容表")
 public class PostHotUpdateModel {
@@ -35,6 +35,13 @@ public class PostHotUpdateModel {
 	 */
 							@ApiModelProperty(value = "发布内容")
 				private String content;
+
+
+	/**
+	 * 图片
+	 */
+							@ApiModelProperty(value = "图片")
+				private String images;
 
 
 	/**
@@ -79,6 +86,13 @@ public class PostHotUpdateModel {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+			public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
 	}
 			public LocalDateTime getReleaseTime() {
 		return releaseTime;

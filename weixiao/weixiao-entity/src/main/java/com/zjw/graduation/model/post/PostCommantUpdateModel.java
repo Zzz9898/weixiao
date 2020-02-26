@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:09:07
+ * @date 2020-02-26 16:27:41
  */
 @ApiModel(value = "post.PostCommantUpdateModel", description = "")
 public class PostCommantUpdateModel {
@@ -54,6 +54,13 @@ public class PostCommantUpdateModel {
 
 
 	/**
+	 * 内容类型 0-所有 1-活动 2-动态 3-热点
+	 */
+							@ApiModelProperty(value = "内容类型 0-所有 1-活动 2-动态 3-热点")
+				private Long category;
+
+
+	/**
 	 * 评论时间
 	 */
 							@ApiModelProperty(value = "评论时间", example = "2019-01-01 09:01:01")
@@ -88,6 +95,13 @@ public class PostCommantUpdateModel {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+			public Long getCategory() {
+		return category;
+	}
+
+	public void setCategory(Long category) {
+		this.category = category;
 	}
 			public LocalDateTime getCommentTime() {
 		return commentTime;

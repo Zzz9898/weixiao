@@ -3,17 +3,20 @@ package com.zjw.graduation.model.post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Size;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
+
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 活动发布表
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:15:39
+ * @date 2020-02-26 16:27:41
  */
 @ApiModel(value = "post.PostActivityCreateModel", description = "活动发布表")
 public class PostActivityCreateModel {
@@ -67,6 +70,25 @@ public class PostActivityCreateModel {
 
 									@ApiModelProperty(value = "内容")
 							private String content;
+
+		
+		/**
+		 * 图片
+		 */
+								@Size(min = 0, max = 999, message = "图片 长度需要在0和999之间")
+					
+
+									@ApiModelProperty(value = "图片")
+							private String images;
+
+		
+		/**
+		 * 活动类型
+		 */
+							
+
+									@ApiModelProperty(value = "活动类型")
+							private Long category;
 
 		
 		/**
@@ -180,6 +202,20 @@ public class PostActivityCreateModel {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+			public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+			public Long getCategory() {
+		return category;
+	}
+
+	public void setCategory(Long category) {
+		this.category = category;
 	}
 			public LocalDateTime getStartTime() {
 		return startTime;

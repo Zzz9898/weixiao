@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:02:40
+ * @date 2020-02-26 16:27:41
  */
 @ApiModel(value="post.PostHotDto", description="热点内容表")
 public class PostHotDto {
@@ -28,6 +28,12 @@ public class PostHotDto {
 	 */
 @ApiModelProperty(value="发布内容", name="content")
 	private String content;
+
+	/**
+	 * 图片
+	 */
+@ApiModelProperty(value="图片", name="images")
+	private String images;
 
 	/**
 	 * 发布时间
@@ -89,6 +95,13 @@ public class PostHotDto {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
 	}
 	public LocalDateTime getReleaseTime() {
 		return releaseTime;

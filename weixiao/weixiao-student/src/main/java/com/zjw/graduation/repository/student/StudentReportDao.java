@@ -1,37 +1,37 @@
-package com.zjw.graduation.repository.post;
+package com.zjw.graduation.repository.student;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.zjw.graduation.entity.post.PostCommant;
+import com.zjw.graduation.entity.student.StudentReport;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 
 /**
- * 
+ * 举报表
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:27:41
+ * @date 2020-02-26 16:30:19
  */
 
-@Repository("PostCommantDao")
-public interface PostCommantDao extends JpaRepository<PostCommant, Long>, JpaSpecificationExecutor<PostCommant> {
+@Repository("StudentReportDao")
+public interface StudentReportDao extends JpaRepository<StudentReport, Long>, JpaSpecificationExecutor<StudentReport> {
 
     @Query(nativeQuery = true,
             value = "SELECT " +
                     "* " +
                     "FROM " +
-                    "z_post_comment " +
+                    "z_student_report " +
                     "WHERE " +
                     "`logic_flag` = 1 ",
             countQuery = "SELECT " +
                     "COUNT(*) " +
                     "FROM " +
-                    "z_post_comment " +
+                    "z_student_report " +
                     "WHERE " +
                     "`logic_flag` = 1 ")
-    Page<PostCommant> findAll(Pageable pageable);
+    Page<StudentReport> findAll(Pageable pageable);
 }
 

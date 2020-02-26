@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-25 17:02:40
+ * @date 2020-02-26 16:27:41
  */
 @ApiModel(value = "post.PostHotCreateModel", description = "热点内容表")
 public class PostHotCreateModel {
@@ -30,6 +30,16 @@ public class PostHotCreateModel {
 
 									@ApiModelProperty(value = "发布内容")
 							private String content;
+
+		
+		/**
+		 * 图片
+		 */
+								@Size(min = 0, max = 999, message = "图片 长度需要在0和999之间")
+					
+
+									@ApiModelProperty(value = "图片")
+							private String images;
 
 		
 		/**
@@ -75,6 +85,13 @@ public class PostHotCreateModel {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+			public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
 	}
 			public LocalDateTime getReleaseTime() {
 		return releaseTime;

@@ -1,4 +1,4 @@
-package com.zjw.graduation.dto.post;
+package com.zjw.graduation.dto.student;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 /**
- * 
+ * 举报表
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:27:41
+ * @date 2020-02-26 16:30:19
  */
-@ApiModel(value="post.PostCommantDto", description="")
-public class PostCommantDto {
+@ApiModel(value="student.StudentReportDto", description="举报表")
+public class StudentReportDto {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,35 +24,46 @@ public class PostCommantDto {
 	private Long id;
 
 	/**
-	 * 发布内容主键
+	 * 举报人主键
 	 */
-@ApiModelProperty(value="发布内容主键", name="postId", required=true)
-	private Long postId;
-
-	/**
-	 * 用户主键
-	 */
-@ApiModelProperty(value="用户主键", name="studentId", required=true)
+@ApiModelProperty(value="举报人主键", name="studentId", required=true)
 	private Long studentId;
 
 	/**
-	 * 内容
+	 * 被举报人主键
 	 */
-@ApiModelProperty(value="内容", name="content")
+@ApiModelProperty(value="被举报人主键", name="reportStudentId", required=true)
+	private Long reportStudentId;
+
+	/**
+	 * 内容类型
+	 */
+@ApiModelProperty(value="内容类型", name="categoryId")
+	private Long categoryId;
+
+	/**
+	 * 发布内容主键
+	 */
+@ApiModelProperty(value="发布内容主键", name="postId")
+	private Long postId;
+
+	/**
+	 * 举报说明
+	 */
+@ApiModelProperty(value="举报说明", name="content")
 	private String content;
 
 	/**
-	 * 内容类型 0-所有 1-活动 2-动态 3-热点
+	 * 举报状态 0-全部 1-正在处理 2-已处理
 	 */
-@ApiModelProperty(value="内容类型 0-所有 1-活动 2-动态 3-热点", name="category")
-	private Long category;
+@ApiModelProperty(value="举报状态 0-全部 1-正在处理 2-已处理", name="state")
+	private Integer state;
 
 	/**
-	 * 评论时间
+	 * 反馈
 	 */
-@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+08:00")
-	@ApiModelProperty(value="评论时间", name="commentTime", example="2019-01-01 09:01:01")
-	private LocalDateTime commentTime;
+@ApiModelProperty(value="反馈", name="reply")
+	private String reply;
 
 	/**
 	 * 创建时间
@@ -83,19 +94,33 @@ public class PostCommantDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getPostId() {
-		return postId;
-	}
-
-	public void setPostId(Long postId) {
-		this.postId = postId;
-	}
 	public Long getStudentId() {
 		return studentId;
 	}
 
 	public void setStudentId(Long studentId) {
 		this.studentId = studentId;
+	}
+	public Long getReportStudentId() {
+		return reportStudentId;
+	}
+
+	public void setReportStudentId(Long reportStudentId) {
+		this.reportStudentId = reportStudentId;
+	}
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+	public Long getPostId() {
+		return postId;
+	}
+
+	public void setPostId(Long postId) {
+		this.postId = postId;
 	}
 	public String getContent() {
 		return content;
@@ -104,19 +129,19 @@ public class PostCommantDto {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Long getCategory() {
-		return category;
+	public Integer getState() {
+		return state;
 	}
 
-	public void setCategory(Long category) {
-		this.category = category;
+	public void setState(Integer state) {
+		this.state = state;
 	}
-	public LocalDateTime getCommentTime() {
-		return commentTime;
+	public String getReply() {
+		return reply;
 	}
 
-	public void setCommentTime(LocalDateTime commentTime) {
-		this.commentTime = commentTime;
+	public void setReply(String reply) {
+		this.reply = reply;
 	}
 	public LocalDateTime getCreated() {
 		return created;
