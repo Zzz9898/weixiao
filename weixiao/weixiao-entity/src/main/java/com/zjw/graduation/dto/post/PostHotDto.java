@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:27:41
+ * @date 2020-02-27 18:25:52
  */
 @ApiModel(value="post.PostHotDto", description="热点内容表")
 public class PostHotDto {
@@ -22,6 +22,12 @@ public class PostHotDto {
 	 */
 @ApiModelProperty(value="主键", name="id", required=true)
 	private Long id;
+
+	/**
+	 * 标题
+	 */
+@ApiModelProperty(value="标题", name="title")
+	private String title;
 
 	/**
 	 * 发布内容
@@ -41,6 +47,20 @@ public class PostHotDto {
 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+08:00")
 	@ApiModelProperty(value="发布时间", name="releaseTime", example="2019-01-01 09:01:01")
 	private LocalDateTime releaseTime;
+
+	/**
+	 * 开始时间
+	 */
+@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+08:00")
+	@ApiModelProperty(value="开始时间", name="startTime", example="2019-01-01 09:01:01")
+	private LocalDateTime startTime;
+
+	/**
+	 * 结束时间
+	 */
+@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+08:00")
+	@ApiModelProperty(value="结束时间", name="endTime", example="2019-01-01 09:01:01")
+	private LocalDateTime endTime;
 
 	/**
 	 * 浏览次数
@@ -89,6 +109,13 @@ public class PostHotDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	public String getContent() {
 		return content;
 	}
@@ -109,6 +136,20 @@ public class PostHotDto {
 
 	public void setReleaseTime(LocalDateTime releaseTime) {
 		this.releaseTime = releaseTime;
+	}
+	public LocalDateTime getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
+	public LocalDateTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
 	}
 	public Integer getLookNum() {
 		return lookNum;

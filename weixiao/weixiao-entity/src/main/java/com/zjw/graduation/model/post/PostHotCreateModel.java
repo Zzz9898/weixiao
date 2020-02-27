@@ -16,10 +16,20 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:27:41
+ * @date 2020-02-27 18:25:52
  */
 @ApiModel(value = "post.PostHotCreateModel", description = "热点内容表")
 public class PostHotCreateModel {
+
+		
+		/**
+		 * 标题
+		 */
+								@Size(min = 0, max = 255, message = "标题 长度需要在0和255之间")
+					
+
+									@ApiModelProperty(value = "标题")
+							private String title;
 
 		
 		/**
@@ -53,6 +63,26 @@ public class PostHotCreateModel {
 
 		
 		/**
+		 * 开始时间
+		 */
+							
+
+									@ApiModelProperty(value = "开始时间", example = "2019-01-01 09:01:01")
+			        	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+				private LocalDateTime startTime;
+
+		
+		/**
+		 * 结束时间
+		 */
+							
+
+									@ApiModelProperty(value = "结束时间", example = "2019-01-01 09:01:01")
+			        	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+				private LocalDateTime endTime;
+
+		
+		/**
 		 * 浏览次数
 		 */
 							
@@ -79,6 +109,13 @@ public class PostHotCreateModel {
 							private Integer state;
 
 				
+			public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 			public String getContent() {
 		return content;
 	}
@@ -99,6 +136,20 @@ public class PostHotCreateModel {
 
 	public void setReleaseTime(LocalDateTime releaseTime) {
 		this.releaseTime = releaseTime;
+	}
+			public LocalDateTime getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
+			public LocalDateTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
 	}
 			public Integer getLookNum() {
 		return lookNum;

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:27:41
+ * @date 2020-02-27 18:25:52
  */
 @Entity
 @Table(name = "z_post_hot")
@@ -30,6 +30,11 @@ public class PostHot implements Serializable {
 	@Column(name = "id", nullable = false, insertable = false, updatable = false)
 	private Long id;
 		/**
+	 * 标题
+	 */
+	    @Column(name = "title")
+	private String title;
+		/**
 	 * 发布内容
 	 */
 	    @Column(name = "content")
@@ -45,6 +50,16 @@ public class PostHot implements Serializable {
 	    @Column(name = "release_time")
 	private LocalDateTime releaseTime;
 		/**
+	 * 开始时间
+	 */
+		@Column(name = "start_time", nullable = false)
+	private LocalDateTime startTime;
+    	/**
+	 * 结束时间
+	 */
+		@Column(name = "end_time", nullable = false)
+	private LocalDateTime endTime;
+    	/**
 	 * 浏览次数
 	 */
 	    @Column(name = "look_num")
@@ -83,6 +98,13 @@ public class PostHot implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
+		    public String getTitle() {
+        return title;
+    }
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 		    public String getContent() {
         return content;
     }
@@ -103,6 +125,20 @@ public class PostHot implements Serializable {
 
 	public void setReleaseTime(LocalDateTime releaseTime) {
 		this.releaseTime = releaseTime;
+	}
+		    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
+		    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
 	}
 		    public Integer getLookNum() {
         return lookNum;

@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:27:41
+ * @date 2020-02-27 18:25:52
  */
 @ApiModel(value = "post.PostHotUpdateModel", description = "热点内容表")
 public class PostHotUpdateModel {
@@ -28,6 +28,13 @@ public class PostHotUpdateModel {
 			@NotNull(message = "主键 不能为空")
 							@ApiModelProperty(value = "主键", required = true)
 				private Long id;
+
+
+	/**
+	 * 标题
+	 */
+							@ApiModelProperty(value = "标题")
+				private String title;
 
 
 	/**
@@ -50,6 +57,22 @@ public class PostHotUpdateModel {
 							@ApiModelProperty(value = "发布时间", example = "2019-01-01 09:01:01")
 		    	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
 		private LocalDateTime releaseTime;
+
+
+	/**
+	 * 开始时间
+	 */
+							@ApiModelProperty(value = "开始时间", example = "2019-01-01 09:01:01")
+		    	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+		private LocalDateTime startTime;
+
+
+	/**
+	 * 结束时间
+	 */
+							@ApiModelProperty(value = "结束时间", example = "2019-01-01 09:01:01")
+		    	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+		private LocalDateTime endTime;
 
 
 	/**
@@ -80,6 +103,13 @@ public class PostHotUpdateModel {
 	public void setId(Long id) {
 		this.id = id;
 	}
+			public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 			public String getContent() {
 		return content;
 	}
@@ -100,6 +130,20 @@ public class PostHotUpdateModel {
 
 	public void setReleaseTime(LocalDateTime releaseTime) {
 		this.releaseTime = releaseTime;
+	}
+			public LocalDateTime getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalDateTime startTime) {
+		this.startTime = startTime;
+	}
+			public LocalDateTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
 	}
 			public Integer getLookNum() {
 		return lookNum;
