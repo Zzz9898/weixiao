@@ -5,8 +5,14 @@ import org.springframework.data.domain.Pageable;
 import com.zjw.graduation.entity.student.StudentReport;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 举报表
@@ -25,13 +31,31 @@ public interface StudentReportDao extends JpaRepository<StudentReport, Long>, Jp
                     "FROM " +
                     "z_student_report " +
                     "WHERE " +
-                    "`logic_flag` = 1 ",
+                    "`logic_flag` = 1 AND " +
+                    "(:state = 0 OR state = :state)",
             countQuery = "SELECT " +
                     "COUNT(*) " +
                     "FROM " +
                     "z_student_report " +
                     "WHERE " +
-                    "`logic_flag` = 1 ")
-    Page<StudentReport> findAll(Pageable pageable);
+                    "`logic_flag` = 1 AND " +
+                    "(:state = 0 OR state = :state)")
+    Page<StudentReport> findAll(@Param("state")int state,
+                                Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true,
+            value = "UPDATE " +
+                    "   z_student_report " +
+                    "SET " +
+                    "   reply = :content, " +
+                    "   state = 2," +
+                    "   updated = :now " +
+                    "WHERE " +
+                    "   id IN :collect")
+    void batchReply(@Param("collect") List<Long> collect,
+                    @Param("content") String content,
+                    @Param("now") LocalDateTime now);
 }
 

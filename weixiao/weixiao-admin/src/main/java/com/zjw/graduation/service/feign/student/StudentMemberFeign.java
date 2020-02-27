@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(value = "weixiao-student", fallback = StudentMemberFeignFallback.class)
+@FeignClient(value = "weixiao-student", fallback = StudentMemberFeignFallback.class, contextId = "student-member")
 public interface StudentMemberFeign {
 
     @GetMapping("/student/studentMember/{id}")
