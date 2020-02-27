@@ -41,9 +41,10 @@ public class StudentReportController {
     @GetMapping("/studentReports")
     @ApiOperation("举报表列表")
     public JsonResult<PagingResult<StudentReportDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
-                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
+                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize,
+                                                           @RequestParam(value = "state", defaultValue = "0")int state) {
 
-        PagingResult<StudentReport> page = studentReportService.page(pageIndex, pageSize);
+        PagingResult<StudentReport> page = studentReportService.page(state, pageIndex, pageSize);
         PagingResult<StudentReportDto> convert = page.convert(item -> {
             StudentReportDto studentReportDto = new StudentReportDto();
             BeanUtils.copyProperties(item, studentReportDto);
@@ -126,6 +127,38 @@ public class StudentReportController {
         studentReportService.delete(id);
 
         return JsonResult.success("删除成功");
+    }
+
+    /**
+     * 举报反馈
+     *
+     * @param id
+     * @return
+     */
+    @PutMapping("/studentReport/reply")
+    @ApiOperation("举报反馈")
+    public JsonResult reply(@RequestParam("id") Long id,
+                            @RequestParam("content") String content) {
+
+        studentReportService.reply(id ,content);
+
+        return JsonResult.success("反馈成功");
+    }
+
+    /**
+     * 批量举报反馈
+     *
+     * @param ids
+     * @return
+     */
+    @PutMapping("/studentReport/batchreply")
+    @ApiOperation("批量举报反馈")
+    public JsonResult batchReply(@RequestParam("ids") String ids,
+                                 @RequestParam("content") String content) {
+
+        studentReportService.batchReply(ids ,content);
+
+        return JsonResult.success("批量反馈成功");
     }
 
 }

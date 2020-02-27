@@ -43,3 +43,16 @@
 - ##### jpa做数据查询时，当查询的数据列表主键有相同的时候，那么之后出第一条外，其他相同的主键值会全部为第一次出现时的值。
 
   - 解决：mysql查询语句里，增加自定义主键列，保证主键唯一，在实体里增加一列，标为主键(例：SELECT @rownum:=@rownum+1 AS rownum, table_name.* FROM (SELECT @rownum:=0) r, table_name ;)，但是在jpa中，由于不识别 : 字符，需要在 : 前用 \\\\ 转义。
+  
+- ##### Feign调用报错The bean 'XXX.FeignClientSpecification', defined in null, could not be registered....的解决办法
+
+  - 一种方式在application.yml中配置：
+
+    - ```java
+      spring:
+        main:
+          allow-bean-definition-overriding: true
+      ```
+
+  - 第二种办法：
+    - 可以在@FeignClient注解上添加contextId解决该问题，如：@FeignClient(name="common-service", contextId = "exp")

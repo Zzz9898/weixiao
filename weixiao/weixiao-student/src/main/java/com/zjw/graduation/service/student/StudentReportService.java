@@ -11,7 +11,7 @@ import com.zjw.graduation.entity.student.StudentReport;
  * @date 2020-02-27 10:50:34
  */
 public interface StudentReportService {
-    PagingResult<StudentReport> page(int pageIndex, int pageSize);
+    PagingResult<StudentReport> page(int state, int pageIndex, int pageSize);
 
     StudentReport get(Long id);
 
@@ -20,5 +20,9 @@ public interface StudentReportService {
     StudentReport update(StudentReport Admin);
 
     void delete(Long id);
+
+    void reply(Long id, String content);
+
+    void batchReply(String ids, String content);
 }
 
