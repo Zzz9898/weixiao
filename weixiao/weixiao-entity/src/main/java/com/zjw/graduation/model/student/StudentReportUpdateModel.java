@@ -16,7 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:30:19
+ * @date 2020-02-27 10:50:34
  */
 @ApiModel(value = "student.StudentReportUpdateModel", description = "举报表")
 public class StudentReportUpdateModel {
@@ -39,11 +39,25 @@ public class StudentReportUpdateModel {
 
 
 	/**
+	 * 举报人姓名
+	 */
+							@ApiModelProperty(value = "举报人姓名")
+				private String studentName;
+
+
+	/**
 	 * 被举报人主键
 	 */
 			@NotNull(message = "被举报人主键 不能为空")
 									@ApiModelProperty(value = "被举报人主键", required = true)
 				private Long reportStudentId;
+
+
+	/**
+	 * 被举报人姓名
+	 */
+							@ApiModelProperty(value = "被举报人姓名")
+				private String reportStudentName;
 
 
 	/**
@@ -95,12 +109,26 @@ public class StudentReportUpdateModel {
 	public void setStudentId(Long studentId) {
 		this.studentId = studentId;
 	}
+			public String getStudentName() {
+		return studentName;
+	}
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
 			public Long getReportStudentId() {
 		return reportStudentId;
 	}
 
 	public void setReportStudentId(Long reportStudentId) {
 		this.reportStudentId = reportStudentId;
+	}
+			public String getReportStudentName() {
+		return reportStudentName;
+	}
+
+	public void setReportStudentName(String reportStudentName) {
+		this.reportStudentName = reportStudentName;
 	}
 			public Long getCategoryId() {
 		return categoryId;

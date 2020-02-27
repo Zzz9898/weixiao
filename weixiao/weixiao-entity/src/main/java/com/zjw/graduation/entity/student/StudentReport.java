@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  *
  * @author zjw
  * @email zhangjw9898@qq.com
- * @date 2020-02-26 16:30:19
+ * @date 2020-02-27 10:50:34
  */
 @Entity
 @Table(name = "z_student_report")
@@ -35,10 +35,20 @@ public class StudentReport implements Serializable {
 		@Column(name = "student_id", nullable = false)
 	private Long studentId;
     	/**
+	 * 举报人姓名
+	 */
+		@Column(name = "student_name", nullable = false)
+	private String studentName;
+    	/**
 	 * 被举报人主键
 	 */
 		@Column(name = "report_student_id", nullable = false)
 	private Long reportStudentId;
+    	/**
+	 * 被举报人姓名
+	 */
+		@Column(name = "report_student_name", nullable = false)
+	private String reportStudentName;
     	/**
 	 * 内容类型
 	 */
@@ -95,12 +105,26 @@ public class StudentReport implements Serializable {
 	public void setStudentId(Long studentId) {
 		this.studentId = studentId;
 	}
+		    public String getStudentName() {
+        return studentName;
+    }
+
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
 		    public Long getReportStudentId() {
         return reportStudentId;
     }
 
 	public void setReportStudentId(Long reportStudentId) {
 		this.reportStudentId = reportStudentId;
+	}
+		    public String getReportStudentName() {
+        return reportStudentName;
+    }
+
+	public void setReportStudentName(String reportStudentName) {
+		this.reportStudentName = reportStudentName;
 	}
 		    public Long getCategoryId() {
         return categoryId;
