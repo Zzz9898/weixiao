@@ -11,7 +11,7 @@ import com.zjw.graduation.entity.post.PostHot;
  * @date 2020-02-27 18:25:52
  */
 public interface PostHotService {
-    PagingResult<PostHot> page(int pageIndex, int pageSize);
+    PagingResult<PostHot> page(String title,int mostLook,int mostLike, int pageIndex, int pageSize);
 
     PostHot get(Long id);
 
@@ -20,5 +20,7 @@ public interface PostHotService {
     PostHot update(PostHot Admin);
 
     void delete(Long id);
+
+    void batchDelete(String ids);
 }
 

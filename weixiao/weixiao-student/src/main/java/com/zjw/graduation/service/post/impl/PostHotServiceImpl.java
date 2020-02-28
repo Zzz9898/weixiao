@@ -11,6 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service("postHotService")
 public class PostHotServiceImpl implements PostHotService  {
@@ -18,10 +23,10 @@ public class PostHotServiceImpl implements PostHotService  {
     @Autowired
     private PostHotDao postHotDao;
 
-    public PagingResult<PostHot> page(int pageIndex, int pageSize){
+    public PagingResult<PostHot> page(String title,int mostLook,int mostLike, int pageIndex, int pageSize){
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
 
-        Page<PostHot> page = postHotDao.findAll(pageable);
+        Page<PostHot> page = postHotDao.findAll(title, pageable);
 
         PagingResult<PostHot> pagingResult = new PagingResult<>();
         pagingResult.setPageIndex(pageIndex);
@@ -54,6 +59,14 @@ public class PostHotServiceImpl implements PostHotService  {
             postHot.setLogicFlag(EnumLogicType.DELETE.getValue());
             postHotDao.save(postHot);
         }
+    }
+
+    @Override
+    public void batchDelete(String ids) {
+        List<Long> collect =
+                Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        LocalDateTime now = LocalDateTime.now();
+        postHotDao.batchDelete(collect, now);
     }
 
 }

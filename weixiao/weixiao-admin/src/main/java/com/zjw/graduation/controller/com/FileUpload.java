@@ -40,7 +40,7 @@ public class FileUpload {
         if (!fileUrl.exists()) {
             fileUrl.mkdirs();
         }
-        filename = UUID.randomUUID().toString() + filename;
+        filename = UUID.randomUUID().toString().replaceAll("-", "") + "-" +  filename;
         String destFilename = filename;
         File destImage = new File(fileUrl, destFilename);
         try {

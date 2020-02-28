@@ -3,12 +3,14 @@ package com.zjw.graduation.model.post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.Size;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 import java.time.LocalDateTime;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -21,156 +23,109 @@ import org.springframework.format.annotation.DateTimeFormat;
 @ApiModel(value = "post.PostHotCreateModel", description = "热点内容表")
 public class PostHotCreateModel {
 
-		
-		/**
-		 * 标题
-		 */
-								@Size(min = 0, max = 255, message = "标题 长度需要在0和255之间")
-					
 
-									@ApiModelProperty(value = "标题")
-							private String title;
+    /**
+     * 标题
+     */
+    @Size(min = 0, max = 255, message = "标题 长度需要在0和255之间")
 
-		
-		/**
-		 * 发布内容
-		 */
-								@Size(min = 0, max = 65535, message = "发布内容 长度需要在0和65535之间")
-					
 
-									@ApiModelProperty(value = "发布内容")
-							private String content;
+    @ApiModelProperty(value = "标题")
+    private String title;
 
-		
-		/**
-		 * 图片
-		 */
-								@Size(min = 0, max = 999, message = "图片 长度需要在0和999之间")
-					
 
-									@ApiModelProperty(value = "图片")
-							private String images;
+    /**
+     * 发布内容
+     */
+    @Size(min = 0, max = 65535, message = "发布内容 长度需要在0和65535之间")
 
-		
-		/**
-		 * 发布时间
-		 */
-							
 
-									@ApiModelProperty(value = "发布时间", example = "2019-01-01 09:01:01")
-			        	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-				private LocalDateTime releaseTime;
+    @ApiModelProperty(value = "发布内容")
+    private String content;
 
-		
-		/**
-		 * 开始时间
-		 */
-							
 
-									@ApiModelProperty(value = "开始时间", example = "2019-01-01 09:01:01")
-			        	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-				private LocalDateTime startTime;
+    /**
+     * 图片
+     */
+    @Size(min = 0, max = 999, message = "图片 长度需要在0和999之间")
 
-		
-		/**
-		 * 结束时间
-		 */
-							
 
-									@ApiModelProperty(value = "结束时间", example = "2019-01-01 09:01:01")
-			        	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-				private LocalDateTime endTime;
+    @ApiModelProperty(value = "图片")
+    private String images;
 
-		
-		/**
-		 * 浏览次数
-		 */
-							
 
-									@ApiModelProperty(value = "浏览次数")
-							private Integer lookNum;
+    /**
+     * 开始时间
+     */
 
-		
-		/**
-		 * 点赞次数
-		 */
-							
 
-									@ApiModelProperty(value = "点赞次数")
-							private Integer likeNum;
+    @ApiModelProperty(value = "开始时间", example = "2019-01-01 09:01:01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startTime;
 
-		
-		/**
-		 * 状态 0-禁止 1-正常
-		 */
-							
 
-									@ApiModelProperty(value = "状态 0-禁止 1-正常")
-							private Integer state;
+    /**
+     * 结束时间
+     */
 
-				
-			public String getTitle() {
-		return title;
-	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-			public String getContent() {
-		return content;
-	}
+    @ApiModelProperty(value = "结束时间", example = "2019-01-01 09:01:01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endTime;
 
-	public void setContent(String content) {
-		this.content = content;
-	}
-			public String getImages() {
-		return images;
-	}
+    /**
+     * 状态 0-禁止 1-正常
+     */
+    @ApiModelProperty(value = "状态 0-禁止 1-正常")
+    private Integer state;
 
-	public void setImages(String images) {
-		this.images = images;
-	}
-			public LocalDateTime getReleaseTime() {
-		return releaseTime;
-	}
 
-	public void setReleaseTime(LocalDateTime releaseTime) {
-		this.releaseTime = releaseTime;
-	}
-			public LocalDateTime getStartTime() {
-		return startTime;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setStartTime(LocalDateTime startTime) {
-		this.startTime = startTime;
-	}
-			public LocalDateTime getEndTime() {
-		return endTime;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setEndTime(LocalDateTime endTime) {
-		this.endTime = endTime;
-	}
-			public Integer getLookNum() {
-		return lookNum;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setLookNum(Integer lookNum) {
-		this.lookNum = lookNum;
-	}
-			public Integer getLikeNum() {
-		return likeNum;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setLikeNum(Integer likeNum) {
-		this.likeNum = likeNum;
-	}
-			public Integer getState() {
-		return state;
-	}
+    public String getImages() {
+        return images;
+    }
 
-	public void setState(Integer state) {
-		this.state = state;
-	}
-				
+    public void setImages(String images) {
+        this.images = images;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
 }

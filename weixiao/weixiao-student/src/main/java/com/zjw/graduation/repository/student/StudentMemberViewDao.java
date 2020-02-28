@@ -34,7 +34,7 @@ public interface StudentMemberViewDao extends JpaRepository<StudentMemberView, L
                     "WHERE " +
                     "   sm.academy_id != 999 AND" +
                     "   sm.logic_flag = 1 AND" +
-                    "   (:username = '' OR sm.username like CONCAT('%',:username,'%')) AND " +
+                    "   (:username = '' OR sm.username LIKE CONCAT('%',:username,'%')) AND " +
                     "   (:sex = 0 OR sm.sex = :sex) AND " +
                     "   (:academyId = 0 OR sm.academy_id = :academyId) AND " +
                     "   (:areaId = 0 OR sm.area_id = :areaId) AND " +

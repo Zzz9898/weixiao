@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 import java.time.LocalDateTime;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -22,149 +23,106 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class PostHotUpdateModel {
 
 
-	/**
-	 * 主键
-	 */
-			@NotNull(message = "主键 不能为空")
-							@ApiModelProperty(value = "主键", required = true)
-				private Long id;
+    /**
+     * 主键
+     */
+    @NotNull(message = "主键 不能为空")
+    @ApiModelProperty(value = "主键", required = true)
+    private Long id;
+
+    /**
+     * 标题
+     */
+    @ApiModelProperty(value = "标题")
+    private String title;
+
+    /**
+     * 发布内容
+     */
+    @ApiModelProperty(value = "发布内容")
+    private String content;
+
+    /**
+     * 图片
+     */
+    @ApiModelProperty(value = "图片")
+    private String images;
+
+    /**
+     * 开始时间
+     */
+    @ApiModelProperty(value = "开始时间", example = "2019-01-01 09:01:01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startTime;
+
+    /**
+     * 结束时间
+     */
+    @ApiModelProperty(value = "结束时间", example = "2019-01-01 09:01:01")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endTime;
+
+    /**
+     * 状态 0-禁止 1-正常
+     */
+    @ApiModelProperty(value = "状态 0-禁止 1-正常")
+    private Integer state;
 
 
-	/**
-	 * 标题
-	 */
-							@ApiModelProperty(value = "标题")
-				private String title;
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	/**
-	 * 发布内容
-	 */
-							@ApiModelProperty(value = "发布内容")
-				private String content;
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	/**
-	 * 图片
-	 */
-							@ApiModelProperty(value = "图片")
-				private String images;
+    public String getContent() {
+        return content;
+    }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	/**
-	 * 发布时间
-	 */
-							@ApiModelProperty(value = "发布时间", example = "2019-01-01 09:01:01")
-		    	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-		private LocalDateTime releaseTime;
+    public String getImages() {
+        return images;
+    }
 
+    public void setImages(String images) {
+        this.images = images;
+    }
 
-	/**
-	 * 开始时间
-	 */
-							@ApiModelProperty(value = "开始时间", example = "2019-01-01 09:01:01")
-		    	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-		private LocalDateTime startTime;
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
-	/**
-	 * 结束时间
-	 */
-							@ApiModelProperty(value = "结束时间", example = "2019-01-01 09:01:01")
-		    	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-		private LocalDateTime endTime;
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
 
-	/**
-	 * 浏览次数
-	 */
-							@ApiModelProperty(value = "浏览次数")
-				private Integer lookNum;
+    public Integer getState() {
+        return state;
+    }
 
+    public void setState(Integer state) {
+        this.state = state;
+    }
 
-	/**
-	 * 点赞次数
-	 */
-							@ApiModelProperty(value = "点赞次数")
-				private Integer likeNum;
-
-
-	/**
-	 * 状态 0-禁止 1-正常
-	 */
-							@ApiModelProperty(value = "状态 0-禁止 1-正常")
-				private Integer state;
-
-
-		public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-			public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-			public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-			public String getImages() {
-		return images;
-	}
-
-	public void setImages(String images) {
-		this.images = images;
-	}
-			public LocalDateTime getReleaseTime() {
-		return releaseTime;
-	}
-
-	public void setReleaseTime(LocalDateTime releaseTime) {
-		this.releaseTime = releaseTime;
-	}
-			public LocalDateTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalDateTime startTime) {
-		this.startTime = startTime;
-	}
-			public LocalDateTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalDateTime endTime) {
-		this.endTime = endTime;
-	}
-			public Integer getLookNum() {
-		return lookNum;
-	}
-
-	public void setLookNum(Integer lookNum) {
-		this.lookNum = lookNum;
-	}
-			public Integer getLikeNum() {
-		return likeNum;
-	}
-
-	public void setLikeNum(Integer likeNum) {
-		this.likeNum = likeNum;
-	}
-			public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
-	}
-				
 }

@@ -47,7 +47,7 @@ public class PostHot implements Serializable {
 		/**
 	 * 发布时间
 	 */
-	    @Column(name = "release_time")
+	    @Column(name = "release_time", nullable = false)
 	private LocalDateTime releaseTime;
 		/**
 	 * 开始时间

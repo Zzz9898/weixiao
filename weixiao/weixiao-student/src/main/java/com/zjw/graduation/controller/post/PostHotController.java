@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import java.time.LocalDateTime;
 
 
@@ -40,10 +41,13 @@ public class PostHotController {
      */
     @GetMapping("/postHots")
     @ApiOperation("热点内容表列表")
-    public JsonResult<PagingResult<PostHotDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
-                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
+    public JsonResult<PagingResult<PostHotDto>> list(@RequestParam(value = "pageindex", defaultValue = "0") int pageIndex,
+                                                     @RequestParam(value = "pagesize", defaultValue = "10") int pageSize,
+                                                     @RequestParam(value = "title", defaultValue = "") String title,
+                                                     @RequestParam(value = "mostlook", defaultValue = "0") int mostLook,
+                                                     @RequestParam(value = "mostlike", defaultValue = "0") int mostLike) {
 
-        PagingResult<PostHot> page = postHotService.page(pageIndex, pageSize);
+        PagingResult<PostHot> page = postHotService.page(title, mostLook, mostLike, pageIndex, pageSize);
         PagingResult<PostHotDto> convert = page.convert(item -> {
             PostHotDto postHotDto = new PostHotDto();
             BeanUtils.copyProperties(item, postHotDto);
@@ -100,17 +104,19 @@ public class PostHotController {
      */
     @PutMapping("/postHot")
     @ApiOperation("热点内容表修改")
-    public JsonResult<PostHot> update(@Validated @RequestBody PostHotUpdateModel postHotUpdateModel) {
+    public JsonResult<PostHotDto> update(@Validated @RequestBody PostHotUpdateModel postHotUpdateModel) {
 
         PostHot postHot = postHotService.get(postHotUpdateModel.getId());
-        if (postHot.getId() == null){
+        if (postHot.getId() == null) {
             return JsonResult.error("Not find entity");
         }
         BeanUtils.copyProperties(postHotUpdateModel, postHot, NullPropertyUtils.getNullPropertyNames(postHotUpdateModel));
         postHot.setUpdated(LocalDateTime.now());
         PostHot entity = postHotService.update(postHot);
 
-        return JsonResult.success(entity);
+        PostHotDto postHotDto = new PostHotDto();
+        BeanUtils.copyProperties(postHot, postHotDto);
+        return JsonResult.success(postHotDto);
     }
 
     /**
@@ -128,4 +134,16 @@ public class PostHotController {
         return JsonResult.success("删除成功");
     }
 
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
+    @DeleteMapping("/postHot/batchdelete")
+    @ApiOperation("热点内容表批量删除")
+    public JsonResult batchDelete(@RequestParam("ids") String ids) {
+        postHotService.batchDelete(ids);
+        return JsonResult.success("操作成功");
+    }
 }

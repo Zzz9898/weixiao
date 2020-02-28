@@ -5,8 +5,14 @@ import org.springframework.data.domain.Pageable;
 import com.zjw.graduation.entity.post.PostHot;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 热点内容表
@@ -25,13 +31,29 @@ public interface PostHotDao extends JpaRepository<PostHot, Long>, JpaSpecificati
                     "FROM " +
                     "z_post_hot " +
                     "WHERE " +
-                    "`logic_flag` = 1 ",
+                    "`logic_flag` = 1 AND " +
+                    "(:title = '' OR title LIKE CONCAT('%',:title,'%')) " ,
             countQuery = "SELECT " +
                     "COUNT(*) " +
                     "FROM " +
                     "z_post_hot " +
                     "WHERE " +
-                    "`logic_flag` = 1 ")
-    Page<PostHot> findAll(Pageable pageable);
+                    "`logic_flag` = 1 " +
+                    "(:title = '' OR title LIKE CONCAT('%',:title,'%'))")
+    Page<PostHot> findAll(@Param("title")String title,
+                          Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true,
+            value = "UPDATE " +
+                    "   z_post_hot " +
+                    "SET " +
+                    "   `logic_flag` = 0," +
+                    "   `updated` = :now " +
+                    "WHERE " +
+                    "   `id` IN :collect")
+    void batchDelete(@Param("collect") List<Long> collect,
+                     @Param("now") LocalDateTime now);
 }
 
