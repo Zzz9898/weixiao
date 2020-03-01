@@ -38,7 +38,7 @@ public class PostCategoryController {
      *
      * @return
      */
-    @GetMapping("/postCategorys")
+    @GetMapping("/postCategories")
     @ApiOperation("内容类别表列表")
     public JsonResult<PagingResult<PostCategoryDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {

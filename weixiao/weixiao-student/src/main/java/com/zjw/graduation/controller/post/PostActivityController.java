@@ -1,6 +1,7 @@
 package com.zjw.graduation.controller.post;
 
 
+import com.zjw.graduation.dto.post.PostActivityViewDto;
 import com.zjw.graduation.service.post.PostActivityService;
 import com.zjw.graduation.model.post.PostActivityCreateModel;
 import com.zjw.graduation.model.post.PostActivityUpdateModel;
@@ -9,6 +10,7 @@ import com.zjw.graduation.dto.post.PostActivityDto;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.view.post.PostActivityView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -38,16 +40,23 @@ public class PostActivityController {
      *
      * @return
      */
-    @GetMapping("/postActivitys")
+    @GetMapping("/postActivities")
     @ApiOperation("活动发布表列表")
-    public JsonResult<PagingResult<PostActivityDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
-                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
+    public JsonResult<PagingResult<PostActivityViewDto>> list(@RequestParam(value = "truename",defaultValue = "")String truename,
+                                                              @RequestParam(value = "title",defaultValue = "")String title,
+                                                              @RequestParam(value = "categoryid",defaultValue = "0")Long categoryId,
+                                                              @RequestParam(value = "academyid",defaultValue = "0")Long academyId,
+                                                              @RequestParam(value = "type",defaultValue = "0")int type,
+                                                              @RequestParam(value = "state",defaultValue = "0")int state,
+                                                              @RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+                                                              @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
 
-        PagingResult<PostActivity> page = postActivityService.page(pageIndex, pageSize);
-        PagingResult<PostActivityDto> convert = page.convert(item -> {
-            PostActivityDto postActivityDto = new PostActivityDto();
-            BeanUtils.copyProperties(item, postActivityDto);
-            return postActivityDto;
+        PagingResult<PostActivityView> page =
+                postActivityService.page(truename, title, categoryId, academyId, type ,state, pageIndex, pageSize);
+        PagingResult<PostActivityViewDto> convert = page.convert(item -> {
+            PostActivityViewDto postActivityViewDto = new PostActivityViewDto();
+            BeanUtils.copyProperties(item, postActivityViewDto);
+            return postActivityViewDto;
         });
         return JsonResult.success(convert);
     }
@@ -126,6 +135,26 @@ public class PostActivityController {
         postActivityService.delete(id);
 
         return JsonResult.success("删除成功");
+    }
+
+    @PutMapping("/postActivity/review")
+    @ApiOperation("活动发布表审核")
+    public JsonResult review(@RequestParam("id") Long id,
+                             @RequestParam("state") int state) {
+
+        postActivityService.review(id, state);
+
+        return JsonResult.success("操作成功");
+    }
+
+    @PutMapping("/postActivity/batchpass")
+    @ApiOperation("活动发布表批量审核")
+    public JsonResult batchPass(@RequestParam("ids") String ids,
+                             @RequestParam("state") int state) {
+
+        postActivityService.batchPass(ids, state);
+
+        return JsonResult.success("操作成功");
     }
 
 }

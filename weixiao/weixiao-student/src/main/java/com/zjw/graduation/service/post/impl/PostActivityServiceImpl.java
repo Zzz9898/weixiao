@@ -1,5 +1,7 @@
 package com.zjw.graduation.service.post.impl;
 
+import com.zjw.graduation.repository.post.PostActivityViewDao;
+import com.zjw.graduation.view.post.PostActivityView;
 import org.springframework.data.domain.Page;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.enums.EnumLogicType;
@@ -11,6 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service("postActivityService")
 public class PostActivityServiceImpl implements PostActivityService  {
@@ -18,18 +25,46 @@ public class PostActivityServiceImpl implements PostActivityService  {
     @Autowired
     private PostActivityDao postActivityDao;
 
-    public PagingResult<PostActivity> page(int pageIndex, int pageSize){
+    @Autowired
+    private PostActivityViewDao postActivityViewDao;
+
+    public PagingResult<PostActivityView> page(String truename,
+                                               String title,
+                                               Long categoryId,
+                                               Long academyId,
+                                               int type,
+                                               int state,
+                                               int pageIndex,
+                                               int pageSize){
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
 
-        Page<PostActivity> page = postActivityDao.findAll(pageable);
+        Page<PostActivityView> page = postActivityViewDao.findAll(truename, title, categoryId, academyId, type ,state, pageable);
 
-        PagingResult<PostActivity> pagingResult = new PagingResult<>();
+        PagingResult<PostActivityView> pagingResult = new PagingResult<>();
         pagingResult.setPageIndex(pageIndex);
         pagingResult.setPageSize(pageSize);
         pagingResult.setEntities(page.getContent());
         pagingResult.setTotalRecords(page.getTotalElements());
 
         return pagingResult;
+    }
+
+    @Override
+    public void review(Long id, int state) {
+        PostActivity postActivity = postActivityDao.findById(id).orElse(null);
+        if (postActivity != null){
+            postActivity.setState(state);
+            postActivity.setUpdated(LocalDateTime.now());
+            postActivityDao.save(postActivity);
+        }
+    }
+
+    @Override
+    public void batchPass(String ids, int state) {
+        List<Long> collect =
+                Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        LocalDateTime now = LocalDateTime.now();
+        postActivityDao.batchPass(collect, state, now);
     }
 
     @Override
