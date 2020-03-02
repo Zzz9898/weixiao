@@ -1,6 +1,7 @@
 package com.zjw.graduation.controller.post;
 
 
+import com.zjw.graduation.dto.post.PostSignViewDto;
 import com.zjw.graduation.service.post.PostSignService;
 import com.zjw.graduation.model.post.PostSignCreateModel;
 import com.zjw.graduation.model.post.PostSignUpdateModel;
@@ -9,6 +10,7 @@ import com.zjw.graduation.dto.post.PostSignDto;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.view.post.PostSignView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,14 +42,16 @@ public class PostSignController {
      */
     @GetMapping("/postSigns")
     @ApiOperation("活动报名表列表")
-    public JsonResult<PagingResult<PostSignDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+    public JsonResult<PagingResult<PostSignViewDto>> singList(@RequestParam(value = "activityid",defaultValue = "0")Long activityId,
+                                                          @RequestParam(value = "truename",defaultValue = "")String truename,
+                                                          @RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
                                                           @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
 
-        PagingResult<PostSign> page = postSignService.page(pageIndex, pageSize);
-        PagingResult<PostSignDto> convert = page.convert(item -> {
-            PostSignDto postSignDto = new PostSignDto();
-            BeanUtils.copyProperties(item, postSignDto);
-            return postSignDto;
+        PagingResult<PostSignView> page = postSignService.page(activityId, truename, pageIndex, pageSize);
+        PagingResult<PostSignViewDto> convert = page.convert(item -> {
+            PostSignViewDto postSignViewDto = new PostSignViewDto();
+            BeanUtils.copyProperties(item, postSignViewDto);
+            return postSignViewDto;
         });
         return JsonResult.success(convert);
     }

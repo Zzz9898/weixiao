@@ -1,5 +1,7 @@
 package com.zjw.graduation.service.post.impl;
 
+import com.zjw.graduation.repository.post.PostSignViewDao;
+import com.zjw.graduation.view.post.PostSignView;
 import org.springframework.data.domain.Page;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.enums.EnumLogicType;
@@ -18,12 +20,16 @@ public class PostSignServiceImpl implements PostSignService  {
     @Autowired
     private PostSignDao postSignDao;
 
-    public PagingResult<PostSign> page(int pageIndex, int pageSize){
+    @Autowired
+    private PostSignViewDao postSignViewDao;
+
+    @Override
+    public PagingResult<PostSignView> page(Long activityId, String truename, int pageIndex, int pageSize){
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
 
-        Page<PostSign> page = postSignDao.findAll(pageable);
+        Page<PostSignView> page = postSignViewDao.findAll(activityId, truename, pageable);
 
-        PagingResult<PostSign> pagingResult = new PagingResult<>();
+        PagingResult<PostSignView> pagingResult = new PagingResult<>();
         pagingResult.setPageIndex(pageIndex);
         pagingResult.setPageSize(pageSize);
         pagingResult.setEntities(page.getContent());
@@ -55,5 +61,4 @@ public class PostSignServiceImpl implements PostSignService  {
             postSignDao.save(postSign);
         }
     }
-
 }

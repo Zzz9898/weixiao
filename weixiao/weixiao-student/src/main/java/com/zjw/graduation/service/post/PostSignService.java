@@ -2,6 +2,7 @@ package com.zjw.graduation.service.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostSign;
+import com.zjw.graduation.view.post.PostSignView;
 
 /**
  * 活动报名表
@@ -11,7 +12,6 @@ import com.zjw.graduation.entity.post.PostSign;
  * @date 2020-02-25 17:09:07
  */
 public interface PostSignService {
-    PagingResult<PostSign> page(int pageIndex, int pageSize);
 
     PostSign get(Long id);
 
@@ -20,5 +20,7 @@ public interface PostSignService {
     PostSign update(PostSign Admin);
 
     void delete(Long id);
+
+    PagingResult<PostSignView> page(Long activityId, String truename, int pageIndex, int pageSize);
 }
 

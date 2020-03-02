@@ -54,6 +54,12 @@ public class PostSign implements Serializable {
 	 */
 	    @Column(name = "message")
 	private String message;
+
+	/**
+	 * 创建时间
+	 */
+	@Column(name = "sign_time")
+	private LocalDateTime signTime;
 		/**
 	 * 创建时间
 	 */
@@ -69,9 +75,16 @@ public class PostSign implements Serializable {
 	 */
 	    @Column(name = "logic_flag")
 	private Integer logicFlag;
-	
 
-	    public Long getId() {
+	public LocalDateTime getSignTime() {
+		return signTime;
+	}
+
+	public void setSignTime(LocalDateTime signTime) {
+		this.signTime = signTime;
+	}
+
+	public Long getId() {
         return id;
     }
 

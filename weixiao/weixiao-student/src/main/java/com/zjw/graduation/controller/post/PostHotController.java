@@ -112,7 +112,8 @@ public class PostHotController {
         }
         BeanUtils.copyProperties(postHotUpdateModel, postHot, NullPropertyUtils.getNullPropertyNames(postHotUpdateModel));
         postHot.setUpdated(LocalDateTime.now());
-        PostHot entity = postHotService.update(postHot);
+        postHot.setImages(postHotUpdateModel.getImages());
+        postHotService.update(postHot);
 
         PostHotDto postHotDto = new PostHotDto();
         BeanUtils.copyProperties(postHot, postHotDto);

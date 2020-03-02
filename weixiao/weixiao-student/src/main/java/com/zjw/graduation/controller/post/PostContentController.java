@@ -1,6 +1,7 @@
 package com.zjw.graduation.controller.post;
 
 
+import com.zjw.graduation.dto.post.PostContentViewDto;
 import com.zjw.graduation.service.post.PostContentService;
 import com.zjw.graduation.model.post.PostContentCreateModel;
 import com.zjw.graduation.model.post.PostContentUpdateModel;
@@ -9,6 +10,7 @@ import com.zjw.graduation.dto.post.PostContentDto;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.view.post.PostContentView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,14 +42,19 @@ public class PostContentController {
      */
     @GetMapping("/postContents")
     @ApiOperation("发布内容表列表")
-    public JsonResult<PagingResult<PostContentDto>> list(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
-                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
+    public JsonResult<PagingResult<PostContentViewDto>> list(@RequestParam(value = "truename",defaultValue = "")String truename,
+                                                             @RequestParam(value = "academyid",defaultValue = "0")Long academyId,
+                                                             @RequestParam(value = "categoryid",defaultValue = "0")Long categoryId,
+                                                             @RequestParam(value = "reviewstate",defaultValue = "0")int reviewState,
+                                                             @RequestParam(value = "state",defaultValue = "0")int state,
+                                                             @RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+                                                             @RequestParam(value = "pagesize",defaultValue = "10")int pageSize) {
 
-        PagingResult<PostContent> page = postContentService.page(pageIndex, pageSize);
-        PagingResult<PostContentDto> convert = page.convert(item -> {
-            PostContentDto postContentDto = new PostContentDto();
-            BeanUtils.copyProperties(item, postContentDto);
-            return postContentDto;
+        PagingResult<PostContentView> page = postContentService.page(truename, academyId, categoryId, reviewState, state, pageIndex, pageSize);
+        PagingResult<PostContentViewDto> convert = page.convert(item -> {
+            PostContentViewDto postContentViewDto = new PostContentViewDto();
+            BeanUtils.copyProperties(item, postContentViewDto);
+            return postContentViewDto;
         });
         return JsonResult.success(convert);
     }
@@ -126,6 +133,35 @@ public class PostContentController {
         postContentService.delete(id);
 
         return JsonResult.success("删除成功");
+    }
+
+    @PutMapping("/postContent/enableordisable")
+    @ApiOperation("发布内容表禁用启用")
+    public JsonResult enableOrDisable(@RequestParam("id") Long id) {
+
+        postContentService.enableOrDisable(id);
+
+        return JsonResult.success("操作成功");
+    }
+
+    @PutMapping("/postContent/review")
+    @ApiOperation("发布内容表审核")
+    public JsonResult review(@RequestParam("id") Long id,
+                             @RequestParam("reviewstate") int reviewState) {
+
+        postContentService.review(id, reviewState);
+
+        return JsonResult.success("操作成功");
+    }
+
+    @PutMapping("/postContent/batchreview")
+    @ApiOperation("发布内容表批量通过")
+    public JsonResult batchReview(@RequestParam("ids") String ids,
+                                  @RequestParam("reviewstate") int reviewState) {
+
+        postContentService.batchReview(ids, reviewState);
+
+        return JsonResult.success("操作成功");
     }
 
 }

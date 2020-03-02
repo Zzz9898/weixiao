@@ -2,6 +2,7 @@ package com.zjw.graduation.controller.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.post.PostActivityViewDto;
+import com.zjw.graduation.dto.post.PostSignViewDto;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.feign.post.PostActivityFeign;
 import io.swagger.annotations.Api;
@@ -44,5 +45,15 @@ public class PostActivityController {
                                 @RequestParam("ids") String ids,
                                 @RequestParam("state") int state){
         return postActivityFeign.batchPass(token, ids, state);
+    }
+
+    @GetMapping("/post/postSigns")
+    @ApiOperation("活动报名表列表")
+    public JsonResult<PagingResult<PostSignViewDto>> singList(@RequestHeader("Authorization")String token,
+                                                          @RequestParam(value = "activityid",defaultValue = "0")Long activityId,
+                                                          @RequestParam(value = "truename",defaultValue = "")String truename,
+                                                          @RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+                                                          @RequestParam(value = "pagesize",defaultValue = "10")int pageSize){
+        return postActivityFeign.singList(token, activityId, truename, pageIndex, pageSize);
     }
 }
