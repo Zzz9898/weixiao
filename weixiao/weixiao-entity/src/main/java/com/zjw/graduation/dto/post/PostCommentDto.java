@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
  * @email zhangjw9898@qq.com
  * @date 2020-02-26 16:27:41
  */
-@ApiModel(value="post.PostCommantDto", description="")
-public class PostCommantDto {
+@ApiModel(value="post.PostCommentDto", description="")
+public class PostCommentDto {
 
 	private static final long serialVersionUID = 1L;
 

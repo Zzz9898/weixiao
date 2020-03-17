@@ -3,16 +3,22 @@ package com.zjw.graduation.controller.student;
 
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.student.StuInfoDto;
 import com.zjw.graduation.dto.student.StudentMemberDto;
 import com.zjw.graduation.dto.student.StudentMemberViewDto;
+import com.zjw.graduation.entity.school.SchoolAcademy;
 import com.zjw.graduation.entity.student.StudentMember;
+import com.zjw.graduation.entity.student.StudentPermission;
 import com.zjw.graduation.model.student.StudentMemberCreateModel;
 import com.zjw.graduation.model.student.StudentMemberLoginModel;
 import com.zjw.graduation.model.student.StudentMemberUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
+import com.zjw.graduation.service.school.SchoolAcademyService;
 import com.zjw.graduation.service.student.StudentMemberService;
+import com.zjw.graduation.util.JwtTokenUtil;
 import com.zjw.graduation.view.stu.StudentMemberView;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +53,14 @@ public class StudentMemberController {
 
     @Autowired
     private StudentMemberService studentMemberService;
+    @Autowired
+    private SchoolAcademyService schoolAcademyService;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
 
     @ApiOperation(value = "登录以后返回token")
@@ -69,6 +79,28 @@ public class StudentMemberController {
         tokenMap.put("tokenHead", tokenHead);
         return JsonResult.success(tokenMap);
     }
+
+    @ApiModelProperty("退出登录")
+    @PostMapping("/logout")
+    public JsonResult logout(){
+        return JsonResult.success("");
+    }
+
+    @ApiOperation("根据token获取学生信息")
+    @GetMapping("/info")
+    public JsonResult<StuInfoDto> getPermissionList(@RequestParam(value = "token") String token) {
+        String username = jwtTokenUtil.getUserNameFromToken(token);
+        StuInfoDto stuInfoDto = new StuInfoDto();
+        StudentMember studentMember = studentMemberService.getStudentByUsername(username);
+        List<StudentPermission> studentPermissions = studentMemberService.getPermissionList(studentMember.getId());
+        List<String> roles = studentPermissions.stream().map(StudentPermission::getIcon).collect(Collectors.toList());
+        SchoolAcademy schoolAcademy = schoolAcademyService.get(studentMember.getAcademyId());
+        BeanUtils.copyProperties(studentMember, stuInfoDto);
+        stuInfoDto.setRoles(roles);
+        stuInfoDto.setAcademy(schoolAcademy.getAcademyName());
+        return JsonResult.success(stuInfoDto);
+    }
+
 //    /**
 //     * 列表
 //     *
