@@ -9,7 +9,6 @@ import com.zjw.graduation.dto.student.StudentMemberViewDto;
 import com.zjw.graduation.entity.school.SchoolAcademy;
 import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.entity.student.StudentPermission;
-import com.zjw.graduation.model.student.StudentMemberCreateModel;
 import com.zjw.graduation.model.student.StudentMemberLoginModel;
 import com.zjw.graduation.model.student.StudentMemberUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
@@ -142,20 +141,21 @@ public class StudentMemberController {
     /**
      * 新增
      *
-     * @param studentMemberCreateModel
+     * @param
      * @return
      */
     @PostMapping("/register")
     @ApiOperation("学生注册")
-    public JsonResult<StudentMemberDto> create(@Validated @RequestBody StudentMemberCreateModel studentMemberCreateModel) {
+    public JsonResult<StudentMemberDto> create(@RequestParam("username")String username,
+                                               @RequestParam("password")String password) {
 
         StudentMember studentMember = new StudentMember();
-        BeanUtils.copyProperties(studentMemberCreateModel, studentMember, NullPropertyUtils.getNullPropertyNames(studentMemberCreateModel));
+        studentMember.setUsername(username);
+        studentMember.setPassword(password);
         StudentMember save = studentMemberService.save(studentMember);
         if (save == null){
             return JsonResult.error("用户名已存在！！！");
         }
-
         StudentMemberDto studentMemberDto = new StudentMemberDto();
         BeanUtils.copyProperties(studentMember, studentMemberDto);
 
@@ -170,7 +170,7 @@ public class StudentMemberController {
         if (studentByUsername == null){
             return JsonResult.success("可以注册！！！");
         }
-        return JsonResult.error("用户已存在！！！");
+        return JsonResult.error(0,"用户已存在！！！",1);
     }
 
     /**
