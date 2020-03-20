@@ -158,8 +158,8 @@ public class StudentMemberController {
         }
         StudentMemberDto studentMemberDto = new StudentMemberDto();
         BeanUtils.copyProperties(studentMember, studentMemberDto);
-
-        return JsonResult.success(studentMemberDto);
+        String token = studentMemberService.login(username, password);
+        return JsonResult.success(tokenHead + token, studentMemberDto);
 
     }
 
@@ -181,7 +181,7 @@ public class StudentMemberController {
      */
     @PutMapping("/studentMember")
     @ApiOperation("学生表修改")
-    public JsonResult<StudentMember> update(@Validated @RequestBody StudentMemberUpdateModel studentMemberUpdateModel) {
+    public JsonResult<StudentMemberDto> update(@Validated @RequestBody StudentMemberUpdateModel studentMemberUpdateModel) {
 
         StudentMember studentMember = studentMemberService.get(studentMemberUpdateModel.getId());
         if (studentMember.getId() == null){
@@ -191,7 +191,10 @@ public class StudentMemberController {
         studentMember.setUpdated(LocalDateTime.now());
         StudentMember entity = studentMemberService.update(studentMember);
 
-        return JsonResult.success(entity);
+        StudentMemberDto studentMemberDto = new StudentMemberDto();
+        BeanUtils.copyProperties(entity, studentMemberDto);
+
+        return JsonResult.success(studentMemberDto);
     }
 
     /**

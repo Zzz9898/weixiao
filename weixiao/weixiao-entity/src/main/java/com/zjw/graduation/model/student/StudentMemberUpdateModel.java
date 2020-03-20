@@ -24,13 +24,6 @@ public class StudentMemberUpdateModel {
     private Long id;
 
     /**
-     * 密码
-     */
-    @ApiModelProperty(value = "密码")
-    private String password;
-
-
-    /**
      * 性别 0-不详 1-男 2-女
      */
     @ApiModelProperty(value = "性别 0-不详 1-男 2-女")
@@ -54,7 +47,7 @@ public class StudentMemberUpdateModel {
      * 地区
      */
     @ApiModelProperty(value = "地区")
-    private String area;
+    private Long areaId;
 
 
     /**
@@ -121,14 +114,6 @@ public class StudentMemberUpdateModel {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Integer getSex() {
         return sex;
     }
@@ -145,12 +130,12 @@ public class StudentMemberUpdateModel {
         this.age = age;
     }
 
-    public String getArea() {
-        return area;
+    public Long getAreaId() {
+        return areaId;
     }
 
-    public void setArea(String area) {
-        this.area = area;
+    public void setAreaId(Long areaId) {
+        this.areaId = areaId;
     }
 
     public String getNumber() {
