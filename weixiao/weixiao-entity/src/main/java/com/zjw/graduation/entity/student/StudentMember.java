@@ -1,6 +1,5 @@
 package com.zjw.graduation.entity.student;
 
-import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -67,6 +66,9 @@ public class StudentMember implements Serializable {
      */
     @Column(name = "area")
     private String area;
+
+    @Column(name = "area_id")
+    private Long areaId;
     /**
      * 学号
      */
@@ -122,6 +124,14 @@ public class StudentMember implements Serializable {
      */
     @Column(name = "logic_flag")
     private Integer logicFlag;
+
+    public Long getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Long areaId) {
+        this.areaId = areaId;
+    }
 
     public String getTruename() {
         return truename;

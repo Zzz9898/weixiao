@@ -6,12 +6,14 @@ import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.student.StuInfoDto;
 import com.zjw.graduation.dto.student.StudentMemberDto;
 import com.zjw.graduation.dto.student.StudentMemberViewDto;
+import com.zjw.graduation.entity.common.CommonArea;
 import com.zjw.graduation.entity.school.SchoolAcademy;
 import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.entity.student.StudentPermission;
 import com.zjw.graduation.model.student.StudentMemberLoginModel;
 import com.zjw.graduation.model.student.StudentMemberUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
+import com.zjw.graduation.service.common.CommonAreaService;
 import com.zjw.graduation.service.school.SchoolAcademyService;
 import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.util.JwtTokenUtil;
@@ -54,6 +56,8 @@ public class StudentMemberController {
     private StudentMemberService studentMemberService;
     @Autowired
     private SchoolAcademyService schoolAcademyService;
+    @Autowired
+    private CommonAreaService commonAreaService;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
@@ -188,6 +192,9 @@ public class StudentMemberController {
             return JsonResult.error("Not find entity");
         }
         BeanUtils.copyProperties(studentMemberUpdateModel, studentMember, NullPropertyUtils.getNullPropertyNames(studentMemberUpdateModel));
+        CommonArea commonArea = commonAreaService.findByNumber(studentMemberUpdateModel.getAreaId().intValue());
+        studentMember.setArea(commonArea.getName());
+        studentMember.setAreaId(commonArea.getId());
         studentMember.setUpdated(LocalDateTime.now());
         StudentMember entity = studentMemberService.update(studentMember);
 

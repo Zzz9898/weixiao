@@ -1,20 +1,23 @@
 package com.zjw.graduation.service.post.impl;
 
-import com.zjw.graduation.enums.EnumStateType;
-import com.zjw.graduation.repository.post.PostContentViewDao;
-import com.zjw.graduation.view.post.PostContentView;
-import org.springframework.data.domain.Page;
 import com.zjw.graduation.data.PagingResult;
-import com.zjw.graduation.enums.EnumLogicType;
 import com.zjw.graduation.entity.post.PostContent;
+import com.zjw.graduation.enums.EnumLogicType;
+import com.zjw.graduation.enums.EnumStateType;
+import com.zjw.graduation.repository.post.PostContentAppViewDao;
 import com.zjw.graduation.repository.post.PostContentDao;
+import com.zjw.graduation.repository.post.PostContentViewDao;
 import com.zjw.graduation.service.post.PostContentService;
+import com.zjw.graduation.view.post.PostContentAppView;
+import com.zjw.graduation.view.post.PostContentView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +31,9 @@ public class PostContentServiceImpl implements PostContentService  {
 
     @Autowired
     private PostContentViewDao postContentViewDao;
+
+    @Autowired
+    private PostContentAppViewDao postContentAppViewDao;
 
     public PagingResult<PostContentView> page(String truename, Long academyId, Long categoryId, int reviewState, int state, int pageIndex, int pageSize){
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
@@ -69,6 +75,28 @@ public class PostContentServiceImpl implements PostContentService  {
                 Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
         LocalDateTime now = LocalDateTime.now();
         postContentDao.batchReview(collect, reviewState, now);
+    }
+
+    @Override
+    public PagingResult<PostContentAppView> appList(String valueContent, int sex, String category, Long departmentId, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        List<Long> collect = new ArrayList<>();
+        if (category != null && !category.equals("")) {
+            collect = Arrays.stream(category.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        }else {
+            collect.add(-1L);
+        }
+
+        Page<PostContentAppView> page = postContentAppViewDao.appList(valueContent, sex, collect, departmentId, pageable);
+
+        PagingResult<PostContentAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
     }
 
     @Override

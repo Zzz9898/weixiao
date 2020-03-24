@@ -1,22 +1,25 @@
 package com.zjw.graduation.controller.post;
 
 
+import com.zjw.graduation.data.NullPropertyUtils;
+import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.post.PostContentAppViewDto;
+import com.zjw.graduation.dto.post.PostContentDto;
 import com.zjw.graduation.dto.post.PostContentViewDto;
-import com.zjw.graduation.service.post.PostContentService;
+import com.zjw.graduation.entity.post.PostContent;
 import com.zjw.graduation.model.post.PostContentCreateModel;
 import com.zjw.graduation.model.post.PostContentUpdateModel;
-import com.zjw.graduation.entity.post.PostContent;
-import com.zjw.graduation.dto.post.PostContentDto;
-import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
-import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.service.post.PostContentService;
+import com.zjw.graduation.view.post.PostContentAppView;
 import com.zjw.graduation.view.post.PostContentView;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
 import java.time.LocalDateTime;
 
 
@@ -55,6 +58,26 @@ public class PostContentController {
             PostContentViewDto postContentViewDto = new PostContentViewDto();
             BeanUtils.copyProperties(item, postContentViewDto);
             return postContentViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
+    @GetMapping("/app/postContents")
+    @ApiOperation("app-发布内容列表")
+    public JsonResult appList(@RequestParam(value = "valuecontent", defaultValue = "") String valueContent,
+                              @RequestParam(value = "sex", defaultValue = "0") int sex,
+                              @RequestParam(value = "category", defaultValue = "") String category,
+                              @RequestParam(value = "departmentid", defaultValue = "0") Long departmentId,
+                              @RequestParam(value = "pageindex", defaultValue = "0") int pageIndex,
+                              @RequestParam(value = "pagesize", defaultValue = "10") int pageSize){
+        PagingResult<PostContentAppView> page = postContentService.appList(valueContent, sex, category, departmentId, pageIndex, pageSize);
+        PagingResult<PostContentAppViewDto> convert = page.convert(item -> {
+            PostContentAppViewDto postContentAppViewDto = new PostContentAppViewDto();
+            BeanUtils.copyProperties(item, postContentAppViewDto);
+            if (item.getImages() != null) {
+                postContentAppViewDto.setImages(item.getImages().split(";"));
+            }
+            return postContentAppViewDto;
         });
         return JsonResult.success(convert);
     }
