@@ -20,5 +20,7 @@ public interface SchoolAcademyService {
     SchoolAcademy update(SchoolAcademy Admin);
 
     void delete(Long id);
+
+    SchoolAcademy findByStudentAcademyId(Long studentId);
 }
 

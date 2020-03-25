@@ -62,6 +62,10 @@ public class StudentMemberController {
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+    @Value("${face.boy}")
+    private String boy;
+    @Value("${face.girl}")
+    private String girl;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
@@ -196,6 +200,13 @@ public class StudentMemberController {
         studentMember.setArea(commonArea.getName());
         studentMember.setAreaId(commonArea.getId());
         studentMember.setUpdated(LocalDateTime.now());
+        if (studentMemberUpdateModel.getSex() == 2){
+            studentMember.setFaceImg(girl);
+            studentMember.setFaceImgMin(girl);
+        } else {
+            studentMember.setFaceImg(boy);
+            studentMember.setFaceImgMin(boy);
+        }
         StudentMember entity = studentMemberService.update(studentMember);
 
         StudentMemberDto studentMemberDto = new StudentMemberDto();

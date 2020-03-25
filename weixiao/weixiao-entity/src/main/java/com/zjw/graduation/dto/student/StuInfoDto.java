@@ -7,6 +7,8 @@ import java.util.List;
 @ApiModel(value="student.StuInfoDto", description="学生信息表")
 public class StuInfoDto {
 
+    private Long id;
+
     private String username;
 
     private String truename;
@@ -34,6 +36,14 @@ public class StuInfoDto {
     private int hide;
 
     private List<String> roles;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNickname() {
         return nickname;

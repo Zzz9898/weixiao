@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import com.zjw.graduation.entity.school.SchoolAcademy;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -33,5 +34,14 @@ public interface SchoolAcademyDao extends JpaRepository<SchoolAcademy, Long>, Jp
                     "WHERE " +
                     "`logic_flag` = 1 ")
     Page<SchoolAcademy> findAll(Pageable pageable);
+
+    @Query(nativeQuery = true,
+            value = "SELECT " +
+                    "* " +
+                    "FROM " +
+                    "z_school_academy " +
+                    "WHERE " +
+                    "id = (SELECT parent_id FROM z_school_academy WHERE id = (SELECT academy_id FROM z_student_member sm WHERE sm.id = 41))")
+    SchoolAcademy findByStudentAcademyId(@Param("studentId") Long studentId);
 }
 

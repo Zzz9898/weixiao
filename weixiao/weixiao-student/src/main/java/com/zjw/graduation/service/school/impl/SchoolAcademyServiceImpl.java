@@ -56,4 +56,9 @@ public class SchoolAcademyServiceImpl implements SchoolAcademyService  {
         }
     }
 
+    @Override
+    public SchoolAcademy findByStudentAcademyId(Long studentId) {
+        return schoolAcademyDao.findByStudentAcademyId(studentId);
+    }
+
 }

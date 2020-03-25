@@ -7,10 +7,12 @@ import com.zjw.graduation.dto.post.PostContentAppViewDto;
 import com.zjw.graduation.dto.post.PostContentDto;
 import com.zjw.graduation.dto.post.PostContentViewDto;
 import com.zjw.graduation.entity.post.PostContent;
+import com.zjw.graduation.entity.school.SchoolAcademy;
 import com.zjw.graduation.model.post.PostContentCreateModel;
 import com.zjw.graduation.model.post.PostContentUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.post.PostContentService;
+import com.zjw.graduation.service.school.SchoolAcademyService;
 import com.zjw.graduation.view.post.PostContentAppView;
 import com.zjw.graduation.view.post.PostContentView;
 import io.swagger.annotations.Api;
@@ -37,6 +39,9 @@ public class PostContentController {
 
     @Autowired
     private PostContentService postContentService;
+
+    @Autowired
+    private SchoolAcademyService schoolAcademyService;
 
     /**
      * 列表
@@ -113,6 +118,8 @@ public class PostContentController {
 
         PostContent postContent = new PostContent();
         BeanUtils.copyProperties(postContentCreateModel, postContent);
+        SchoolAcademy schoolAcademy = schoolAcademyService.findByStudentAcademyId(postContentCreateModel.getStudentId());
+        postContent.setAcademyId(schoolAcademy.getId());
         postContentService.save(postContent);
 
         PostContentDto postContentDto = new PostContentDto();
