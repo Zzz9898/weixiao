@@ -1,7 +1,9 @@
 package com.zjw.graduation.controller.post;
 
 
+import com.zjw.graduation.dto.post.PostActivityAppViewDto;
 import com.zjw.graduation.dto.post.PostActivityViewDto;
+import com.zjw.graduation.entity.school.SchoolAcademy;
 import com.zjw.graduation.service.post.PostActivityService;
 import com.zjw.graduation.model.post.PostActivityCreateModel;
 import com.zjw.graduation.model.post.PostActivityUpdateModel;
@@ -10,6 +12,8 @@ import com.zjw.graduation.dto.post.PostActivityDto;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.service.school.SchoolAcademyService;
+import com.zjw.graduation.view.post.PostActivityAppView;
 import com.zjw.graduation.view.post.PostActivityView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,9 @@ public class PostActivityController {
     @Autowired
     private PostActivityService postActivityService;
 
+    @Autowired
+    private SchoolAcademyService schoolAcademyService;
+
     /**
      * 列表
      *
@@ -57,6 +64,30 @@ public class PostActivityController {
             PostActivityViewDto postActivityViewDto = new PostActivityViewDto();
             BeanUtils.copyProperties(item, postActivityViewDto);
             return postActivityViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
+    @GetMapping("/app/postActivities")
+    @ApiOperation("app-活动发布表列表")
+    public JsonResult<PagingResult<PostActivityAppViewDto>> appList(@RequestParam(value = "title", defaultValue = "") String title,
+                                                                 @RequestParam(value = "sex", defaultValue = "0") int sex,
+                                                                 @RequestParam(value = "activitystate", defaultValue = "0") int activityState,
+                                                                 @RequestParam(value = "activitytype", defaultValue = "0") int activityType,
+                                                                 @RequestParam(value = "activitytime", defaultValue = "") String activityTime,
+                                                                 @RequestParam(value = "category", defaultValue = "") String category,
+                                                                 @RequestParam(value = "departmentid", defaultValue = "0") Long departmentId,
+                                                                 @RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+                                                                 @RequestParam(value = "pagesize",defaultValue = "10")int pageSize){
+        PagingResult<PostActivityAppView> pagingResult =
+                postActivityService.appList(title, sex, activityState, activityType, activityTime ,category, departmentId, pageIndex, pageSize);
+        PagingResult<PostActivityAppViewDto> convert = pagingResult.convert(item -> {
+            PostActivityAppViewDto postActivityAppViewDto = new PostActivityAppViewDto();
+            BeanUtils.copyProperties(item, postActivityAppViewDto);
+            if (item.getImage() != null && !item.getImage().equals("")) {
+                postActivityAppViewDto.setImages(item.getImage().split(";"));
+            }
+            return postActivityAppViewDto;
         });
         return JsonResult.success(convert);
     }
@@ -92,6 +123,11 @@ public class PostActivityController {
 
         PostActivity postActivity = new PostActivity();
         BeanUtils.copyProperties(postActivityCreateModel, postActivity);
+        SchoolAcademy byStudentAcademyId = schoolAcademyService.findByStudentAcademyId(postActivityCreateModel.getStudentId());
+        if (byStudentAcademyId == null){
+            return JsonResult.error("发布失败，请设置所在专业再试~");
+        }
+        postActivity.setAcademyId(byStudentAcademyId.getId());
         postActivityService.save(postActivity);
 
         PostActivityDto postActivityDto = new PostActivityDto();

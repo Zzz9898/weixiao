@@ -1,19 +1,23 @@
 package com.zjw.graduation.service.post.impl;
 
-import com.zjw.graduation.repository.post.PostActivityViewDao;
-import com.zjw.graduation.view.post.PostActivityView;
-import org.springframework.data.domain.Page;
 import com.zjw.graduation.data.PagingResult;
-import com.zjw.graduation.enums.EnumLogicType;
 import com.zjw.graduation.entity.post.PostActivity;
+import com.zjw.graduation.enums.EnumLogicType;
+import com.zjw.graduation.repository.post.PostActivityAppViewDao;
 import com.zjw.graduation.repository.post.PostActivityDao;
+import com.zjw.graduation.repository.post.PostActivityViewDao;
 import com.zjw.graduation.service.post.PostActivityService;
+import com.zjw.graduation.view.post.PostActivityAppView;
+import com.zjw.graduation.view.post.PostActivityView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +31,9 @@ public class PostActivityServiceImpl implements PostActivityService  {
 
     @Autowired
     private PostActivityViewDao postActivityViewDao;
+
+    @Autowired
+    private PostActivityAppViewDao postActivityAppViewDao;
 
     public PagingResult<PostActivityView> page(String truename,
                                                String title,
@@ -65,6 +72,36 @@ public class PostActivityServiceImpl implements PostActivityService  {
                 Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
         LocalDateTime now = LocalDateTime.now();
         postActivityDao.batchPass(collect, state, now);
+    }
+
+    @Override
+    public PagingResult<PostActivityAppView> appList(String title, int sex, int activityState, int activityType, String activityTime, String category, Long departmentId, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        LocalDateTime time;
+        if (!activityTime.equals("")) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            time = LocalDateTime.parse(activityTime, formatter);
+        } else {
+            time = null;
+        }
+
+        List<Long> collect = new ArrayList<>();
+        if (category != null && !category.equals("")) {
+            collect = Arrays.stream(category.split(",")).map(Long::parseLong).collect(Collectors.toList());
+        }else {
+            collect.add(-1L);
+        }
+
+        Page<PostActivityAppView> page = postActivityAppViewDao.appList(title, sex, activityState, activityType, time, collect, departmentId, pageable);
+
+        PagingResult<PostActivityAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
     }
 
     @Override

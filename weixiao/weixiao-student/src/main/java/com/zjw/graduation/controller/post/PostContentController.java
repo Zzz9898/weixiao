@@ -69,7 +69,7 @@ public class PostContentController {
 
     @GetMapping("/app/postContents")
     @ApiOperation("app-发布内容列表")
-    public JsonResult appList(@RequestParam(value = "valuecontent", defaultValue = "") String valueContent,
+    public JsonResult<PagingResult<PostContentAppViewDto>> appList(@RequestParam(value = "valuecontent", defaultValue = "") String valueContent,
                               @RequestParam(value = "sex", defaultValue = "0") int sex,
                               @RequestParam(value = "category", defaultValue = "") String category,
                               @RequestParam(value = "departmentid", defaultValue = "0") Long departmentId,
@@ -79,7 +79,7 @@ public class PostContentController {
         PagingResult<PostContentAppViewDto> convert = page.convert(item -> {
             PostContentAppViewDto postContentAppViewDto = new PostContentAppViewDto();
             BeanUtils.copyProperties(item, postContentAppViewDto);
-            if (item.getImages() != null) {
+            if (item.getImages() != null && !item.getImages().equals("")) {
                 postContentAppViewDto.setImages(item.getImages().split(";"));
             }
             return postContentAppViewDto;

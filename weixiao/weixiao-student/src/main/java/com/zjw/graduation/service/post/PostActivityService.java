@@ -2,6 +2,7 @@ package com.zjw.graduation.service.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostActivity;
+import com.zjw.graduation.view.post.PostActivityAppView;
 import com.zjw.graduation.view.post.PostActivityView;
 
 /**
@@ -26,5 +27,7 @@ public interface PostActivityService {
     void review(Long id, int state);
 
     void batchPass(String ids, int state);
+
+    PagingResult<PostActivityAppView> appList(String title, int sex, int activityState, int activityType, String activityTime, String category, Long departmentId, int pageIndex, int pageSize);
 }
 
