@@ -3,6 +3,7 @@ package com.zjw.graduation.controller.student;
 
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.post.PostInfoDto;
 import com.zjw.graduation.dto.student.StuInfoDto;
 import com.zjw.graduation.dto.student.StudentMemberDto;
 import com.zjw.graduation.dto.student.StudentMemberViewDto;
@@ -17,6 +18,7 @@ import com.zjw.graduation.service.common.CommonAreaService;
 import com.zjw.graduation.service.school.SchoolAcademyService;
 import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.util.JwtTokenUtil;
+import com.zjw.graduation.view.post.PostInfoView;
 import com.zjw.graduation.view.stu.StudentMemberView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
@@ -270,5 +272,24 @@ public class StudentMemberController {
                 Arrays.stream(ids.split(",")).map(Long::parseLong).collect(Collectors.toList());
         studentMemberService.batchDelete(collect);
         return JsonResult.success("批量禁用成功");
+    }
+
+    @PutMapping("/studentMember/updateface")
+    @ApiOperation("修改头像")
+    public JsonResult<StudentMember> updateFace(@RequestBody StudentMemberUpdateModel model){
+        StudentMember studentMember = studentMemberService.updateFace(model.getId(), model.getFaceImg());
+        if (studentMember == null){
+            return JsonResult.error("出现错误！");
+        }
+        return JsonResult.success(studentMember);
+    }
+
+    @GetMapping("/studentMember/postinfo")
+    @ApiOperation("获取我的发布数量")
+    public JsonResult<PostInfoDto> getPostInfo(@RequestParam("id") Long id){
+        PostInfoView postInfoView = studentMemberService.getPostInfo(id);
+        PostInfoDto postInfoDto = new PostInfoDto();
+        BeanUtils.copyProperties(postInfoView, postInfoDto);
+        return JsonResult.success(postInfoDto);
     }
 }

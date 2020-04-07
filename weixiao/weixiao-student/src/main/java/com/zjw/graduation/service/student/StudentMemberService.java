@@ -3,6 +3,7 @@ package com.zjw.graduation.service.student;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.entity.student.StudentPermission;
+import com.zjw.graduation.view.post.PostInfoView;
 import com.zjw.graduation.view.stu.StudentMemberView;
 
 import java.util.List;
@@ -38,5 +39,9 @@ public interface StudentMemberService {
     PagingResult<StudentMemberView> getStudentViewList(String username, int sex, Long academyId, Long areaId, Long state, int pageIndex, int pageSize);
 
     void batchDelete(List<Long> collect);
+
+    StudentMember updateFace(Long id, String avatar);
+
+    PostInfoView getPostInfo(Long id);
 }
 

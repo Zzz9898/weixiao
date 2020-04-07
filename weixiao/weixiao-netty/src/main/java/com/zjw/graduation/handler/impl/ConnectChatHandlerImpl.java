@@ -17,8 +17,8 @@ public class ConnectChatHandlerImpl implements ChatHandler {
 
     @Override
     public void handler(DataContent dataContent, Channel currentChannel) {
-        UserChannelRel.put(dataContent.getChatInfo().getSenderId(),currentChannel);
-        logger.info("连接成功 ... {},clients大小：{}",currentChannel.id(),NettyServerHandler.clients.size());
+        UserChannelRel.put(dataContent.getChatInfo().getSenderId(), currentChannel);
+        logger.info("{} 连接成功 ... {},clients大小：{}",dataContent.getChatInfo().getSenderId(), currentChannel.id(), NettyServerHandler.clients.size());
     }
 
     @Override

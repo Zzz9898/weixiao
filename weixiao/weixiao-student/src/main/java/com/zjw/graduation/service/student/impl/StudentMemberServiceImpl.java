@@ -6,12 +6,14 @@ import com.zjw.graduation.entity.student.StudentMemberPermissionRelation;
 import com.zjw.graduation.entity.student.StudentPermission;
 import com.zjw.graduation.enums.EnumLogicType;
 import com.zjw.graduation.enums.EnumStateType;
+import com.zjw.graduation.repository.post.*;
 import com.zjw.graduation.repository.student.StudentMemberDao;
 import com.zjw.graduation.repository.student.StudentMemberPermissionRelationDao;
 import com.zjw.graduation.repository.student.StudentMemberViewDao;
 import com.zjw.graduation.repository.student.StudentPermissionDao;
 import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.util.JwtTokenUtil;
+import com.zjw.graduation.view.post.PostInfoView;
 import com.zjw.graduation.view.stu.StudentMemberView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +66,21 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
 
     @Autowired
     private StudentMemberViewDao studentMemberViewDao;
+
+    @Autowired
+    private PostContentDao postContentDao;
+
+    @Autowired
+    private PostActivityDao postActivityDao;
+
+    @Autowired
+    private PostSignDao postSignDao;
+
+    @Autowired
+    private PostCollectDao postCollectDao;
+
+    @Autowired
+    private PostInfoViewDao postInfoViewDao;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -184,6 +201,25 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
     public void batchDelete(List<Long> collect) {
         LocalDateTime now = LocalDateTime.now();
         studentMemberDao.batchDelete(collect, now);
+    }
+
+    @Override
+    public StudentMember updateFace(Long id, String avatar) {
+        StudentMember studentMember = studentMemberDao.findById(id).orElse(null);
+        if (studentMember == null){
+            return null;
+        }else {
+            studentMember.setFaceImgMin(avatar);
+            studentMember.setFaceImg(avatar);
+            studentMemberDao.save(studentMember);
+        }
+        return studentMember;
+    }
+
+    @Override
+    public PostInfoView getPostInfo(Long id) {
+        PostInfoView postInfoView = postInfoViewDao.getById(id);
+        return postInfoView;
     }
 
 }
