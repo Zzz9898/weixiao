@@ -5,9 +5,27 @@ import java.io.Serializable;
 public class ChatInfo implements Serializable {
 
     private Long senderId;
+    private String senderAvatar;
+    private String senderNickname;
     private Long receiverId;
     private String message;
     private String msgId;
+
+    public String getSenderAvatar() {
+        return senderAvatar;
+    }
+
+    public void setSenderAvatar(String senderAvatar) {
+        this.senderAvatar = senderAvatar;
+    }
+
+    public String getSenderNickname() {
+        return senderNickname;
+    }
+
+    public void setSenderNickname(String senderNickname) {
+        this.senderNickname = senderNickname;
+    }
 
     public Long getSenderId() {
         return senderId;
@@ -44,8 +62,10 @@ public class ChatInfo implements Serializable {
     @Override
     public String toString() {
         return "ChatInfo{" +
-                "senderId='" + senderId + '\'' +
-                ", receiverId='" + receiverId + '\'' +
+                "senderId=" + senderId +
+                ", senderAvatar='" + senderAvatar + '\'' +
+                ", senderNickname='" + senderNickname + '\'' +
+                ", receiverId=" + receiverId +
                 ", message='" + message + '\'' +
                 ", msgId='" + msgId + '\'' +
                 '}';
