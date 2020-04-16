@@ -31,8 +31,22 @@ public class WordChatHandlerImpl implements ChatHandler {
             Channel receiverChannel = NettyServerHandler.clients.find(channel.id());
             if (receiverChannel != null){
                 receiverChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(dataContent)));
+            } else {
+                logger.info("写入离线消息....");
+                MessageContentService messageContentServiceImpl = (MessageContentService) SpringUtil.getBean("MessageContentServiceImpl");
+                MessageContent messageContent = new MessageContent();
+                messageContent.setSenderId(dataContent.getChatInfo().getSenderId());
+                messageContent.setSenderAvatar(dataContent.getChatInfo().getSenderAvatar());
+                messageContent.setSenderNickname(dataContent.getChatInfo().getSenderNickname());
+                messageContent.setContent(dataContent.getChatInfo().getMessage());
+                messageContent.setReceiverId(dataContent.getChatInfo().getReceiverId());
+                messageContent.setType(dataContent.getAction());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime time = LocalDateTime.parse(dataContent.getExtend(), formatter);
+                messageContent.setSendTime(time);
+                messageContentServiceImpl.save(messageContent);
             }
-        }else {
+        } else {
             logger.info("写入离线消息...");
             MessageContentService messageContentServiceImpl = (MessageContentService) SpringUtil.getBean("MessageContentServiceImpl");
             MessageContent messageContent = new MessageContent();

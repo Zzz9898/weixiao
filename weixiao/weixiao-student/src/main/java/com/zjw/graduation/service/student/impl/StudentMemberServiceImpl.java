@@ -4,13 +4,11 @@ import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.entity.student.StudentMemberPermissionRelation;
 import com.zjw.graduation.entity.student.StudentPermission;
+import com.zjw.graduation.entity.student.StudentSetting;
 import com.zjw.graduation.enums.EnumLogicType;
 import com.zjw.graduation.enums.EnumStateType;
-import com.zjw.graduation.repository.post.*;
-import com.zjw.graduation.repository.student.StudentMemberDao;
-import com.zjw.graduation.repository.student.StudentMemberPermissionRelationDao;
-import com.zjw.graduation.repository.student.StudentMemberViewDao;
-import com.zjw.graduation.repository.student.StudentPermissionDao;
+import com.zjw.graduation.repository.post.PostInfoViewDao;
+import com.zjw.graduation.repository.student.*;
 import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.util.JwtTokenUtil;
 import com.zjw.graduation.view.post.PostInfoView;
@@ -68,19 +66,10 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
     private StudentMemberViewDao studentMemberViewDao;
 
     @Autowired
-    private PostContentDao postContentDao;
-
-    @Autowired
-    private PostActivityDao postActivityDao;
-
-    @Autowired
-    private PostSignDao postSignDao;
-
-    @Autowired
-    private PostCollectDao postCollectDao;
-
-    @Autowired
     private PostInfoViewDao postInfoViewDao;
+
+    @Autowired
+    private StudentSettingDao studentSettingDao;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -114,6 +103,10 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
         }
         StudentMember entity = studentMemberDao.save(studentMember);
         entityManager.refresh(entity);
+        // 注册之后默认设置
+        StudentSetting studentSetting = new StudentSetting();
+        studentSetting.setStudentId(entity.getId());
+        studentSettingDao.save(studentSetting);
         return entity;
     }
 

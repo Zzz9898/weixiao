@@ -1,22 +1,21 @@
 package com.zjw.graduation.controller.student;
 
 
-import com.zjw.graduation.service.student.StudentSettingService;
+import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.student.StudentSettingDto;
+import com.zjw.graduation.entity.student.StudentMember;
+import com.zjw.graduation.entity.student.StudentSetting;
 import com.zjw.graduation.model.student.StudentSettingCreateModel;
 import com.zjw.graduation.model.student.StudentSettingUpdateModel;
-import com.zjw.graduation.entity.student.StudentSetting;
-import com.zjw.graduation.dto.student.StudentSettingDto;
-import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
-import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.service.student.StudentMemberService;
+import com.zjw.graduation.service.student.StudentSettingService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import java.time.LocalDateTime;
 
 
 /**
@@ -33,6 +32,9 @@ public class StudentSettingController {
 
     @Autowired
     private StudentSettingService studentSettingService;
+
+    @Autowired
+    private StudentMemberService studentMemberService;
 
     /**
      * 列表
@@ -60,7 +62,21 @@ public class StudentSettingController {
      * @param id
      * @return
      */
-    @GetMapping("/studentSetting/{id}")
+    @GetMapping("/studentSetting")
+    @ApiOperation("学生设置表详情")
+    public JsonResult<StudentSettingDto> getDetail(@RequestParam("id") Long id) {
+
+        StudentSetting studentSetting = studentSettingService.findByStudentId(id);
+
+        if (studentSetting != null) {
+            StudentSettingDto studentSettingDto = new StudentSettingDto();
+            BeanUtils.copyProperties(studentSetting, studentSettingDto);
+            return JsonResult.success(studentSettingDto);
+        }
+        return JsonResult.error("获取错误！");
+    }
+
+    @GetMapping("/studentSetting2")
     @ApiOperation("学生设置表详情")
     public JsonResult<StudentSettingDto> detail(@PathVariable("id") Long id) {
 
@@ -96,22 +112,17 @@ public class StudentSettingController {
     /**
      * 修改
      *
-     * @param studentSettingUpdateModel
+     * @param
      * @return
      */
     @PutMapping("/studentSetting")
     @ApiOperation("学生设置表修改")
-    public JsonResult<StudentSetting> update(@Validated @RequestBody StudentSettingUpdateModel studentSettingUpdateModel) {
-
-        StudentSetting studentSetting = studentSettingService.get(studentSettingUpdateModel.getId());
-        if (studentSetting.getId() == null) {
-            return JsonResult.error("Not find entity");
-        }
-        BeanUtils.copyProperties(studentSettingUpdateModel, studentSetting, NullPropertyUtils.getNullPropertyNames(studentSettingUpdateModel));
-        studentSetting.setUpdated(LocalDateTime.now());
-        StudentSetting entity = studentSettingService.update(studentSetting);
-
-        return JsonResult.success(entity);
+    public JsonResult update(@Validated @RequestBody StudentSettingUpdateModel model) {
+        studentSettingService.setByStudentId(model.getStudentId(), model.getChatSet(), model.getSexSet(), model.getAcademySet());
+        StudentMember studentMember = studentMemberService.get(model.getStudentId());
+        studentMember.setHide(model.getHide());
+        studentMemberService.save(studentMember);
+        return JsonResult.success("");
     }
 
     /**

@@ -20,5 +20,9 @@ public interface StudentSettingService {
     StudentSetting update(StudentSetting Admin);
 
     void delete(Long id);
+
+    void setByStudentId(Long id, Integer chat, Integer sexs, Integer academy);
+
+    StudentSetting findByStudentId(Long id);
 }
 

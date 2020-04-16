@@ -17,6 +17,7 @@ import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.common.CommonAreaService;
 import com.zjw.graduation.service.school.SchoolAcademyService;
 import com.zjw.graduation.service.student.StudentMemberService;
+import com.zjw.graduation.service.student.StudentSettingService;
 import com.zjw.graduation.util.JwtTokenUtil;
 import com.zjw.graduation.view.post.PostInfoView;
 import com.zjw.graduation.view.stu.StudentMemberView;
@@ -60,6 +61,8 @@ public class StudentMemberController {
     private SchoolAcademyService schoolAcademyService;
     @Autowired
     private CommonAreaService commonAreaService;
+    @Autowired
+    private StudentSettingService studentSettingService;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
@@ -199,10 +202,10 @@ public class StudentMemberController {
         }
         BeanUtils.copyProperties(studentMemberUpdateModel, studentMember, NullPropertyUtils.getNullPropertyNames(studentMemberUpdateModel));
         CommonArea commonArea = commonAreaService.findByNumber(studentMemberUpdateModel.getAreaId().intValue());
-        studentMember.setArea(commonArea.getName());
+        studentMember.setArea(studentMemberUpdateModel.getAreaName());
         studentMember.setAreaId(commonArea.getId());
         studentMember.setUpdated(LocalDateTime.now());
-        if (studentMemberUpdateModel.getSex() == 2){
+        if (studentMember.getSex() == 2){
             studentMember.setFaceImg(girl);
             studentMember.setFaceImgMin(girl);
         } else {
@@ -210,7 +213,29 @@ public class StudentMemberController {
             studentMember.setFaceImgMin(boy);
         }
         StudentMember entity = studentMemberService.update(studentMember);
+        studentSettingService.setByStudentId(entity.getId(), studentMemberUpdateModel.getChat(), studentMemberUpdateModel.getSexs(), studentMemberUpdateModel.getAcademy());
+        StudentMemberDto studentMemberDto = new StudentMemberDto();
+        BeanUtils.copyProperties(entity, studentMemberDto);
 
+        return JsonResult.success(studentMemberDto);
+    }
+
+    @PutMapping("/updateinfo")
+    @ApiOperation("学生表修改")
+    public JsonResult<StudentMemberDto> updateInfo(@RequestBody StudentMemberUpdateModel studentMemberUpdateModel) {
+        StudentMember studentMember = studentMemberService.get(studentMemberUpdateModel.getId());
+        if (studentMember.getId() == null){
+            return JsonResult.error("Not find entity");
+        }
+        BeanUtils.copyProperties(studentMemberUpdateModel, studentMember, NullPropertyUtils.getNullPropertyNames(studentMemberUpdateModel));
+        if (studentMemberUpdateModel.getAreaId() != null){
+            CommonArea commonArea = commonAreaService.findByNumber(studentMemberUpdateModel.getAreaId().intValue());
+            studentMember.setArea(studentMemberUpdateModel.getAreaName());
+            studentMember.setAreaId(commonArea.getId());
+            studentMember.setUpdated(LocalDateTime.now());
+        }
+
+        StudentMember entity = studentMemberService.update(studentMember);
         StudentMemberDto studentMemberDto = new StudentMemberDto();
         BeanUtils.copyProperties(entity, studentMemberDto);
 

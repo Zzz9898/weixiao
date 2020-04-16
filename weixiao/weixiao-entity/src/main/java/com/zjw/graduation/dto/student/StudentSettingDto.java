@@ -2,8 +2,6 @@ package com.zjw.graduation.dto.student;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
 
 /**
  * 学生设置表
@@ -47,25 +45,6 @@ public class StudentSettingDto {
 @ApiModelProperty(value="是否显示院部 0-否 1-是", name="academySet")
 	private Integer academySet;
 
-	/**
-	 * 创建时间
-	 */
-@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+08:00")
-	@ApiModelProperty(value="创建时间", name="created", example="2019-01-01 09:01:01")
-	private LocalDateTime created;
-
-	/**
-	 * 更新时间
-	 */
-@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone="GMT+08:00")
-	@ApiModelProperty(value="更新时间", name="updated", example="2019-01-01 09:01:01")
-	private LocalDateTime updated;
-
-	/**
-	 * 逻辑删除 0-是 1-否
-	 */
-@ApiModelProperty(value="逻辑删除 0-是 1-否", name="logicFlag")
-	private Integer logicFlag;
 
 
 
@@ -103,27 +82,6 @@ public class StudentSettingDto {
 
 	public void setAcademySet(Integer academySet) {
 		this.academySet = academySet;
-	}
-	public LocalDateTime getCreated() {
-		return created;
-	}
-
-	public void setCreated(LocalDateTime created) {
-		this.created = created;
-	}
-	public LocalDateTime getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(LocalDateTime updated) {
-		this.updated = updated;
-	}
-	public Integer getLogicFlag() {
-		return logicFlag;
-	}
-
-	public void setLogicFlag(Integer logicFlag) {
-		this.logicFlag = logicFlag;
 	}
 
 }

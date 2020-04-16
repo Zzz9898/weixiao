@@ -15,6 +15,10 @@ public class UserChannelRel {
         return manager.get(senderId);
     }
 
+    public static void remove(Long senderId) {
+        manager.remove(senderId);
+    }
+
     public static void output() {
         for (HashMap.Entry<Long, Channel> entry : manager.entrySet()) {
             System.out.println("UserId: " + entry.getKey()

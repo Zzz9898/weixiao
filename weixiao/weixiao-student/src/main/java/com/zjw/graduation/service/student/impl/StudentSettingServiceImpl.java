@@ -56,4 +56,14 @@ public class StudentSettingServiceImpl implements StudentSettingService  {
         }
     }
 
+    @Override
+    public void setByStudentId(Long id, Integer chat, Integer sexs, Integer academy) {
+        studentSettingDao.setByStudentId(id, chat, sexs, academy);
+    }
+
+    @Override
+    public StudentSetting findByStudentId(Long id) {
+        return studentSettingDao.findByStudentId(id);
+    }
+
 }

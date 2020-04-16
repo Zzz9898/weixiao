@@ -29,6 +29,8 @@ public class StuInfoDto {
 
     private String faceImgMin;
 
+    private Long academyId;
+
     private String academy;
 
     private String autograph;
@@ -36,6 +38,14 @@ public class StuInfoDto {
     private int hide;
 
     private List<String> roles;
+
+    public Long getAcademyId() {
+        return academyId;
+    }
+
+    public void setAcademyId(Long academyId) {
+        this.academyId = academyId;
+    }
 
     public Long getId() {
         return id;

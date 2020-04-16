@@ -29,6 +29,8 @@ public class StudentMemberUpdateModel {
     @ApiModelProperty(value = "性别 0-不详 1-男 2-女")
     private Integer sex;
 
+    private String truename;
+
     /**
      * 昵称
      */
@@ -48,6 +50,8 @@ public class StudentMemberUpdateModel {
      */
     @ApiModelProperty(value = "地区")
     private Long areaId;
+
+    private String areaName;
 
 
     /**
@@ -97,6 +101,52 @@ public class StudentMemberUpdateModel {
      */
     @ApiModelProperty(value = "是否隐藏个人信息 1-不隐藏 2-隐藏")
     private Integer hide;
+
+    private Integer chat;
+
+    private Integer sexs;
+
+    private Integer academy;
+
+    public String getTruename() {
+        return truename;
+    }
+
+    public void setTruename(String truename) {
+        this.truename = truename;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public Integer getChat() {
+        return chat;
+    }
+
+    public void setChat(Integer chat) {
+        this.chat = chat;
+    }
+
+    public Integer getSexs() {
+        return sexs;
+    }
+
+    public void setSexs(Integer sexs) {
+        this.sexs = sexs;
+    }
+
+    public Integer getAcademy() {
+        return academy;
+    }
+
+    public void setAcademy(Integer academy) {
+        this.academy = academy;
+    }
 
     public String getNickname() {
         return nickname;

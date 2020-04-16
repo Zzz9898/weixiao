@@ -1,15 +1,9 @@
 package com.zjw.graduation.model.student;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
-import javax.validation.groups.Default;
-
-import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 学生设置表
@@ -22,77 +16,74 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class StudentSettingUpdateModel {
 
 
-	/**
-	 * 主键
-	 */
-			@NotNull(message = "主键 不能为空")
-							@ApiModelProperty(value = "主键", required = true)
-				private Long id;
+    /**
+     * 用户主键
+     */
+    @NotNull(message = "用户主键 不能为空")
+    @ApiModelProperty(value = "用户主键", required = true)
+    private Long studentId;
 
 
-	/**
-	 * 用户主键
-	 */
-			@NotNull(message = "用户主键 不能为空")
-									@ApiModelProperty(value = "用户主键", required = true)
-				private Long studentId;
+    /**
+     * 是否允许私聊 0-否 1-是
+     */
+    @ApiModelProperty(value = "是否允许私聊 0-否 1-是")
+    private Integer chatSet;
 
 
-	/**
-	 * 是否允许私聊 0-否 1-是
-	 */
-							@ApiModelProperty(value = "是否允许私聊 0-否 1-是")
-				private Integer chatSet;
+    /**
+     * 是否展示性别 0-否 1-是
+     */
+    @ApiModelProperty(value = "是否展示性别 0-否 1-是")
+    private Integer sexSet;
 
 
-	/**
-	 * 是否展示性别 0-否 1-是
-	 */
-							@ApiModelProperty(value = "是否展示性别 0-否 1-是")
-				private Integer sexSet;
+    /**
+     * 是否显示院部 0-否 1-是
+     */
+    @ApiModelProperty(value = "是否显示院部 0-否 1-是")
+    private Integer academySet;
 
+    private Integer hide;
 
-	/**
-	 * 是否显示院部 0-否 1-是
-	 */
-							@ApiModelProperty(value = "是否显示院部 0-否 1-是")
-				private Integer academySet;
+    public Integer getHide() {
+        return hide;
+    }
 
+    public void setHide(Integer hide) {
+        this.hide = hide;
+    }
 
-		public Long getId() {
-		return id;
-	}
+    public Long getStudentId() {
+        return studentId;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-			public Long getStudentId() {
-		return studentId;
-	}
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
 
-	public void setStudentId(Long studentId) {
-		this.studentId = studentId;
-	}
-			public Integer getChatSet() {
-		return chatSet;
-	}
+    public Integer getChatSet() {
+        return chatSet;
+    }
 
-	public void setChatSet(Integer chatSet) {
-		this.chatSet = chatSet;
-	}
-			public Integer getSexSet() {
-		return sexSet;
-	}
+    public void setChatSet(Integer chatSet) {
+        this.chatSet = chatSet;
+    }
 
-	public void setSexSet(Integer sexSet) {
-		this.sexSet = sexSet;
-	}
-			public Integer getAcademySet() {
-		return academySet;
-	}
+    public Integer getSexSet() {
+        return sexSet;
+    }
 
-	public void setAcademySet(Integer academySet) {
-		this.academySet = academySet;
-	}
-				
+    public void setSexSet(Integer sexSet) {
+        this.sexSet = sexSet;
+    }
+
+    public Integer getAcademySet() {
+        return academySet;
+    }
+
+    public void setAcademySet(Integer academySet) {
+        this.academySet = academySet;
+    }
+
 }
