@@ -60,4 +60,36 @@ public interface PostContentAppViewDao extends JpaRepository<PostContentAppView,
                                      @Param("category") List<Long> category,
                                      @Param("departmentId") Long departmentId,
                                      Pageable pageable);
+
+    @Query(nativeQuery = true,
+            value = "SELECT " +
+                    "pc.id," +
+                    "pc.student_id," +
+                    "sm.face_img_min AS avatar," +
+                    "sm.nickname," +
+                    "pc.content," +
+                    "pc.images AS image," +
+                    "pc.look_num," +
+                    "pc.like_num," +
+                    "pc.release_time " +
+                    "FROM z_post_content pc " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pc.student_id = sm.id " +
+                    "WHERE pc.id IN " +
+                    "(SELECT pct.content_id FROM z_post_collect pct " +
+                    "WHERE pct.student_id = :id AND pct.logic_flag = 1) AND " +
+                    "pc.logic_flag = 1 AND " +
+                    "sm.logic_flag = 1",
+            countQuery = "SELECT " +
+                    "COUNT(*) " +
+                    "FROM z_post_content pc " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pc.student_id = sm.id " +
+                    "WHERE pc.id IN " +
+                    "(SELECT pct.content_id FROM z_post_collect pct " +
+                    "WHERE pct.student_id = :id AND pct.logic_flag = 1) AND " +
+                    "pc.logic_flag = 1 AND " +
+                    "sm.logic_flag = 1")
+    Page<PostContentAppView> getMyCollect(@Param("id") Long id,
+                                          Pageable pageable );
 }

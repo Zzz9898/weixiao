@@ -1,5 +1,6 @@
 package com.zjw.graduation.service.post.impl;
 
+import com.zjw.graduation.model.post.PostCollectUpdateModel;
 import org.springframework.data.domain.Page;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.enums.EnumLogicType;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 
 @Service("postCollectService")
@@ -39,7 +42,15 @@ public class PostCollectServiceImpl implements PostCollectService  {
 
     @Override
     public PostCollect save(PostCollect postCollect) {
-        return postCollectDao.save(postCollect);
+        PostCollect entity = postCollectDao.findByStudentIdAndContentId(postCollect.getStudentId(), postCollect.getContentId());
+        if (entity == null){
+            return postCollectDao.save(postCollect);
+        } else {
+            entity.setLogicFlag(EnumLogicType.NORMAL.getValue());
+            entity.setUpdated(LocalDateTime.now());
+            postCollectDao.save(entity);
+            return entity;
+        }
     }
 
     @Override
@@ -54,6 +65,16 @@ public class PostCollectServiceImpl implements PostCollectService  {
             postCollect.setLogicFlag(EnumLogicType.DELETE.getValue());
             postCollectDao.save(postCollect);
         }
+    }
+
+    @Override
+    public PostCollect modify(PostCollectUpdateModel postCollectUpdateModel) {
+        PostCollect entity = postCollectDao.findByStudentIdAndContentId(postCollectUpdateModel.getStudentId(), postCollectUpdateModel.getContentId());
+        if (entity != null) {
+            entity.setUpdated(LocalDateTime.now());
+            return postCollectDao.save(entity);
+        }
+        return null;
     }
 
 }

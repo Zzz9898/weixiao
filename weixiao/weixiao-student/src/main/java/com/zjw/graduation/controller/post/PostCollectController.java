@@ -102,17 +102,10 @@ public class PostCollectController {
     @ApiOperation("收藏表修改")
     public JsonResult<PostCollectDto> update(@Validated @RequestBody PostCollectUpdateModel postCollectUpdateModel) {
 
-        PostCollect postCollect = postCollectService.get(postCollectUpdateModel.getId());
-        if (postCollect.getId() == null){
-            return JsonResult.error("Not find entity");
-        }
-        BeanUtils.copyProperties(postCollectUpdateModel, postCollect, NullPropertyUtils.getNullPropertyNames(postCollectUpdateModel));
-        postCollect.setUpdated(LocalDateTime.now());
-        PostCollect entity = postCollectService.update(postCollect);
+        PostCollect postCollect = postCollectService.modify(postCollectUpdateModel);
 
         PostCollectDto postCollectDto = new PostCollectDto();
-        BeanUtils.copyProperties(entity, postCollectDto);
-
+        BeanUtils.copyProperties(postCollect, postCollectDto);
         return JsonResult.success(postCollectDto);
     }
 

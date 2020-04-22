@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 import java.time.LocalDateTime;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -22,50 +23,35 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class PostLikeUpdateModel {
 
 
-	/**
-	 * 
-	 */
-			@NotNull(message = " 不能为空")
-							@ApiModelProperty(value = "", required = true)
-				private Long id;
+    /**
+     * 学生主键
+     */
+    @NotNull(message = "学生主键 不能为空")
+    @ApiModelProperty(value = "学生主键", required = true)
+    private Long studentId;
 
 
-	/**
-	 * 学生主键
-	 */
-			@NotNull(message = "学生主键 不能为空")
-									@ApiModelProperty(value = "学生主键", required = true)
-				private Long studentId;
+    /**
+     * 内容主键
+     */
+    @NotNull(message = "内容主键 不能为空")
+    @ApiModelProperty(value = "内容主键", required = true)
+    private Long contentId;
 
+    public Long getStudentId() {
+        return studentId;
+    }
 
-	/**
-	 * 内容主键
-	 */
-			@NotNull(message = "内容主键 不能为空")
-									@ApiModelProperty(value = "内容主键", required = true)
-				private Long contentId;
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
 
+    public Long getContentId() {
+        return contentId;
+    }
 
-		public Long getId() {
-		return id;
-	}
+    public void setContentId(Long contentId) {
+        this.contentId = contentId;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-			public Long getStudentId() {
-		return studentId;
-	}
-
-	public void setStudentId(Long studentId) {
-		this.studentId = studentId;
-	}
-			public Long getContentId() {
-		return contentId;
-	}
-
-	public void setContentId(Long contentId) {
-		this.contentId = contentId;
-	}
-				
 }

@@ -34,5 +34,6 @@ public interface PostCollectDao extends JpaRepository<PostCollect, Long>, JpaSpe
                     "`logic_flag` = 1 ")
     Page<PostCollect> findAll(Pageable pageable);
 
+    PostCollect findByStudentIdAndContentId(Long studentId, Long contentId);
 }
 

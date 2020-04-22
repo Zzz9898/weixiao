@@ -3,6 +3,7 @@ package com.zjw.graduation.controller.student;
 
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.post.PostContentAppViewDto;
 import com.zjw.graduation.dto.post.PostInfoDto;
 import com.zjw.graduation.dto.student.StuInfoDto;
 import com.zjw.graduation.dto.student.StudentMemberDto;
@@ -15,10 +16,12 @@ import com.zjw.graduation.model.student.StudentMemberLoginModel;
 import com.zjw.graduation.model.student.StudentMemberUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.common.CommonAreaService;
+import com.zjw.graduation.service.post.PostContentService;
 import com.zjw.graduation.service.school.SchoolAcademyService;
 import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.service.student.StudentSettingService;
 import com.zjw.graduation.util.JwtTokenUtil;
+import com.zjw.graduation.view.post.PostContentAppView;
 import com.zjw.graduation.view.post.PostInfoView;
 import com.zjw.graduation.view.stu.StudentMemberView;
 import io.swagger.annotations.Api;
@@ -63,6 +66,8 @@ public class StudentMemberController {
     private CommonAreaService commonAreaService;
     @Autowired
     private StudentSettingService studentSettingService;
+    @Autowired
+    private PostContentService postContentService;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
@@ -316,5 +321,22 @@ public class StudentMemberController {
         PostInfoDto postInfoDto = new PostInfoDto();
         BeanUtils.copyProperties(postInfoView, postInfoDto);
         return JsonResult.success(postInfoDto);
+    }
+
+    @GetMapping("/studentMember/collect")
+    @ApiOperation("获取我的收藏")
+    public JsonResult<PagingResult<PostContentAppViewDto>> getPostInfo(@RequestParam("id") Long id,
+                                                                       @RequestParam(value = "pageindex", defaultValue = "0")int pageIndex,
+                                                                       @RequestParam(value = "pagesize", defaultValue = "5") int pageSize){
+        PagingResult<PostContentAppView> postContentAppView = postContentService.getMyCollect(id, pageIndex, pageSize);
+        PagingResult<PostContentAppViewDto> convert = postContentAppView.convert(item -> {
+            PostContentAppViewDto postContentAppViewDto = new PostContentAppViewDto();
+            BeanUtils.copyProperties(item, postContentAppViewDto);
+            if (item.getImages() != null && !item.getImages().equals("")) {
+                postContentAppViewDto.setImages(item.getImages().split(";"));
+            }
+            return postContentAppViewDto;
+        });
+        return JsonResult.success(convert);
     }
 }

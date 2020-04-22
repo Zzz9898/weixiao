@@ -64,6 +64,7 @@ public interface PostActivityAppViewDao extends JpaRepository<PostActivityAppVie
                     "ps.activity_id," +
                     "COUNT(*) AS sign_number " +
                     "FROM z_post_sign ps " +
+                    "WHERE ps.logic_flag = 1 " +
                     "GROUP BY ps.activity_id) ps1 ON ps1.activity_id = pa.id " +
                     "WHERE " +
                     "(pa.logic_flag = 1) AND " +

@@ -2,6 +2,7 @@ package com.zjw.graduation.service.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostCollect;
+import com.zjw.graduation.model.post.PostCollectUpdateModel;
 
 /**
  * 收藏表
@@ -20,5 +21,7 @@ public interface PostCollectService {
     PostCollect update(PostCollect Admin);
 
     void delete(Long id);
+
+    PostCollect modify(PostCollectUpdateModel postCollectUpdateModel);
 }
 

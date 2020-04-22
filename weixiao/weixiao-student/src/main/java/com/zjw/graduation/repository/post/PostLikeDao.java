@@ -33,5 +33,7 @@ public interface PostLikeDao extends JpaRepository<PostLike, Long>, JpaSpecifica
                     "WHERE " +
                     "`logic_flag` = 1 ")
     Page<PostLike> findAll(Pageable pageable);
+
+    PostLike findByStudentIdAndContentId(Long studentId, Long contentId);
 }
 
