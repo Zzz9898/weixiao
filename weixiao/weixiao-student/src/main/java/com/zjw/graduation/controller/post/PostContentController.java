@@ -3,6 +3,7 @@ package com.zjw.graduation.controller.post;
 
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.post.PostContentAppDetailViewDto;
 import com.zjw.graduation.dto.post.PostContentAppViewDto;
 import com.zjw.graduation.dto.post.PostContentDto;
 import com.zjw.graduation.dto.post.PostContentViewDto;
@@ -13,6 +14,7 @@ import com.zjw.graduation.model.post.PostContentUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.post.PostContentService;
 import com.zjw.graduation.service.school.SchoolAcademyService;
+import com.zjw.graduation.view.post.PostContentAppDetailView;
 import com.zjw.graduation.view.post.PostContentAppView;
 import com.zjw.graduation.view.post.PostContentView;
 import io.swagger.annotations.Api;
@@ -94,17 +96,34 @@ public class PostContentController {
      * @param id
      * @return
      */
+//    @GetMapping("/postContent/{id}")
+//    @ApiOperation("发布内容表详情")
+//    public JsonResult<PostContentDto> detail(@PathVariable("id") Long id) {
+//
+//        PostContent postContent = postContentService.get(id);
+//
+//        PostContentDto postContentDto = new PostContentDto();
+//        BeanUtils.copyProperties(postContent, postContentDto);
+//
+//        return JsonResult.success(postContentDto);
+//    }
+
     @GetMapping("/postContent/{id}")
     @ApiOperation("发布内容表详情")
-    public JsonResult<PostContentDto> detail(@PathVariable("id") Long id) {
+    public JsonResult<PostContentAppDetailViewDto> detail(@PathVariable("id") Long id,
+                                                          @RequestParam("studentid") Long studentId) {
 
-        PostContent postContent = postContentService.get(id);
+        PostContentAppDetailView postContentAppDetailView = postContentService.getDetail(id, studentId);
 
-        PostContentDto postContentDto = new PostContentDto();
-        BeanUtils.copyProperties(postContent, postContentDto);
-
-        return JsonResult.success(postContentDto);
+        PostContentAppDetailViewDto postContentAppDetailViewDto = new PostContentAppDetailViewDto();
+        BeanUtils.copyProperties(postContentAppDetailView, postContentAppDetailViewDto);
+        if (postContentAppDetailView.getImages() != null && !postContentAppDetailView.getImages().equals("")){
+            postContentAppDetailViewDto.setImage(postContentAppDetailViewDto.getImages().split(";"));
+        }
+        return JsonResult.success(postContentAppDetailViewDto);
     }
+
+
 
     /**
      * 新增

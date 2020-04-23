@@ -102,17 +102,10 @@ public class PostLikeController {
     @ApiOperation("点赞表修改")
     public JsonResult<PostLikeDto> update(@Validated @RequestBody PostLikeUpdateModel postLikeUpdateModel) {
 
-        PostLike postLike = postLikeService.get(postLikeUpdateModel.getId());
-        if (postLike.getId() == null){
-            return JsonResult.error("Not find entity");
-        }
-        BeanUtils.copyProperties(postLikeUpdateModel, postLike, NullPropertyUtils.getNullPropertyNames(postLikeUpdateModel));
-        postLike.setUpdated(LocalDateTime.now());
-        PostLike entity = postLikeService.update(postLike);
+        PostLike entity = postLikeService.modify(postLikeUpdateModel);
 
         PostLikeDto postLikeDto = new PostLikeDto();
-        BeanUtils.copyProperties(entity, postLikeDto);
-
+        if (entity != null ) BeanUtils.copyProperties(entity, postLikeDto);
         return JsonResult.success(postLikeDto);
     }
 

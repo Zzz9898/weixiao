@@ -2,6 +2,7 @@ package com.zjw.graduation.service.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostContent;
+import com.zjw.graduation.view.post.PostContentAppDetailView;
 import com.zjw.graduation.view.post.PostContentAppView;
 import com.zjw.graduation.view.post.PostContentView;
 
@@ -30,5 +31,9 @@ public interface PostContentService {
     void batchReview(String ids, int reviewState);
 
     PagingResult<PostContentAppView> appList(String valueContent, int sex, String category, Long departmentId, int pageIndex, int pageSize);
+
+    PostContentAppDetailView getDetail(Long id, Long studentId);
+
+    PagingResult<PostContentAppView> getMyCollect(Long id, int pageIndex, int pageSize);
 }
 

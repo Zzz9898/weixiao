@@ -1,6 +1,7 @@
 package com.zjw.graduation.controller.post;
 
 
+import com.zjw.graduation.dto.post.PostActivityAppDetailViewDto;
 import com.zjw.graduation.dto.post.PostActivityAppViewDto;
 import com.zjw.graduation.dto.post.PostActivityViewDto;
 import com.zjw.graduation.entity.school.SchoolAcademy;
@@ -13,6 +14,7 @@ import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.service.school.SchoolAcademyService;
+import com.zjw.graduation.view.post.PostActivityAppDetailView;
 import com.zjw.graduation.view.post.PostActivityAppView;
 import com.zjw.graduation.view.post.PostActivityView;
 import org.springframework.beans.BeanUtils;
@@ -110,6 +112,18 @@ public class PostActivityController {
 
         return JsonResult.success(postActivityDto);
     }
+
+//    @GetMapping("/postActivity/{id}")
+//    @ApiOperation("活动发布表详情")
+//    public JsonResult<PostActivityAppDetailViewDto> getDetail(@PathVariable("id") Long id) {
+//
+//        PostActivityAppDetailView postActivityAppDetail = postActivityService.getDetail(id);
+//
+//        PostActivityAppDetailViewDto postActivityAppDetailViewDto = new PostActivityAppDetailViewDto();
+//        BeanUtils.copyProperties(postActivityAppDetail, postActivityAppDetailViewDto);
+//
+//        return JsonResult.success(postActivityAppDetailViewDto);
+//    }
 
     /**
      * 新增

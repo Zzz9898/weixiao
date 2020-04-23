@@ -2,6 +2,7 @@ package com.zjw.graduation.service.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostLike;
+import com.zjw.graduation.model.post.PostLikeUpdateModel;
 
 /**
  * 点赞表
@@ -20,5 +21,7 @@ public interface PostLikeService {
     PostLike update(PostLike Admin);
 
     void delete(Long id);
+
+    PostLike modify(PostLikeUpdateModel postLikeUpdateModel);
 }
 

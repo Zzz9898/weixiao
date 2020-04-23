@@ -3,11 +3,12 @@ package com.zjw.graduation.service.post.impl;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostContent;
 import com.zjw.graduation.enums.EnumLogicType;
-import com.zjw.graduation.enums.EnumStateType;
+import com.zjw.graduation.repository.post.PostContentAppDetailViewDao;
 import com.zjw.graduation.repository.post.PostContentAppViewDao;
 import com.zjw.graduation.repository.post.PostContentDao;
 import com.zjw.graduation.repository.post.PostContentViewDao;
 import com.zjw.graduation.service.post.PostContentService;
+import com.zjw.graduation.view.post.PostContentAppDetailView;
 import com.zjw.graduation.view.post.PostContentAppView;
 import com.zjw.graduation.view.post.PostContentView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class PostContentServiceImpl implements PostContentService  {
     @Autowired
     private PostContentAppViewDao postContentAppViewDao;
 
+    @Autowired
+    private PostContentAppDetailViewDao postContentAppDetailViewDao;
+
     public PagingResult<PostContentView> page(String truename, Long academyId, Long categoryId, int reviewState, int state, int pageIndex, int pageSize){
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
 
@@ -53,7 +57,7 @@ public class PostContentServiceImpl implements PostContentService  {
     public void enableOrDisable(Long id) {
         PostContent postContent = postContentDao.findById(id).orElse(null);
         if (postContent != null){
-            postContent.setState(postContent.getState().equals(0) ? EnumStateType.NORMAL.getValue() : EnumStateType.DISABLE.getValue());
+            postContent.setState(postContent.getState().equals(1) ? 2 : 1);
             postContent.setUpdated(LocalDateTime.now());
             postContentDao.save(postContent);
         }
@@ -89,6 +93,28 @@ public class PostContentServiceImpl implements PostContentService  {
         }
 
         Page<PostContentAppView> page = postContentAppViewDao.appList(valueContent, sex, collect, departmentId, pageable);
+
+        PagingResult<PostContentAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
+    }
+
+    @Override
+    public PostContentAppDetailView getDetail(Long id, Long studentId) {
+        PostContent one = postContentDao.getOne(id);
+        one.setLookNum(one.getLookNum() + 1);
+        postContentDao.save(one);
+        return postContentAppDetailViewDao.getDetail(id, studentId);
+    }
+
+    @Override
+    public PagingResult<PostContentAppView> getMyCollect(Long id, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        Page<PostContentAppView> page = postContentAppViewDao.getMyCollect(id, pageable);
 
         PagingResult<PostContentAppView> pagingResult = new PagingResult<>();
         pagingResult.setPageIndex(pageIndex);
