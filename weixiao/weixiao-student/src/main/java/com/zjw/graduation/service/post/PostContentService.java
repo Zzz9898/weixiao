@@ -35,5 +35,7 @@ public interface PostContentService {
     PostContentAppDetailView getDetail(Long id, Long studentId);
 
     PagingResult<PostContentAppView> getMyCollect(Long id, int pageIndex, int pageSize);
+
+    PagingResult<PostContentAppView> getMyContent(Long id, int pageIndex, int pageSize);
 }
 

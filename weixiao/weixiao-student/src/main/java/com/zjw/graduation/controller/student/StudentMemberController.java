@@ -3,6 +3,7 @@ package com.zjw.graduation.controller.student;
 
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.dto.post.PostActivityAppViewDto;
 import com.zjw.graduation.dto.post.PostContentAppViewDto;
 import com.zjw.graduation.dto.post.PostInfoDto;
 import com.zjw.graduation.dto.student.StuInfoDto;
@@ -16,11 +17,13 @@ import com.zjw.graduation.model.student.StudentMemberLoginModel;
 import com.zjw.graduation.model.student.StudentMemberUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.service.common.CommonAreaService;
+import com.zjw.graduation.service.post.PostActivityService;
 import com.zjw.graduation.service.post.PostContentService;
 import com.zjw.graduation.service.school.SchoolAcademyService;
 import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.service.student.StudentSettingService;
 import com.zjw.graduation.util.JwtTokenUtil;
+import com.zjw.graduation.view.post.PostActivityAppView;
 import com.zjw.graduation.view.post.PostContentAppView;
 import com.zjw.graduation.view.post.PostInfoView;
 import com.zjw.graduation.view.stu.StudentMemberView;
@@ -68,6 +71,8 @@ public class StudentMemberController {
     private StudentSettingService studentSettingService;
     @Autowired
     private PostContentService postContentService;
+    @Autowired
+    private PostActivityService postActivityService;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
@@ -325,7 +330,7 @@ public class StudentMemberController {
 
     @GetMapping("/studentMember/collect")
     @ApiOperation("获取我的收藏")
-    public JsonResult<PagingResult<PostContentAppViewDto>> getPostInfo(@RequestParam("id") Long id,
+    public JsonResult<PagingResult<PostContentAppViewDto>> getMyCollect(@RequestParam("id") Long id,
                                                                        @RequestParam(value = "pageindex", defaultValue = "0")int pageIndex,
                                                                        @RequestParam(value = "pagesize", defaultValue = "5") int pageSize){
         PagingResult<PostContentAppView> postContentAppView = postContentService.getMyCollect(id, pageIndex, pageSize);
@@ -336,6 +341,57 @@ public class StudentMemberController {
                 postContentAppViewDto.setImages(item.getImages().split(";"));
             }
             return postContentAppViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
+    @GetMapping("/studentMember/content")
+    @ApiOperation("获取我的发布")
+    public JsonResult<PagingResult<PostContentAppViewDto>> getMyContent(@RequestParam("id") Long id,
+                                                                       @RequestParam(value = "pageindex", defaultValue = "0")int pageIndex,
+                                                                       @RequestParam(value = "pagesize", defaultValue = "5") int pageSize){
+        PagingResult<PostContentAppView> postContentAppView = postContentService.getMyContent(id, pageIndex, pageSize);
+        PagingResult<PostContentAppViewDto> convert = postContentAppView.convert(item -> {
+            PostContentAppViewDto postContentAppViewDto = new PostContentAppViewDto();
+            BeanUtils.copyProperties(item, postContentAppViewDto);
+            if (item.getImages() != null && !item.getImages().equals("")) {
+                postContentAppViewDto.setImages(item.getImages().split(";"));
+            }
+            return postContentAppViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
+    @GetMapping("/studentMember/activity")
+    @ApiOperation("获取我的活动发布")
+    public JsonResult<PagingResult<PostActivityAppViewDto>> getMyPublish(@RequestParam("id") Long id,
+                                                                         @RequestParam(value = "pageindex", defaultValue = "0")int pageIndex,
+                                                                         @RequestParam(value = "pagesize", defaultValue = "5") int pageSize){
+        PagingResult<PostActivityAppView> postContentAppView = postActivityService.getMyPublish(id, pageIndex, pageSize);
+        PagingResult<PostActivityAppViewDto> convert = postContentAppView.convert(item -> {
+            PostActivityAppViewDto postActivityAppViewDto = new PostActivityAppViewDto();
+            BeanUtils.copyProperties(item, postActivityAppViewDto);
+            if (item.getImage() != null && !item.getImage().equals("")) {
+                postActivityAppViewDto.setImages(item.getImage().split(";"));
+            }
+            return postActivityAppViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
+    @GetMapping("/studentMember/participation")
+    @ApiOperation("获取我的活动参与")
+    public JsonResult<PagingResult<PostActivityAppViewDto>> getMyParticipation(@RequestParam("id") Long id,
+                                                                         @RequestParam(value = "pageindex", defaultValue = "0")int pageIndex,
+                                                                         @RequestParam(value = "pagesize", defaultValue = "5") int pageSize){
+        PagingResult<PostActivityAppView> postContentAppView = postActivityService.getMyParticipation(id, pageIndex, pageSize);
+        PagingResult<PostActivityAppViewDto> convert = postContentAppView.convert(item -> {
+            PostActivityAppViewDto postActivityAppViewDto = new PostActivityAppViewDto();
+            BeanUtils.copyProperties(item, postActivityAppViewDto);
+            if (item.getImage() != null && !item.getImage().equals("")) {
+                postActivityAppViewDto.setImages(item.getImage().split(";"));
+            }
+            return postActivityAppViewDto;
         });
         return JsonResult.success(convert);
     }

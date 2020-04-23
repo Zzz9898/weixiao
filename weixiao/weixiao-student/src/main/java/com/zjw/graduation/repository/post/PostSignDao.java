@@ -33,5 +33,7 @@ public interface PostSignDao extends JpaRepository<PostSign, Long>, JpaSpecifica
                     "WHERE " +
                     "`logic_flag` = 1 ")
     Page<PostSign> findAll(Pageable pageable);
+
+    PostSign findByActivityIdAndStudentIdAndLogicFlagIs(Long activityId, Long studentId, Integer value);
 }
 

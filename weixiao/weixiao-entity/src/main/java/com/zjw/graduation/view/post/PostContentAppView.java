@@ -38,6 +38,17 @@ public class PostContentAppView {
     @Column(name = "like_num", nullable = false)
     private int likeNum;
 
+    @Column(name = "review_state", nullable = false)
+    private int reviewState;
+
+    public int getReviewState() {
+        return reviewState;
+    }
+
+    public void setReviewState(int reviewState) {
+        this.reviewState = reviewState;
+    }
+
     public int getLookNum() {
         return lookNum;
     }

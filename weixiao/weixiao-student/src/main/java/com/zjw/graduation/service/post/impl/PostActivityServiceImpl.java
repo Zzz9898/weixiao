@@ -105,6 +105,41 @@ public class PostActivityServiceImpl implements PostActivityService  {
     }
 
     @Override
+    public PagingResult<PostActivityAppView> getMyPublish(Long id, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        Page<PostActivityAppView> page = postActivityAppViewDao.getMyPublish(id, pageable);
+
+        PagingResult<PostActivityAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+        return pagingResult;
+    }
+
+    @Override
+    public void cancel(Long id) {
+        PostActivity one = postActivityDao.getOne(id);
+        one.setState(5);
+        postActivityDao.save(one);
+    }
+
+    @Override
+    public PagingResult<PostActivityAppView> getMyParticipation(Long id, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        Page<PostActivityAppView> page = postActivityAppViewDao.getMyParticipation(id, pageable);
+
+        PagingResult<PostActivityAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+        return pagingResult;
+    }
+
+    @Override
     public PostActivity get(Long id) {
         return postActivityDao.findById(id).orElse(new PostActivity());
     }

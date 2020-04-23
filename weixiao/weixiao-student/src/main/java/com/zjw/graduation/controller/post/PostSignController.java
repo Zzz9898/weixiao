@@ -1,6 +1,7 @@
 package com.zjw.graduation.controller.post;
 
 
+import com.zjw.graduation.dto.post.PostSignAppViewDto;
 import com.zjw.graduation.dto.post.PostSignViewDto;
 import com.zjw.graduation.service.post.PostSignService;
 import com.zjw.graduation.model.post.PostSignCreateModel;
@@ -10,6 +11,7 @@ import com.zjw.graduation.dto.post.PostSignDto;
 import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.mvc.JsonResult;
 import com.zjw.graduation.data.PagingResult;
+import com.zjw.graduation.view.post.PostSignAppView;
 import com.zjw.graduation.view.post.PostSignView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -132,4 +134,38 @@ public class PostSignController {
         return JsonResult.success("删除成功");
     }
 
+    @PutMapping("/postSign/cancel")
+    @ApiOperation("活动报名表删除")
+    public JsonResult cancel(@RequestParam("activityId") Long activityId,
+                             @RequestParam("studentId") Long studentId) {
+
+        postSignService.cancel(activityId, studentId);
+
+        return JsonResult.success("取消成功");
+    }
+
+    @GetMapping("/postSign/check")
+    @ApiOperation("活动报名表删除")
+    public JsonResult check(@RequestParam("activityId") Long activityId,
+                             @RequestParam("studentId") Long studentId) {
+
+        boolean flag = postSignService.check(activityId, studentId);
+
+        return JsonResult.success(flag);
+    }
+
+    @GetMapping("/postSign/list")
+    @ApiOperation("活动报名表列表")
+    public JsonResult<PagingResult<PostSignAppViewDto>> signList(@RequestParam("activityid") Long activityId,
+                                                                 @RequestParam("pageindex") int pageIndex,
+                                                                 @RequestParam("pagesize") int pageSize) {
+
+        PagingResult<PostSignAppView> pagingResult = postSignService.signList(activityId, pageIndex, pageSize);
+        PagingResult<PostSignAppViewDto> convert = pagingResult.convert(item -> {
+            PostSignAppViewDto postSignAppViewDto = new PostSignAppViewDto();
+            BeanUtils.copyProperties(item, postSignAppViewDto);
+            return postSignAppViewDto;
+        });
+        return JsonResult.success(convert);
+    }
 }

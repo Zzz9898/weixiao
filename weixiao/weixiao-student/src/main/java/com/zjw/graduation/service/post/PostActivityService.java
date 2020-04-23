@@ -29,5 +29,11 @@ public interface PostActivityService {
     void batchPass(String ids, int state);
 
     PagingResult<PostActivityAppView> appList(String title, int sex, int activityState, int activityType, String activityTime, String category, Long departmentId, int pageIndex, int pageSize);
+
+    PagingResult<PostActivityAppView> getMyPublish(Long id, int pageIndex, int pageSize);
+
+    void cancel(Long id);
+
+    PagingResult<PostActivityAppView> getMyParticipation(Long id, int pageIndex, int pageSize);
 }
 

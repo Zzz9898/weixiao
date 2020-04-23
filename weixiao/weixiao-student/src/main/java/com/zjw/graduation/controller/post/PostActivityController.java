@@ -187,6 +187,15 @@ public class PostActivityController {
         return JsonResult.success("删除成功");
     }
 
+    @PutMapping("/postActivity/cancel/{id}")
+    @ApiOperation("活动发布表删除")
+    public JsonResult cancel(@PathVariable("id") Long id) {
+
+        postActivityService.cancel(id);
+
+        return JsonResult.success("取消成功");
+    }
+
     @PutMapping("/postActivity/review")
     @ApiOperation("活动发布表审核")
     public JsonResult review(@RequestParam("id") Long id,

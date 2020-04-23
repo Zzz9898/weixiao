@@ -25,6 +25,16 @@ public class PostContentAppViewDto {
 
     private String[] images;
 
+    private int reviewState;
+
+    public int getReviewState() {
+        return reviewState;
+    }
+
+    public void setReviewState(int reviewState) {
+        this.reviewState = reviewState;
+    }
+
     public String[] getImages() {
         return images;
     }

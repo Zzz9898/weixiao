@@ -23,6 +23,7 @@ public interface PostContentAppViewDao extends JpaRepository<PostContentAppView,
                     "pc.release_time," +
                     "pc.look_num," +
                     "pc.like_num," +
+                    "pc.review_state," +
                     "sm.face_img_min AS avatar, " +
                     "sm.nickname " +
                     "FROM " +
@@ -71,7 +72,8 @@ public interface PostContentAppViewDao extends JpaRepository<PostContentAppView,
                     "pc.images AS image," +
                     "pc.look_num," +
                     "pc.like_num," +
-                    "pc.release_time " +
+                    "pc.release_time," +
+                    "pc.review_state " +
                     "FROM z_post_content pc " +
                     "LEFT JOIN " +
                     "z_student_member sm ON pc.student_id = sm.id " +
@@ -91,5 +93,34 @@ public interface PostContentAppViewDao extends JpaRepository<PostContentAppView,
                     "pc.logic_flag = 1 AND " +
                     "sm.logic_flag = 1")
     Page<PostContentAppView> getMyCollect(@Param("id") Long id,
+                                          Pageable pageable );
+
+    @Query(nativeQuery = true,
+            value = "SELECT " +
+                    "pc.id," +
+                    "pc.student_id," +
+                    "sm.face_img_min AS avatar," +
+                    "sm.nickname,pc.content," +
+                    "pc.images AS image,pc.look_num," +
+                    "pc.like_num," +
+                    "pc.release_time," +
+                    "pc.review_state " +
+                    "FROM z_post_content pc " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pc.student_id = sm.id " +
+                    "WHERE " +
+                    "pc.student_id = :id AND " +
+                    "pc.logic_flag = 1 AND  " +
+                    "sm.logic_flag = 1",
+            countQuery = "SELECT " +
+                    "COUNT(*) " +
+                    "FROM z_post_content pc " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pc.student_id = sm.id " +
+                    "WHERE " +
+                    "pc.student_id = :id AND " +
+                    "pc.logic_flag = 1 AND  " +
+                    "sm.logic_flag = 1")
+    Page<PostContentAppView> getMyContent(@Param("id") Long id,
                                           Pageable pageable );
 }

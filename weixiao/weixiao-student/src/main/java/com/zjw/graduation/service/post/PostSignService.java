@@ -2,6 +2,7 @@ package com.zjw.graduation.service.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostSign;
+import com.zjw.graduation.view.post.PostSignAppView;
 import com.zjw.graduation.view.post.PostSignView;
 
 /**
@@ -22,5 +23,11 @@ public interface PostSignService {
     void delete(Long id);
 
     PagingResult<PostSignView> page(Long activityId, String truename, int pageIndex, int pageSize);
+
+    void cancel(Long activityId, Long studentId);
+
+    boolean check(Long activityId, Long studentId);
+
+    PagingResult<PostSignAppView> signList(Long activityId, int pageIndex, int pageSize);
 }
 

@@ -51,7 +51,7 @@ public class StudentFeedbackServiceImpl implements StudentFeedbackService  {
     public void delete(Long id) {
         StudentFeedback studentFeedback = studentFeedbackDao.findById(id).orElse(null);
         if (studentFeedback != null){
-            studentFeedback.setLogicFlag(EnumLogicType.DELETE.getValue());
+            studentFeedback.setLogicFalg(EnumLogicType.DELETE.getValue());
             studentFeedbackDao.save(studentFeedback);
         }
     }

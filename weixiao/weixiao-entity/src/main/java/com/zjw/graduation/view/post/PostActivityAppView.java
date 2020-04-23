@@ -99,6 +99,17 @@ public class PostActivityAppView implements Serializable {
     @Column(name = "sign_number")
     private int signNumber;
 
+    @Column(name = "state")
+    private int state;
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
     public String getAvatar() {
         return avatar;
     }
