@@ -131,4 +131,35 @@ public class StudentFollowController {
         return JsonResult.success("删除成功");
     }
 
+    /**
+     * 删除
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/studentFollow/check")
+    @ApiOperation("检查是否关注")
+    public JsonResult check(@RequestParam("studentid") Long studentId,
+                             @RequestParam("followstudentid") Long followStudentId) {
+
+        boolean flag = studentFollowService.check(studentId, followStudentId);
+
+        return JsonResult.success(flag);
+    }
+
+    /**
+     * 删除
+     *
+     * @param
+     * @return
+     */
+    @DeleteMapping("/studentFollow/cancel")
+    @ApiOperation("取消关注")
+    public JsonResult cancel(@RequestParam("studentid") Long studentId,
+                            @RequestParam("followstudentid") Long followStudentId) {
+
+        studentFollowService.cancel(studentId, followStudentId);
+
+        return JsonResult.success("");
+    }
 }

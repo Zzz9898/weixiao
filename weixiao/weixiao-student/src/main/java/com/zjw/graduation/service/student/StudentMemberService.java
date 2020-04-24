@@ -43,5 +43,7 @@ public interface StudentMemberService {
     StudentMember updateFace(Long id, String avatar);
 
     PostInfoView getPostInfo(Long id);
+
+    PagingResult<StudentMemberView> getMyFollow(Long id, int pageIndex, int pageSize);
 }
 

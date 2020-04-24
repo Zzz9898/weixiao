@@ -33,5 +33,7 @@ public interface StudentFollowDao extends JpaRepository<StudentFollow, Long>, Jp
                     "WHERE " +
                     "`logic_flag` = 1 ")
     Page<StudentFollow> findAll(Pageable pageable);
+
+    StudentFollow findByStudentIdAndFollowStudentIdAndLogicFlagIs(Long studentId, Long followStudentId, Integer value);
 }
 

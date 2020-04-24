@@ -20,5 +20,9 @@ public interface StudentFollowService {
     StudentFollow update(StudentFollow Admin);
 
     void delete(Long id);
+
+    boolean check(Long studentId, Long followStudentId);
+
+    void cancel(Long studentId, Long followStudentId);
 }
 

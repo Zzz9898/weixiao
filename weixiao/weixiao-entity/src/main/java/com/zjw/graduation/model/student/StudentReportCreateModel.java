@@ -3,12 +3,14 @@ package com.zjw.graduation.model.student;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.Size;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
 import java.time.LocalDateTime;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -21,156 +23,89 @@ import org.springframework.format.annotation.DateTimeFormat;
 @ApiModel(value = "student.StudentReportCreateModel", description = "举报表")
 public class StudentReportCreateModel {
 
-		
-		/**
-		 * 举报人主键
-		 */
-					@NotNull(message = "举报人主键 不能为空")
-					
+    /**
+     * 举报人主键
+     */
+    @NotNull(message = "举报人主键 不能为空")
+    @ApiModelProperty(value = "举报人主键", required = true)
+    private Long studentId;
 
-									@ApiModelProperty(value = "举报人主键", required = true)
-							private Long studentId;
+    /**
+     * 举报人姓名
+     */
+    @Size(min = 0, max = 255, message = "举报人姓名 长度需要在0和255之间")
+    @ApiModelProperty(value = "举报人姓名")
+    private String studentName;
 
-		
-		/**
-		 * 举报人姓名
-		 */
-								@Size(min = 0, max = 255, message = "举报人姓名 长度需要在0和255之间")
-					
+    @ApiModelProperty(value = "被举报人主键", required = true)
+    private Long reportStudentId;
 
-									@ApiModelProperty(value = "举报人姓名")
-							private String studentName;
+    @ApiModelProperty(value = "被举报人姓名")
+    private String reportStudentName;
 
-		
-		/**
-		 * 被举报人主键
-		 */
-					@NotNull(message = "被举报人主键 不能为空")
-					
+    @ApiModelProperty(value = "内容类型")
+    private Long categoryId;
 
-									@ApiModelProperty(value = "被举报人主键", required = true)
-							private Long reportStudentId;
+    @ApiModelProperty(value = "发布内容主键")
+    private Long postId;
 
-		
-		/**
-		 * 被举报人姓名
-		 */
-								@Size(min = 0, max = 255, message = "被举报人姓名 长度需要在0和255之间")
-					
+    @ApiModelProperty(value = "举报说明")
+    private String content;
 
-									@ApiModelProperty(value = "被举报人姓名")
-							private String reportStudentName;
+    public Long getStudentId() {
+        return studentId;
+    }
 
-		
-		/**
-		 * 内容类型
-		 */
-							
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
+    }
 
-									@ApiModelProperty(value = "内容类型")
-							private Long categoryId;
+    public String getStudentName() {
+        return studentName;
+    }
 
-		
-		/**
-		 * 发布内容主键
-		 */
-							
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
 
-									@ApiModelProperty(value = "发布内容主键")
-							private Long postId;
+    public Long getReportStudentId() {
+        return reportStudentId;
+    }
 
-		
-		/**
-		 * 举报说明
-		 */
-								@Size(min = 0, max = 255, message = "举报说明 长度需要在0和255之间")
-					
+    public void setReportStudentId(Long reportStudentId) {
+        this.reportStudentId = reportStudentId;
+    }
 
-									@ApiModelProperty(value = "举报说明")
-							private String content;
+    public String getReportStudentName() {
+        return reportStudentName;
+    }
 
-		
-		/**
-		 * 举报状态 0-全部 1-正在处理 2-已处理
-		 */
-							
+    public void setReportStudentName(String reportStudentName) {
+        this.reportStudentName = reportStudentName;
+    }
 
-									@ApiModelProperty(value = "举报状态 0-全部 1-正在处理 2-已处理")
-							private Integer state;
+    public Long getCategoryId() {
+        return categoryId;
+    }
 
-		
-		/**
-		 * 反馈
-		 */
-								@Size(min = 0, max = 255, message = "反馈 长度需要在0和255之间")
-					
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
 
-									@ApiModelProperty(value = "反馈")
-							private String reply;
+    public Long getPostId() {
+        return postId;
+    }
 
-				
-			public Long getStudentId() {
-		return studentId;
-	}
+    public void setPostId(Long postId) {
+        this.postId = postId;
+    }
 
-	public void setStudentId(Long studentId) {
-		this.studentId = studentId;
-	}
-			public String getStudentName() {
-		return studentName;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setStudentName(String studentName) {
-		this.studentName = studentName;
-	}
-			public Long getReportStudentId() {
-		return reportStudentId;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setReportStudentId(Long reportStudentId) {
-		this.reportStudentId = reportStudentId;
-	}
-			public String getReportStudentName() {
-		return reportStudentName;
-	}
-
-	public void setReportStudentName(String reportStudentName) {
-		this.reportStudentName = reportStudentName;
-	}
-			public Long getCategoryId() {
-		return categoryId;
-	}
-
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
-			public Long getPostId() {
-		return postId;
-	}
-
-	public void setPostId(Long postId) {
-		this.postId = postId;
-	}
-			public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
-			public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
-	}
-			public String getReply() {
-		return reply;
-	}
-
-	public void setReply(String reply) {
-		this.reply = reply;
-	}
-				
 }

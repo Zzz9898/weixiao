@@ -395,4 +395,18 @@ public class StudentMemberController {
         });
         return JsonResult.success(convert);
     }
+
+    @GetMapping("/studentMember/myfollow")
+    @ApiOperation("获取我的关注")
+    public JsonResult<PagingResult<StudentMemberViewDto>> getMyFollow(@RequestParam("id") Long id,
+                                                                      @RequestParam(value = "pageindex", defaultValue = "0")int pageIndex,
+                                                                      @RequestParam(value = "pagesize", defaultValue = "5") int pageSize){
+        PagingResult<StudentMemberView> pagingResult = studentMemberService.getMyFollow(id, pageIndex, pageSize);
+        PagingResult<StudentMemberViewDto> convert = pagingResult.convert(item -> {
+            StudentMemberViewDto studentMemberViewDto = new StudentMemberViewDto();
+            BeanUtils.copyProperties(item, studentMemberViewDto);
+            return studentMemberViewDto;
+        });
+        return JsonResult.success(convert);
+    }
 }

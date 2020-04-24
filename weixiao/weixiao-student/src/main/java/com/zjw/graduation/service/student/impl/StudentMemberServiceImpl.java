@@ -215,4 +215,19 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
         return postInfoView;
     }
 
+    @Override
+    public PagingResult<StudentMemberView> getMyFollow(Long id, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        Page<StudentMemberView> page = studentMemberViewDao.getMyFollow(id, pageable);
+
+        PagingResult<StudentMemberView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
+    }
+
 }

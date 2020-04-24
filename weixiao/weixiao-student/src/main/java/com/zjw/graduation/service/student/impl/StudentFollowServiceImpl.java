@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 
 @Service("studentFollowService")
 public class StudentFollowServiceImpl implements StudentFollowService  {
@@ -52,6 +54,24 @@ public class StudentFollowServiceImpl implements StudentFollowService  {
         StudentFollow studentFollow = studentFollowDao.findById(id).orElse(null);
         if (studentFollow != null){
             studentFollow.setLogicFlag(EnumLogicType.DELETE.getValue());
+            studentFollowDao.save(studentFollow);
+        }
+    }
+
+    @Override
+    public boolean check(Long studentId, Long followStudentId) {
+        StudentFollow studentFollow =
+                studentFollowDao.findByStudentIdAndFollowStudentIdAndLogicFlagIs(studentId, followStudentId, EnumLogicType.NORMAL.getValue());
+        return studentFollow != null;
+    }
+
+    @Override
+    public void cancel(Long studentId, Long followStudentId) {
+        StudentFollow studentFollow =
+                studentFollowDao.findByStudentIdAndFollowStudentIdAndLogicFlagIs(studentId, followStudentId, EnumLogicType.NORMAL.getValue());
+        if (studentFollow != null) {
+            studentFollow.setLogicFlag(EnumLogicType.DELETE.getValue());
+            studentFollow.setUpdated(LocalDateTime.now());
             studentFollowDao.save(studentFollow);
         }
     }

@@ -1,6 +1,10 @@
 package com.zjw.graduation.controller.student;
 
 
+import com.zjw.graduation.entity.post.PostContent;
+import com.zjw.graduation.entity.student.StudentMember;
+import com.zjw.graduation.service.post.PostContentService;
+import com.zjw.graduation.service.student.StudentMemberService;
 import com.zjw.graduation.service.student.StudentReportService;
 import com.zjw.graduation.model.student.StudentReportCreateModel;
 import com.zjw.graduation.model.student.StudentReportUpdateModel;
@@ -32,6 +36,12 @@ public class StudentReportController {
 
     @Autowired
     private StudentReportService studentReportService;
+
+    @Autowired
+    private PostContentService postContentService;
+
+    @Autowired
+    private StudentMemberService studentMemberService;
 
     /**
      * 列表
@@ -84,6 +94,10 @@ public class StudentReportController {
 
         StudentReport studentReport = new StudentReport();
         BeanUtils.copyProperties(studentReportCreateModel, studentReport);
+        if (studentReport.getPostId() != null){
+            StudentMember studentMember = studentMemberService.get(studentReport.getReportStudentId());
+            studentReport.setReportStudentName(studentMember.getNickname());
+        }
         studentReportService.save(studentReport);
 
         StudentReportDto studentReportDto = new StudentReportDto();

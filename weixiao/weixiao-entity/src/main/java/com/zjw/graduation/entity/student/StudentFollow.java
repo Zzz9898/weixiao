@@ -53,10 +53,21 @@ public class StudentFollow implements Serializable {
 	 * 是否逻辑删除 0-是 1-否
 	 */
 	    @Column(name = "logic_flag")
-	private String logicFlag;
-	
+	private int logicFlag;
 
-	    public Long getId() {
+	public int getLogicFlag() {
+		return logicFlag;
+	}
+
+	public void setLogicFlag(int logicFlag) {
+		this.logicFlag = logicFlag;
+	}
+
+	public void setUpdated(LocalDateTime updated) {
+		this.updated = updated;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -87,17 +98,6 @@ public class StudentFollow implements Serializable {
 		    public LocalDateTime getUpdated() {
         return updated;
     }
-
-	public void setUpdated(LocalDateTime updated) {
-		this.updated = updated;
-	}
-		    public String getLogicFlag() {
-        return logicFlag;
-    }
-
-	public void setLogicFlag(String logicFlag) {
-		this.logicFlag = logicFlag;
-	}
 	
     public Object copy() {
         try {
