@@ -45,5 +45,7 @@ public interface StudentMemberService {
     PostInfoView getPostInfo(Long id);
 
     PagingResult<StudentMemberView> getMyFollow(Long id, int pageIndex, int pageSize);
+
+    StudentMember saveAmd(StudentMember studentMember);
 }
 

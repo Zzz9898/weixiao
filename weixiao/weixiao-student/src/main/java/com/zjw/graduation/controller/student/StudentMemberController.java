@@ -13,6 +13,7 @@ import com.zjw.graduation.entity.common.CommonArea;
 import com.zjw.graduation.entity.school.SchoolAcademy;
 import com.zjw.graduation.entity.student.StudentMember;
 import com.zjw.graduation.entity.student.StudentPermission;
+import com.zjw.graduation.model.student.StudentMemberCreateModel;
 import com.zjw.graduation.model.student.StudentMemberLoginModel;
 import com.zjw.graduation.model.student.StudentMemberUpdateModel;
 import com.zjw.graduation.mvc.JsonResult;
@@ -184,6 +185,16 @@ public class StudentMemberController {
         String token = studentMemberService.login(username, password);
         return JsonResult.success(tokenHead + token, studentMemberDto);
 
+    }
+
+    @PostMapping("/adm/register")
+    public JsonResult<StudentMemberDto> create(@Validated @RequestBody StudentMemberCreateModel studentMemberCreateModel){
+        StudentMember studentMember = new StudentMember();
+        BeanUtils.copyProperties(studentMemberCreateModel, studentMember, NullPropertyUtils.getNullPropertyNames(studentMemberCreateModel));
+        StudentMember entity = studentMemberService.saveAmd(studentMember);
+        StudentMemberDto studentMemberDto = new StudentMemberDto();
+        BeanUtils.copyProperties(entity, studentMemberDto);
+        return JsonResult.success(studentMemberDto);
     }
 
     @PostMapping("/canregister")

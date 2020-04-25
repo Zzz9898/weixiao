@@ -230,4 +230,14 @@ public class StudentMemberServiceImpl implements StudentMemberService  {
         return pagingResult;
     }
 
+    @Override
+    public StudentMember saveAmd(StudentMember studentMember) {
+        StudentMember entity = studentMemberDao.findByUsernameAndLogicFlagIs(studentMember.getUsername(), EnumLogicType.NORMAL.getValue());
+        if (entity != null ){
+            return entity;
+        }else {
+            return studentMemberDao.save(studentMember);
+        }
+    }
+
 }

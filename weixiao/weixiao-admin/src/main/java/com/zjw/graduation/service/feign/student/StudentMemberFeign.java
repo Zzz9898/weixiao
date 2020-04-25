@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(value = "weixiao-student", fallback = StudentMemberFeignFallback.class, contextId = "student-member")
+@FeignClient(value = "weixiao-student", contextId = "student-member")
 public interface StudentMemberFeign {
 
     @GetMapping("/student/studentMember/{id}")
@@ -26,7 +26,7 @@ public interface StudentMemberFeign {
     public JsonResult disableOrEnable(@RequestHeader("Authorization")String token,
                               @PathVariable("id") Long id);
 
-    @PostMapping("/student/register")
+    @PostMapping("/student/adm/register")
     public JsonResult<StudentMemberDto> create(@RequestHeader("Authorization")String token,
                                                @Validated @RequestBody StudentMemberCreateModel studentMemberCreateModel);
 

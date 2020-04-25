@@ -1,5 +1,6 @@
 package com.zjw.graduation.service.adm.impl;
 
+import com.zjw.graduation.data.NullPropertyUtils;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.dto.student.StudentMemberDto;
 import com.zjw.graduation.entity.adm.*;
@@ -159,7 +160,7 @@ public class AdmAdminServiceImpl implements AdmAdminService  {
     @Transactional
     public AdmAdmin adminAdd(AdmAdminCreateModel model) {
         AdmAdmin admAdmin = new AdmAdmin();
-        BeanUtils.copyProperties(model, admAdmin);
+        BeanUtils.copyProperties(model, admAdmin, NullPropertyUtils.getNullPropertyNames(model));
         String password = passwordEncoder.encode(admAdmin.getPassword());
         admAdmin.setPassword(password);
         StudentMemberCreateModel studentMemberCreateModel = new StudentMemberCreateModel();
