@@ -89,6 +89,22 @@ public class PostContentController {
         return JsonResult.success(convert);
     }
 
+    @GetMapping("/app/hot/postContents")
+    @ApiOperation("app-发布内容热门")
+    public JsonResult<PagingResult<PostContentAppViewDto>> appHotList(@RequestParam(value = "pageindex", defaultValue = "0") int pageIndex,
+                                                                      @RequestParam(value = "pagesize", defaultValue = "10") int pageSize){
+        PagingResult<PostContentAppView> page = postContentService.appHotList(pageIndex, pageSize);
+        PagingResult<PostContentAppViewDto> convert = page.convert(item -> {
+            PostContentAppViewDto postContentAppViewDto = new PostContentAppViewDto();
+            BeanUtils.copyProperties(item, postContentAppViewDto);
+            if (item.getImages() != null && !item.getImages().equals("")) {
+                postContentAppViewDto.setImages(item.getImages().split(";"));
+            }
+            return postContentAppViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
 
     /**
      * 详情

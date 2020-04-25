@@ -37,5 +37,7 @@ public interface PostContentService {
     PagingResult<PostContentAppView> getMyCollect(Long id, int pageIndex, int pageSize);
 
     PagingResult<PostContentAppView> getMyContent(Long id, int pageIndex, int pageSize);
+
+    PagingResult<PostContentAppView> appHotList(int pageIndex, int pageSize);
 }
 

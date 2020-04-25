@@ -55,5 +55,29 @@ public interface PostHotDao extends JpaRepository<PostHot, Long>, JpaSpecificati
                     "   `id` IN :collect")
     void batchDelete(@Param("collect") List<Long> collect,
                      @Param("now") LocalDateTime now);
+
+    @Query(nativeQuery = true,
+            value = "SELECT " +
+                    "* " +
+                    "FROM " +
+                    "z_post_hot " +
+                    "WHERE " +
+                    "logic_flag = 1 AND " +
+                    "start_time <= :now AND " +
+                    "end_time >= :now " +
+                    "ORDER BY " +
+                    "id DESC ",
+            countQuery = "SELECT " +
+                    "COUNT(*) " +
+                    "FROM " +
+                    "z_post_hot " +
+                    "WHERE " +
+                    "logic_flag = 1 AND " +
+                    "start_time <= :now AND " +
+                    "end_time >= :now " +
+                    "ORDER BY " +
+                    "id DESC ")
+    Page<PostHot> appList(@Param("now") LocalDateTime now,
+                          Pageable pageable);
 }
 

@@ -140,6 +140,21 @@ public class PostActivityServiceImpl implements PostActivityService  {
     }
 
     @Override
+    public PagingResult<PostActivityAppView> appHotList(int pageIndex, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        Page<PostActivityAppView> page = postActivityAppViewDao.appHotList(pageable);
+
+        PagingResult<PostActivityAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+        return pagingResult;
+    }
+
+    @Override
     public PostActivity get(Long id) {
         return postActivityDao.findById(id).orElse(new PostActivity());
     }

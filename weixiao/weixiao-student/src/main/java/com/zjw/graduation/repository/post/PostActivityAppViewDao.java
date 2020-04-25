@@ -198,4 +198,57 @@ public interface PostActivityAppViewDao extends JpaRepository<PostActivityAppVie
                     "pa.id DESC")
     Page<PostActivityAppView> getMyParticipation(@Param("id") Long id,
                                                  Pageable pageable);
+
+    @Query(nativeQuery = true,
+            value = "SELECT " +
+                    "pa.id," +
+                    "pa.student_id," +
+                    "sm.nickname," +
+                    "sm.face_img_min AS avatar," +
+                    "pa.academy_id," +
+                    "pa.title," +
+                    "pa.abs," +
+                    "pa.content," +
+                    "pa.images," +
+                    "pa.category," +
+                    "pa.start_time," +
+                    "pa.end_time," +
+                    "pa.release_time," +
+                    "pa.type," +
+                    "pa.max_number," +
+                    "pa.state," +
+                    "IF(ps1.sign_number IS NULL,0,ps1.sign_number) AS sign_number " +
+                    "FROM " +
+                    "z_post_activity pa " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pa.student_id = sm.id " +
+                    "LEFT JOIN " +
+                    "(SELECT " +
+                    "ps.activity_id," +
+                    "COUNT(*) AS sign_number " +
+                    "FROM z_post_sign ps " +
+                    "WHERE ps.logic_flag = 1 " +
+                    "GROUP BY ps.activity_id) ps1 ON ps1.activity_id = pa.id " +
+                    "WHERE " +
+                    "(pa.logic_flag = 1) " +
+                    "ORDER BY " +
+                    "sign_number DESC",
+            countQuery = "SELECT " +
+                    "COUNT(*) " +
+                    "FROM " +
+                    "z_post_activity pa " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pa.student_id = sm.id " +
+                    "LEFT JOIN " +
+                    "(SELECT " +
+                    "ps.activity_id," +
+                    "COUNT(*) AS sign_number " +
+                    "FROM z_post_sign ps " +
+                    "WHERE ps.logic_flag = 1 " +
+                    "GROUP BY ps.activity_id) ps1 ON ps1.activity_id = pa.id " +
+                    "WHERE " +
+                    "(pa.logic_flag = 1) " +
+                    "ORDER BY " +
+                    "sign_number DESC")
+    Page<PostActivityAppView> appHotList(Pageable pageable);
 }

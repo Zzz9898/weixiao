@@ -35,5 +35,7 @@ public interface PostActivityService {
     void cancel(Long id);
 
     PagingResult<PostActivityAppView> getMyParticipation(Long id, int pageIndex, int pageSize);
+
+    PagingResult<PostActivityAppView> appHotList(int pageIndex, int pageSize);
 }
 

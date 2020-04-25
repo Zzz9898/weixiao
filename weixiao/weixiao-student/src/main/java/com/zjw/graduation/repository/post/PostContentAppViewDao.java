@@ -123,4 +123,42 @@ public interface PostContentAppViewDao extends JpaRepository<PostContentAppView,
                     "sm.logic_flag = 1")
     Page<PostContentAppView> getMyContent(@Param("id") Long id,
                                           Pageable pageable );
+
+    @Query(nativeQuery = true,
+            value = "SELECT " +
+                    "pc.id," +
+                    "pc.student_id," +
+                    "pc.content," +
+                    "pc.images as image," +
+                    "pc.release_time," +
+                    "pc.look_num," +
+                    "pc.like_num," +
+                    "pc.review_state," +
+                    "sm.face_img_min AS avatar, " +
+                    "sm.nickname " +
+                    "FROM " +
+                    "z_post_content pc " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pc.student_id = sm.id " +
+                    "WHERE " +
+                    "pc.logic_flag = 1 AND " +
+                    "sm.logic_flag = 1 AND " +
+                    "pc.review_state = 2 AND " +
+                    "pc.state = 1 " +
+                    "ORDER BY " +
+                    "pc.look_num DESC",
+            countQuery = "SELECT " +
+                    "COUNT(*) " +
+                    "FROM " +
+                    "z_post_content pc " +
+                    "LEFT JOIN " +
+                    "z_student_member sm ON pc.student_id = sm.id " +
+                    "WHERE " +
+                    "pc.logic_flag = 1 AND " +
+                    "sm.logic_flag = 1 AND " +
+                    "pc.review_state = 2 AND " +
+                    "pc.state = 1 " +
+                    "ORDER BY " +
+                    "pc.look_num DESC")
+    Page<PostContentAppView> appHotList(Pageable pageable);
 }

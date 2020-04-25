@@ -56,6 +56,20 @@ public class PostHotController {
         return JsonResult.success(convert);
     }
 
+    @GetMapping("/app/postHots")
+    @ApiOperation("热点内容表app列表")
+    public JsonResult<PagingResult<PostHotDto>> appList(@RequestParam(value = "pageindex", defaultValue = "0") int pageIndex,
+                                                     @RequestParam(value = "pagesize", defaultValue = "10") int pageSize) {
+
+        PagingResult<PostHot> page = postHotService.appList(pageIndex, pageSize);
+        PagingResult<PostHotDto> convert = page.convert(item -> {
+            PostHotDto postHotDto = new PostHotDto();
+            BeanUtils.copyProperties(item, postHotDto);
+            return postHotDto;
+        });
+        return JsonResult.success(convert);
+    }
+
 
     /**
      * 详情

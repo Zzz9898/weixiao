@@ -94,6 +94,23 @@ public class PostActivityController {
         return JsonResult.success(convert);
     }
 
+    @GetMapping("/app/hot/postActivities")
+    @ApiOperation("app-活动发布表热门")
+    public JsonResult<PagingResult<PostActivityAppViewDto>> appHotList(@RequestParam(value = "pageindex",defaultValue = "0")int pageIndex,
+                                                                    @RequestParam(value = "pagesize",defaultValue = "10")int pageSize){
+        PagingResult<PostActivityAppView> pagingResult =
+                postActivityService.appHotList(pageIndex, pageSize);
+        PagingResult<PostActivityAppViewDto> convert = pagingResult.convert(item -> {
+            PostActivityAppViewDto postActivityAppViewDto = new PostActivityAppViewDto();
+            BeanUtils.copyProperties(item, postActivityAppViewDto);
+            if (item.getImage() != null && !item.getImage().equals("")) {
+                postActivityAppViewDto.setImages(item.getImage().split(";"));
+            }
+            return postActivityAppViewDto;
+        });
+        return JsonResult.success(convert);
+    }
+
 
     /**
      * 详情

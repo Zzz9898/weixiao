@@ -69,4 +69,19 @@ public class PostHotServiceImpl implements PostHotService  {
         postHotDao.batchDelete(collect, now);
     }
 
+    @Override
+    public PagingResult<PostHot> appList(int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        LocalDateTime now = LocalDateTime.now();
+        Page<PostHot> page = postHotDao.appList(now, pageable);
+
+        PagingResult<PostHot> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
+    }
+
 }

@@ -140,6 +140,20 @@ public class PostContentServiceImpl implements PostContentService  {
     }
 
     @Override
+    public PagingResult<PostContentAppView> appHotList(int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        Page<PostContentAppView> page = postContentAppViewDao.appHotList(pageable);
+
+        PagingResult<PostContentAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
+    }
+
+    @Override
     public PostContent get(Long id) {
         return postContentDao.findById(id).orElse(new PostContent());
     }

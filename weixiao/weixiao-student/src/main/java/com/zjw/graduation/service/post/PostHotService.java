@@ -22,5 +22,7 @@ public interface PostHotService {
     void delete(Long id);
 
     void batchDelete(String ids);
+
+    PagingResult<PostHot> appList(int pageIndex, int pageSize);
 }
 
