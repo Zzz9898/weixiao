@@ -2,6 +2,7 @@ package com.zjw.graduation.service.post;
 
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.entity.post.PostComment;
+import com.zjw.graduation.view.post.PostCommentAppView;
 
 /**
  * 
@@ -20,5 +21,7 @@ public interface PostCommentService {
     PostComment update(PostComment Admin);
 
     void delete(Long id);
+
+    PagingResult<PostCommentAppView> appList(Long postId, Long category, int pageIndex, int pageSize);
 }
 

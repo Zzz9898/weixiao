@@ -1,5 +1,7 @@
 package com.zjw.graduation.service.post.impl;
 
+import com.zjw.graduation.repository.post.PostCommentAppViewDao;
+import com.zjw.graduation.view.post.PostCommentAppView;
 import org.springframework.data.domain.Page;
 import com.zjw.graduation.data.PagingResult;
 import com.zjw.graduation.enums.EnumLogicType;
@@ -11,12 +13,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 
 @Service("postCommentService")
 public class PostCommentServiceImpl implements PostCommentService {
 
     @Autowired
     private PostCommentDao postCommentDao;
+    @Autowired
+    private PostCommentAppViewDao postCommentAppViewDao;
 
     public PagingResult<PostComment> page(int pageIndex, int pageSize){
         Pageable pageable = PageRequest.of(pageIndex, pageSize);
@@ -39,6 +45,7 @@ public class PostCommentServiceImpl implements PostCommentService {
 
     @Override
     public PostComment save(PostComment postComment) {
+        postComment.setCommentTime(LocalDateTime.now());
         return postCommentDao.save(postComment);
     }
 
@@ -54,6 +61,21 @@ public class PostCommentServiceImpl implements PostCommentService {
             postComment.setLogicFlag(EnumLogicType.DELETE.getValue());
             postCommentDao.save(postComment);
         }
+    }
+
+    @Override
+    public PagingResult<PostCommentAppView> appList(Long postId, Long category, int pageIndex, int pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+
+        Page<PostCommentAppView> page = postCommentAppViewDao.appList(postId, category, pageable);
+
+        PagingResult<PostCommentAppView> pagingResult = new PagingResult<>();
+        pagingResult.setPageIndex(pageIndex);
+        pagingResult.setPageSize(pageSize);
+        pagingResult.setEntities(page.getContent());
+        pagingResult.setTotalRecords(page.getTotalElements());
+
+        return pagingResult;
     }
 
 }
